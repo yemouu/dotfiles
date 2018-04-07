@@ -1,0 +1,32 @@
+# Functionality
+ignore-empty-password
+daemonize
+
+# Appearance
+disable-caps-lock-text
+indicator-caps-lock
+color={color8}
+bs-hl-color={color1}
+caps-lock-bs-hl-color={color1}
+caps-lock-key-hl-color={color3}
+font=monospace
+indicator-radius=64
+indicator-thickness=16
+inside-color={color2}
+inside-clear-color={color5}
+inside-caps-lock-color={color3}
+inside-ver-color={color4}
+inside-wrong-color={color1}
+key-hl-color={color2}
+line-uses-inside
+ring-color={color10}
+ring-clear-color={color13}
+ring-caps-lock-color={color11}
+ring-ver-color={color12}
+ring-wrong-color={color9}
+separator-color={color7}00
+text-color={color15}
+text-clear-color={color15}
+text-caps-lock-color={color15}
+text-ver-color={color15}
+text-wrong-color={color15}

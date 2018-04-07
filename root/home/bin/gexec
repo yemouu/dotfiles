@@ -1,0 +1,11 @@
+#!/bin/sh
+# Script to chroot into the glibc chroot (/media/glibc64) and launch discord
+# This script is symlinked to /usr/local/bin to easily be run by root/sudo 
+
+[ "$1" ] || { printf '%s\n' "${0##*/} requires a command to launch"; exit 1; }
+
+# Check that the chroot is setup and set it up if it isn't
+ghroot m /media/glibc64
+
+TERM=xterm-256color
+chroot /media/glibc64 su -c "XDG_RUNTIME_DIR=/run/user/1000 WAYLAND_DISPLAY=wayland-1 XDG_SESSION_TYPE=wayland $*" - mou

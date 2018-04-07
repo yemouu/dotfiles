@@ -1,0 +1,64 @@
+[global]
+monitor = 1
+geometry = 400x1-32+32
+shrink = true
+layer = top
+
+progress_bar = false
+
+font = monospace 10
+markup = full
+format = <b>%a</b>\n%s\n%b
+
+icon_position = left
+min_icon_size = 64
+max_icon_size = 64
+
+hide_duplicate_count = true
+
+word_wrap = true
+ellipsize = end
+
+padding = 8
+horizontal_padding = 8
+text_icon_padding = 8
+
+#transparency = 100
+
+frame_width = 2
+corner_radius = 8
+
+idle_threshold = 900s
+show_age_threshold = 900s
+
+dmenu = /home/mou/bin/bemenu
+browser = /home/mou/bin/firefox
+
+mouse_left_click = close_current
+mouse_middle_click = close_all
+mouse_right_click = do_action
+
+[urgency_low]
+background = "#{bg_color}"
+foreground = "#{fg_color}"
+frame_color = "#{color7}"
+# I will be making custom icons soon
+#icon =
+timeout = 10
+
+[urgency_normal]
+background = "#{bg_color}"
+foreground = "#{fg_color}"
+frame_color = "#{color0}"
+# I will be making custom icons soon
+#icon =
+timeout = 10
+
+[urgency_critical]
+background = "#{bg_color}"
+foreground = "#{fg_color}"
+frame_color = "#{color9}"
+# I will be making custom icons soon
+#icon =
+timeout = 0
+

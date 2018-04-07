@@ -1,0 +1,23 @@
+#!/bin/ksh
+
+# Not having this set to the current terminal can cause issues
+GPG_TTY=$(tty)
+export GPG_TTY
+
+# Setup some shell functionality
+set -o trackall
+set -o bgnice
+set -o braceexpand
+set -o csh-history
+
+# Setup Prompt
+PS1="\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
+PS2="\[\033[1;36m\]>\[\033[m\] "
+
+[ -d /media/glibc64 ] || PS1="(chroot) $PS1"
+
+# Source aliases
+. "$XDG_CONFIG_HOME/loksh/alias"
+
+# Source completions
+. "$XDG_CONFIG_HOME/loksh/completions"

@@ -1,0 +1,38 @@
+#!/bin/sh
+
+theme_type="light"
+
+bg_color="efefef"
+fg_color="1f1f1f"
+
+# Black
+color0="3f3f3f"
+color8="6a6a6a"
+
+# Red
+color1="e67b7b"
+color9="ed9a9a"
+
+# Green
+color2="80ba63"
+color10="a3d989"
+
+# Yellow
+color3="f5a868"
+color11="f7c297"
+
+# Blue
+color4="849ce6"
+color12="a6baf5"
+
+# Magenta
+color5="b37fe3"
+color13="d1adf2"
+
+# Cyan
+color6="6ebdc4"
+color14="bedcde"
+
+# White
+color7="d2d2d2"
+color15="dfdfdf"

@@ -1,0 +1,29 @@
+#!/bin/sh
+[ ! "$USER" = "mou" ] || [ ! "$SHELL" = "/bin/bash" ] && return 0
+
+PATH="${HOME}/bin:${HOME}/opt/bin:$PATH"
+XDG_DATA_HOME="${HOME}/data"
+XDG_CONFIG_HOME="${HOME}/cfg"
+XDG_CACHE_HOME="${HOME}/tmp/cache"
+
+VISUAL="kak"
+EDITOR="kak"
+PAGER="less"
+
+HISTFILE="${XDG_CACHE_HOME}/bash_history"
+HISTSIZE=
+HISTFILESIZE=
+HISTCONTROL="$HISTCONTROL:ignorespace:ignoredups:erasedups"
+LESSHISTFILE="${XDG_CACHE_HOME}/less_history"
+LESSHISTSIZE=
+
+GNUPGHOME="${XDG_DATA_HOME}/gnupg"
+XINITRC="${XDG_CONFIG_HOME}/xorg/xinitrc"
+INPUTRC="${XDG_CONFIG_HOME}/bash/inputrc"
+PASSWORD_STORE_DIR="${HOME}/doc/.pws"
+
+export PATH XDG_DATA_HOME XDG_CONFIG_HOME XDG_CACHE_HOME VISUAL EDITOR PAGER \
+       HISTFILE HISTSIZE HISTFILESIZE HISTCONTROL LESSHISTFILE LESSHISTSIZE \
+       GNUPGHOME XINITRC INPUTRC PASSWORD_STORE_DIR
+
+[ -f ${XDG_CONFIG_HOME}/bash/rc  ] && . "${XDG_CONFIG_HOME}/bash/rc"

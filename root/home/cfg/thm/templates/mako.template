@@ -1,0 +1,46 @@
+# Global Config
+max-visible=2
+output=DP-1
+layer=top
+anchor=top-right
+
+# All Notifcations
+background-color=#{bg_color}
+text-color=#{fg_color}
+width=400
+height=200
+margin=8
+padding=8
+border-size=2
+border-color=#{fg_color}
+max-icon-size=48
+actions=1
+format=<b>%a</b>\n%s\n%b
+default-timeout=8000
+group-by=app-name
+
+# Low Urgency Notifcations
+[urgency=low]
+border-color=#{color8}
+default-timeout=4000
+
+# Normal Ugency Notifcations
+[urgency=normal]
+border-color=#{fg_color}
+default-timeout=8000
+
+# High Urgency Notifcations
+[urgency=high]
+border-color=#{color1}
+default-timeout=0
+
+[grouped]
+format=<b>%a</b>\n%s\n%b
+
+# Mako fails to start with this and i forgot why its here
+## Hidden Notification
+#[hidden]
+#width=0
+#height=0
+#border-size=0
+#format=

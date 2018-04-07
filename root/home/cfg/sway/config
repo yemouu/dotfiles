@@ -1,0 +1,240 @@
+# Include extra system config #
+include /etc/sway/config.d/*
+
+# Appearance #
+include ${XDG_CACHE_HOME}/thm/sway-appearance
+
+# Outputs #
+output DP-1 {
+	bg ${HOME}/media/images/wallpapers/evie-s-_IpKsTK9gcE-unsplash.jpg fill
+	max_render_time 3
+	pos 1920 0
+	res 3840x2160@60.000000Hz
+	scale 2
+	subpixel rgb
+}
+
+output DP-2 {
+	bg ${HOME}/media/images/wallpapers/evie-s-XjX3Ju1jFfU-unsplash.jpg fill
+	max_render_time 3
+	pos 0 0
+	res 1920x1080@144.001007Hz
+	subpixel rgb
+}
+
+# Input #
+input 7805:11815:ROCCAT_ROCCAT_Kone_Aimo_Mouse {
+	accel_profile flat
+}
+
+input 12136:130:Hoksi_Technology_DURGOD_Taurus_K320 {
+	xkb_options compose:caps
+}
+
+input 1386:782:Wacom_Intuos_S_Pen {
+	map_to_output DP-1
+}
+
+# Seats #
+seat seat0 {
+	hide_cursor 8000
+	#xcursor_theme clicc
+}
+
+# Bar
+bar swaybar_command waybar
+
+# Options #
+floating_maximum_size -1 x -1
+focus_follows_mouse yes
+focus_on_window_activation urgent
+focus_wrapping workspace
+hide_edge_borders --i3 smart
+show_marks yes
+tiling_drag disable
+
+# Workspaces #
+# Variables
+set {
+	$ws0 0
+	$ws1 1
+	$ws2 2
+	$ws3 3
+	$ws4 4
+	$ws5 5
+	$ws6 6
+	$ws7 7
+	$ws8 8
+	$ws9 9
+}
+
+# Options
+workspace_layout tabbed
+
+# Assign workspaces to Displays
+workspace {
+	$ws0 output DP-1
+	$ws1 output DP-2
+	$ws2 output DP-1
+	$ws3 output DP-2
+	$ws4 output DP-1
+	$ws5 output DP-2
+	$ws6 output DP-1
+	$ws7 output DP-2
+	$ws8 output DP-1
+	$ws9 output DP-2
+}
+
+# Keybinds #
+# Variables
+set {
+	$W Mod4
+	$A Mod1
+	$C Control
+	$S Shift
+	$term alacritty
+	$menu bemenu-run
+	$file_manager dolphin
+}
+
+# Binds
+bindsym {
+	$W+Return exec $term
+	$W+r exec $menu
+	$A+F12 exec powermenu
+	$W+f exec $file_manager
+	$W+$C+f exec ffp
+
+	XF86AudioPlay exec playerctl play-pause
+	XF86AudioStop exec playerctl stop
+	XF86AudioPrev exec playerctl previous
+	XF86AudioNext exec playerctl next
+	XF86AudioRaiseVolume exec playerctl volume 0.02+
+	XF86AudioLowerVolume exec playerctl volume 0.02- 
+	XF86AudioMute exec playerctl volume 0
+	 
+	$A+F5 exec pactl set-source-volume @DEFAULT_SOURCE@ 9830398%
+	$C+F5 exec pactl set-source-volume @DEFAULT_SOURCE@ 100%
+	$W+e exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+	Print exec scr pic -c
+
+	$W+c exec colorgrab -co
+	$W+$A+c exec colorgrab -cn
+	$W+$C+c exec colorgrab -cor
+	$W+$C+$A+c exec colorgrab -cnr
+
+	$W+space exec makoctl dismiss -a
+
+	$W+z focus next sibling
+	$W+$A+z focus prev sibling
+	$W+$C+z focus mode_toggle
+
+	$W+x move workspace to right
+	$W+$A+x move workspace to left
+
+	$W+Left focus left
+	$W+Down focus down
+	$W+Up focus up
+	$W+Right focus right
+
+	$W+1 workspace $ws0
+	$W+2 workspace $ws1
+	$W+3 workspace $ws2
+	$W+4 workspace $ws3
+	$W+5 workspace $ws4
+	$W+6 workspace $ws5
+	$W+7 workspace $ws6
+	$W+8 workspace $ws7
+	$W+9 workspace $ws8
+	$W+0 workspace $ws9
+
+	$W+$S+1 move container to workspace $ws0
+	$W+$S+2 move container to workspace $ws1
+	$W+$S+3 move container to workspace $ws2
+	$W+$S+4 move container to workspace $ws3
+	$W+$S+5 move container to workspace $ws4
+	$W+$S+6 move container to workspace $ws5
+	$W+$S+7 move container to workspace $ws6
+	$W+$S+8 move container to workspace $ws7
+	$W+$S+9 move container to workspace $ws8
+	$W+$S+0 move container to workspace $ws9
+
+	$W+$C+Escape exit
+	$W+$A+Escape reload
+	$W+q kill
+
+	$W+$S+s floating enable
+	$W+$S+t floating disable
+	$W+$S+f fullscreen toggle
+	$W+l layout toggle split tabbed
+	$W+o layout toggle split
+	$W+p splitt
+
+	$W+d exec swaymsg seat seat0 hide_cursor 0
+	$W+$A+d exec swaymsg seat seat0 hide_cursor 8000
+
+	$W+v border normal 2
+	$W+b border pixel 2
+	$W+n border none
+}
+
+floating_modifier $W normal
+
+# Window Rules #
+for_window {
+	# Make all windows float by default
+	# According to `swaymsg -m "['window']" -t subscribe`, windows get their title after
+	# they get created. However, app_id, class and instace are all set when the window is
+	# created.
+	[app_id="."] floating enable
+	[class="."] floating enable
+	[instance="."] floating enable
+
+	# Make the title of each window bold
+	[title="."] title_format "<b>%title</b>"
+
+	[app_id="mpv"] border none
+
+	# Set Alacritty's size. Doing this through Alacritty's config causes the window contents
+	# to spill outside of the border when using multiple scaling factors and spawning
+	# the terminal on one lower than the highest. Sets the terminal to 120x36.
+	[app_id="Alacritty"] resize set width 976 px, resize set height 654 px
+
+	# These apps should take up the entire screen and not have a border
+	[app_id="firefox-wayland" title=".*- Mozilla Firefox$"] floating disable, border none
+	[app_id="firefox-wayland" title="^Mozilla Firefox$"] floating disable, border none
+	[class="Element"] floating disable, border none
+	[class="discord"] floating disable, border none
+
+	[class="csgo_linux64"] fullscreen enable
+}
+
+# Move Windows when they launch
+for_window {
+	# Web Browsers should be on the first workspace
+	[app_id="firefox-wayland"] move container to workspace 0
+
+	# Chat Applications should be on the second workspace
+	[class="Element"] move container to workspace 1
+	[class="discord"] move container to workspace 1
+
+	# Graphic Applications should be on the third workspace
+	[app_id="org.inkscape.Inkscape"] move container to workspace 2
+	[class="Gimp"] move container to workspace 2
+	[class="krita"] move container to workspace 2
+
+	# Games and Game Launchers should be on the eighth workspace
+	[app_id="org.multimc.multimc"] move container to workspace 7
+	[class="Steam"] move container to workspace 7
+
+	[class="csgo_linux64"] move container to workspace 7
+	[class="Minecraft.*"] move container to workspace 7
+
+	# Rocket League
+	[class="steam_app_252950"] move container to workspace 7
+	# Deceit
+	[class="steam_app_466240"] move container to workspace 7
+	# TitanFall 2
+	[class="steam_app_1237970"] move container to workspace 7
+}

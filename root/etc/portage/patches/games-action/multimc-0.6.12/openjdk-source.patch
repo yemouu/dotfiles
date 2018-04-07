@@ -1,0 +1,24 @@
+diff -ur MultiMC5-0.6.12a/libraries/javacheck/CMakeLists.txt MultiMC5-0.6.12b/libraries/javacheck/CMakeLists.txt
+--- MultiMC5-0.6.12a/libraries/javacheck/CMakeLists.txt	2021-03-21 19:45:06.000000000 +0000
++++ MultiMC5-0.6.12b/libraries/javacheck/CMakeLists.txt	2021-06-19 22:44:52.903139910 +0000
+@@ -4,7 +4,7 @@
+ 
+ include(UseJava)
+ set(CMAKE_JAVA_JAR_ENTRY_POINT JavaCheck)
+-set(CMAKE_JAVA_COMPILE_FLAGS -target 1.6 -source 1.6 -Xlint:deprecation -Xlint:unchecked)
++set(CMAKE_JAVA_COMPILE_FLAGS -target 1.7 -source 1.7 -Xlint:deprecation -Xlint:unchecked)
+ 
+ set(SRC
+     JavaCheck.java
+diff -ur MultiMC5-0.6.12a/libraries/launcher/CMakeLists.txt MultiMC5-0.6.12b/libraries/launcher/CMakeLists.txt
+--- MultiMC5-0.6.12a/libraries/launcher/CMakeLists.txt	2021-03-21 19:45:06.000000000 +0000
++++ MultiMC5-0.6.12b/libraries/launcher/CMakeLists.txt	2021-06-19 22:45:04.434354664 +0000
+@@ -4,7 +4,7 @@
+ 
+ include(UseJava)
+ set(CMAKE_JAVA_JAR_ENTRY_POINT org.multimc.EntryPoint)
+-set(CMAKE_JAVA_COMPILE_FLAGS -target 1.6 -source 1.6 -Xlint:deprecation -Xlint:unchecked)
++set(CMAKE_JAVA_COMPILE_FLAGS -target 1.7 -source 1.7 -Xlint:deprecation -Xlint:unchecked)
+ 
+ set(SRC
+     org/multimc/EntryPoint.java

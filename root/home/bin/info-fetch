@@ -1,0 +1,67 @@
+#!/bin/sh
+# Print some information about the system. This script was written with gentoo systems in mind.
+
+# Used Environment Variables
+# $SHELL
+# $USER
+
+# Used Files
+# /etc/os-release
+# /proc/sys/kernel/hostname
+# /proc/uptime
+# /proc/version
+
+# Get the hostname of the computer
+read -r hostname < /proc/sys/kernel/hostname
+
+# Source /etc/os-release if it exist
+[ -f /etc/os-release ] && . /etc/os-release
+[ "$PRETTY_NAME" ] || PRETTY_NAME="Linux"
+
+# Get the kernel version
+read -r _ _ kernel_version _ < /proc/version
+
+# Read uptime
+read -r uptime _ < /proc/uptime
+
+# Remove extra percision
+up=${uptime%.*}
+
+# Calculate days, hours, minutes and seconds from the given output
+days=$(( up / 86400 ))
+hours=$(( ( up % 86400 ) / 3600 ))
+min=$(( (( up % 86400 ) % 3600 ) / 60 ))
+sec=$(( (( up % 86400 ) % 3600 ) % 60 ))
+
+# Only display the value if it is not zero
+[ $days = 0 ] || dout="${days}d "
+[ $hours = 0 ] || hout="${hours}h "
+[ $min = 0 ] || mout="${min}m "
+[ $sec = 0 ] || sout="${sec}s"
+pretty_uptime="$dout$hout$mout$sout"
+
+# Calculate package count (Gentoo)
+pkg_count=0
+set -- /var/db/pkg/*/*
+pkg_count=$#
+
+# Color Showcase
+for i in 0 1 2 3 4 5 6 7
+do
+	normal_colors="$normal_colors\033[4${i}m\033[3${i}m  "
+	bright_colors="$bright_colors\033[10${i}m\033[9${i}m  "
+done
+
+# Colors and Formatting
+color="\033[35;1m"
+nocolor="\033[m"
+underline="\033[4m"
+
+printf '%b\n' "\n$color$underline$USER$nocolor@$underline$color$hostname$nocolor" \
+              "${color}os$nocolor $PRETTY_NAME" \
+              "${color}ke$nocolor $kernel_version" \
+              "${color}up$nocolor $pretty_uptime" \
+              "${color}sh$nocolor ${SHELL##*/}" \
+              "${color}pk$nocolor $pkg_count\n" \
+              "$normal_colors$nocolor" \
+              "$bright_colors$nocolor\n"

@@ -1,0 +1,59 @@
+import:
+  - ~/tmp/cache/thm/alacritty-colors.yml
+
+window:
+  padding:
+    x: 8
+    y: 8
+#  dimensions:
+#    columns: 120
+#    lines: 36
+  dynamic_padding: true
+  title: ""
+  dynamic_title: false
+
+scrolling:
+  history: 30000
+  multiplier: 3
+
+font:
+  normal:
+    family: monospace
+    style: Regular
+  bold:
+    family: monospace
+    style: Bold
+  italic:
+    family: monospace
+    style: Italic
+
+  bold_italic:
+    family: monospace
+    style: Bold Italic
+
+  size: 9.0
+
+draw_bold_text_with_bright_colors: false
+
+cursor:
+  style: Beam
+
+mouse:
+  url:
+    launcher:
+      program: None
+      args: []
+    modifiers: Command
+
+key_bindings:
+
+  - { key: Space,          mods: Shift|Control, mode: Vi, action: None }
+  - { key: Space,          mods: Shift|Control,           action: None }
+  - { key: F,              mods: Control|Shift,           action: None }
+  - { key: B,              mods: Control|Shift,           action: None }
+  - { key: Key0,           mods: Control,                 action: None }
+  - { key: Equals,         mods: Control,                 action: None }
+  - { key: Plus,           mods: Control,                 action: None }
+  - { key: NumpadAdd,      mods: Control,                 action: None }
+  - { key: Minus,          mods: Control,                 action: None }
+  - { key: NumpadSubtract, mods: Control,                 action: None }

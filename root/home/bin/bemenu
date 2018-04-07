@@ -1,0 +1,16 @@
+#!/bin/sh
+. "${XDG_CACHE_HOME}/thm/colors.sh"
+exec /usr/bin/bemenu -i \
+                     -w \
+                     -m all \
+                     -H 32 \
+                     --fn "monospace 10" \
+                     --tb="#$bg_color" \
+                     --tf="#$color1" \
+                     --fb="#$bg_color" \
+                     --ff="#$color9" \
+                     --nb="#$bg_color" \
+                     --nf="#$color8" \
+                     --hb="#$bg_color" \
+                     --hf="#$fg_color" \
+                     "$@"

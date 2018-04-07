@@ -1,0 +1,12 @@
+diff --git a/compiler-rt/lib/fuzzer/FuzzerInterceptors.cpp b/compiler-rt/lib/fuzzer/FuzzerInterceptors.cpp
+index b877986..74b4196 100644
+--- a/compiler-rt/lib/fuzzer/FuzzerInterceptors.cpp
++++ b/compiler-rt/lib/fuzzer/FuzzerInterceptors.cpp
+@@ -27,6 +27,7 @@
+ #include <cassert>
+ #include <cstdint>
+ #include <dlfcn.h> // for dlsym()
++#include <sys/types.h>
+ 
+ static void *getFuncAddr(const char *name, uintptr_t wrapper_addr) {
+   void *addr = dlsym(RTLD_NEXT, name);

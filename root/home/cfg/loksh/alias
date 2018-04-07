@@ -1,0 +1,18 @@
+#!/bin/ksh
+
+alias ls="ls -Fh --color=auto"
+alias grep="grep --color=auto"
+
+alias su="TERM=xterm-256color su -ls /bin/bash"
+
+# Run something N amount of times
+run() {
+	[[ $# -lt 2 ]] && { print "usage: run <repeat num> <command>" 1>&2; return 1; }
+	local i=0
+	local n=$1; shift
+	until [[ $i -eq $n ]]
+	do
+		eval "$@"
+		i=$((i+1))
+	done
+}

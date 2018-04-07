@@ -1,0 +1,20 @@
+CC="clang"
+CPP="clang-cpp"
+CXX="clang++"
+LD="ld.lld"
+AR="llvm-ar"
+NM="llvm-nm"
+RANLIB="llvm-ranlib"
+
+# GCC doesn't define __gnu_linux__ on musl but clang does
+# Remove the definition
+COMMON_FLAGS="${COMMON_FLAGS} -U__gnu_linux__"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+FCFLAGS="${COMMON_FLAGS}"
+FFLAGS="${COMMON_FLAGS}"
+
+CGO_CFLAGS="${COMMON_FLAGS}"
+CGO_CXXFLAGS="${COMMON_FLAGS}"
+CGO_FFLAGS="${COMMON_FLAGS}"
+CGO_LDFLAGS="${LDFLAGS}"

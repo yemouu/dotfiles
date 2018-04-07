@@ -1,0 +1,2 @@
+# Versions older than 1.13 need xrandr to run
+x11-apps/xrandr

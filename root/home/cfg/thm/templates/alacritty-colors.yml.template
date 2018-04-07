@@ -1,0 +1,32 @@
+colors:
+  primary:
+    background: '#{bg_color}'
+    foreground: '#{fg_color}'
+
+  cursor:
+    text:       '#{bg_color}'
+    cursor:     '#{fg_color}'
+
+  selection:
+    text:       '#{bg_color}'
+    background: '#{fg_color}'
+
+  normal:
+    black:      '#{color0}'
+    red:        '#{color1}'
+    green:      '#{color2}'
+    yellow:     '#{color3}'
+    blue:       '#{color4}'
+    magenta:    '#{color5}'
+    cyan:       '#{color6}'
+    white:      '#{color7}'
+
+  bright:
+    black:      '#{color8}'
+    red:        '#{color9}'
+    green:      '#{color10}'
+    yellow:     '#{color11}'
+    blue:       '#{color12}'
+    magenta:    '#{color13}'
+    cyan:       '#{color14}'
+    white:      '#{color15}'

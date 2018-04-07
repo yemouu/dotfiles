@@ -1,0 +1,155 @@
+#!/bin/sh
+# This script is made for Gentoo systems running EFISTUB but could be adapted
+# for other systems
+
+# Required commands:
+# cp - copy compiled kernel to destination aswell as making a backup of the current kernel
+# make - needed for perform clean, olddefconfig, menuconfig and to compile the kernel source
+# nproc - find amount of cpu threads available if $KUPDATER_MAKEOPTS isn't specified
+# zcat - copy currently running kernel config for use in new kernel
+# you will also need whatever is required to compile the kernel
+
+# Exit the script on error
+set -e
+
+# Compile kernel with LLVM toolchain
+export LLVM=1 LLVM_IAS=1
+
+# If these variables are not set, set them
+[ "$KUPDATER_SRC_DIR" ] || KUPDATER_SRC_DIR=/usr/src/linux
+[ "$KUPDATER_MAKEOPTS" ] || KUPDATER_MAKEOPTS="-j$(nproc)"
+[ "$KUPDATER_DEST_DIR" ] || KUPDATER_DEST_DIR=/boot/EFI/Gentoo
+[ "$KUPDATER_NAME" ] || KUPDATER_NAME=bzImage
+
+# Make sure the required directories are present before continuing
+[ -d "$KUPDATER_SRC_DIR" ] || { info f "$KUPDATER_SRC_DIR not found" 1>&2; exit 1; }
+[ -d "$KUPDATER_DEST_DIR" ] || { info f "$KUPDATER_DEST_DIR not found" 1>&2; exit 1; }
+
+# Usage statement
+usage() {
+	printf '%s\n' "usage: ${0##*/} [options]" \
+	              "options:" \
+	              "  -a: do not move kernel to \$KUPDATER_DEST_DIR" \
+	              "  -b: do not make a backup kernel" \
+	              "  -c: do not compile the kernel" \
+	              "  -e: edit kernel config" \
+	              "  -h: display this message" \
+	              "  -l: set LLVM=0" \
+	              "  -o: do not apply old kernel config" \
+	              "  -r: rollback the last update"
+}
+
+# Print status messages to the terminal
+info() {
+	case $1 in
+		f ) m="!!"; c="\033[31;1m" ;;
+		i ) m="**"; c="\033[32;1m" ;;
+		w ) m="??"; c="\033[33;1m" ;;
+	esac; shift
+	printf "$c%s\033[m %s\n" "$m" "$*"
+}
+
+# Restore the old kernel as the main kernel. This will  keep the old kernel as a backup.
+kup_restore() {
+	info i "cp $KUPDATER_DEST_DIR/$KUPDATER_NAME.bak $KUPDATER_DEST_DIR/$KUPDATER_NAME"
+	cp "$KUPDATER_DEST_DIR/$KUPDATER_NAME.bak" "$KUPDATER_DEST_DIR/$KUPDATER_NAME" || \
+		{ info f "failed to backup kernel" 1>&2; exit 1; }
+}
+
+# Preform some setup on the source
+kup_setup() {
+	# Very rarely, compiling the kernel will fail without a clean
+	info i "make clean"
+	make clean || { info f "make clean failed" 1>&2; }
+
+	# Check for old configuration here
+	[ -e /proc/config.gz ] || {
+		info f "/proc/config.gz does not exist." 1>&2
+		info w "The current kernel was most likely compiled without support for" 1>&2
+		info w "IKCONFIG and IKCONFIG_PROC. Skipping application of old kernel" 1>&2
+		info w "config." 1>&2
+		return 1
+	}
+
+	# Apply old kernel configuration
+	info i "zcat /proc/config.gz > $KUPDATER_SRC_DIR/.config"
+	zcat /proc/config.gz > "$KUPDATER_SRC_DIR/.config"
+
+	info i "make olddefconfig"
+	make olddefconfig || { info f "failed to apply old kernel config" 1>&2; exit 1; }
+}
+
+# Allow the user to configure the kernel before compilation
+kup_configure() {
+	info i "make menuconfig"
+	make menuconfig || { info f "configuration failed" 1>&2; exit 1; }
+}
+
+# Compile the kernel
+kup_compile() {
+	info i "make $KUPDATER_MAKEOPTS"
+	# shellcheck disable=SC2086
+	# This is favorable here
+	make $KUPDATER_MAKEOPTS || { info f "failed to compile the kernel" 1>&2; exit 1; }
+}
+
+# Move current kernel to a backup location
+kup_backup() {
+	info i "cp $KUPDATER_DEST_DIR/$KUPDATER_NAME $KUPDATER_DEST_DIR/$KUPDATER_NAME.bak"
+	cp "$KUPDATER_DEST_DIR/$KUPDATER_NAME" "$KUPDATER_DEST_DIR/$KUPDATER_NAME.bak" || \
+		{ info f "failed to backup kernel" 1>&2; exit 1; }
+}
+
+# Move new kernel to the correct location
+kup_apply() {
+	info i "cp $KUPDATER_SRC_DIR/arch/x86/boot/bzImage" "$KUPDATER_DEST_DIR"
+	cp "$KUPDATER_SRC_DIR/arch/x86/boot/bzImage" "$KUPDATER_DEST_DIR" || \
+		{ info f "failed to move new kernel" 1>&2; exit 1; }
+}
+
+# Handle arguments
+for flag in "$@"
+do
+	# Make sure argument start with '-' and is atleast 2 characters long
+	case $flag in
+		-  ) continue ;;
+		-- ) break ;;
+		-* ) ;;
+		*  ) continue ;;
+	esac
+
+	# Split the argument into letters to get options
+	flag=${flag#-}
+	while [ "$flag" ]
+	do
+		a=${flag%${flag#?}}
+		case $a in
+			a ) kup_skip_apply=true ;;
+			b ) kup_skip_backup=true ;;
+			c ) kup_skip_compile=true ;;
+			e ) kup_edit_cfg=true ;;
+			h ) usage; exit 0 ;;
+			l ) export LLVM=0 LLVM_IAS=0 ;;
+			o ) kup_skip_setup=true ;;
+			r ) kup_rollback=true ;;
+			* ) printf '%s\n' "${0##*/}: -$a is an invalid argument" 1>&2
+			    usage 1>&2; exit 1 ;;
+		esac
+		flag=${flag#?}
+	done
+done
+
+
+# Launch script functions based on options
+# If rollback is specified, we shouldn't try to do anything else
+[ $kup_rollback ] && { kup_restore; exit 0; }
+
+# Change directories into $KUPDATER_SRC_DIR
+info i "cd $KUPDATER_SRC_DIR"
+cd "$KUPDATER_SRC_DIR" || { info f "failed to enter directory $KUPDATER_SRC_DIR" 1>&2; exit 1; }
+
+[ $kup_skip_setup ] || kup_setup
+[ $kup_edit_cfg ] && kup_configure
+[ $kup_skip_compile ] || kup_compile
+[ $kup_skip_backup ] || kup_backup
+[ $kup_skip_apply ] || kup_apply

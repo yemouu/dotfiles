@@ -1,0 +1,62 @@
+@import url("/home/mou/tmp/cache/thm/gtk.css");
+
+* {
+  border: none;
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+window#waybar {
+  background-color: @bg-color;
+  color: @fg-color;
+}
+
+#custom-randomtext, #custom-loadaverage, #memory, #custom-ds4-battery, #pulseaudio, #clock, #tray {
+  padding: 0 8px;
+  margin: 0 8px;
+}
+
+#custom-randomtext {
+  color: @color1;
+}
+
+#custom-loadaverage {
+  color: @color2;
+}
+
+#memory {
+  color: @color3;
+}
+
+#workspaces {
+  color: @color4;
+}
+
+#workspaces button {
+  color: @color8;
+}
+
+#workspaces button.visible {
+  color: @color4;
+}
+
+#workspaces button.urgent {
+  color: @color1;
+}
+
+#workspaces button {
+  padding: 0 4px;
+}
+
+#custom-ds4-battery {
+  color: @color4;
+}
+
+#pulseaudio {
+  color: @color5;
+}
+
+#clock {
+  color: @color6;
+}

@@ -1,0 +1,41 @@
+/* HEX */
+@define-color bg-color #{bg_color};
+@define-color fg-color #{fg_color};
+
+@define-color color0 #{color0};
+@define-color color1 #{color1};
+@define-color color2 #{color2};
+@define-color color3 #{color3};
+@define-color color4 #{color4};
+@define-color color5 #{color5};
+@define-color color6 #{color6};
+@define-color color7 #{color7};
+@define-color color8 #{color8};
+@define-color color9 #{color9};
+@define-color color10 #{color10};
+@define-color color11 #{color11};
+@define-color color12 #{color12};
+@define-color color13 #{color13};
+@define-color color14 #{color14};
+@define-color color15 #{color15};
+
+/* RGB */
+@define-color bg-color-rgb rgb ({bg_color.rgb});
+@define-color fg-color-rgb rgb ({fg_color.rgb});
+
+@define-color color0-rgb rgb ({color0.rgb});
+@define-color color1-rgb rgb ({color1.rgb});
+@define-color color2-rgb rgb ({color2.rgb});
+@define-color color3-rgb rgb ({color3.rgb});
+@define-color color4-rgb rgb ({color4.rgb});
+@define-color color5-rgb rgb ({color5.rgb});
+@define-color color6-rgb rgb ({color6.rgb});
+@define-color color7-rgb rgb ({color7.rgb});
+@define-color color8-rgb rgb ({color8.rgb});
+@define-color color9-rgb rgb ({color9.rgb});
+@define-color color10-rgb rgb ({color10.rgb});
+@define-color color11-rgb rgb ({color11.rgb});
+@define-color color12-rgb rgb ({color12.rgb});
+@define-color color13-rgb rgb ({color13.rgb});
+@define-color color14-rgb rgb ({color14.rgb});
+@define-color color15-rgb rgb ({color15.rgb});

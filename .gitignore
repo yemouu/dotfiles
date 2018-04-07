@@ -1,0 +1,8 @@
+20opengl.conf
+*log
+*keep
+eselect-repo.conf~
+patterns.list
+plugins
+ltoworkarounds.conf
+example

@@ -1,0 +1,82 @@
+[
+	{
+		"layer":	   "top",
+		"position":	   "top",
+		"height":	   32,
+		"modules-left":	   ["custom/loadaverage", "memory"],
+		"modules-center":  ["custom/randomtext"],
+		"modules-right":   ["custom/ds4-battery", "pulseaudio", "clock", "tray"],
+		"name":		   "topbar",
+	
+		"custom/randomtext": {
+			"exec": "$HOME/cfg/waybar/randomtext.sh",
+			"interval": 3600,
+			"format": "{}",
+			"tooltip": false
+		},
+	
+		"clock": {
+			"interval": 1,
+			"format": "{:%R %e %a %b %Y %Z}",
+			"timezones": [ "UTC", "America/New_York"],
+			"tooltip": false,
+			"tooltip-format": "{:%e %a %b %Y %Z}"
+		},
+	
+		"custom/loadaverage": {
+			"exec": "$HOME/cfg/waybar/loadaverage.sh",
+			"interval": 1,
+			"format": "{}",
+			"tooltip": false
+		},
+	
+		"memory": {
+			"interval": 1,
+			"format": "{used:0.2f}G / {total:0.2f}G ({avail:0.2f}G)",
+			"tooltip": false
+		},
+	
+		"custom/ds4-battery": {
+			"exec": "$HOME/cfg/waybar/ds4-battery.sh",
+			"interval": 60,
+			"format": "{}",
+			"tooltip": false
+		},
+	
+		"pulseaudio": {
+			"format": "{volume}% / {format_source}",
+			"format-muted": "MUTE / {format_source}",
+			"format-source": "{volume}%",
+			"format-source-muted": "MUTE",
+			"scroll-step": 0.0,
+			"tooltip": false
+		},
+	
+		"sway/workspaces": {
+			"format": "{name}",
+			"disable-scroll": true,
+			"disable-click": true,
+			"numeric-first": true
+		},
+	
+		"tray": {
+			"icon-size": 24,
+			"spacing": 10
+		}
+	},
+	{
+		"layer":	   "top",
+		"position":	   "bottom",
+		"height":	   32,
+		"modules-center":  ["wlr/taskbar"],
+		"name":		   "botbar",
+	
+		"wlr/taskbar": {
+			"format": "{app_id}",
+			"icon-size": 24,
+			"on-click": "minimize-raise",
+			"on-click-middle": "close",
+			"on-click-right": "activate"
+		}
+	}
+]
