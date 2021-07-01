@@ -1,0 +1,12 @@
+#!/bin/sh
+# Script to launch a specific firefox profile
+
+# I don't have firefox store data at the root of my homedir
+HOME="/home/mou/tmp/homes/mozilla"
+
+profile_location="${HOME}/.mozilla"
+profile="$(grep Name= $profile_location/firefox/profiles.ini | sed 's/Name=//' | sort | bemenu -p 'Pick a profile:')"
+
+[ -z "$profile" ] && exit
+
+exec firefox -P "$profile"

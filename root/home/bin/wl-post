@@ -24,4 +24,4 @@ pgrep -x 'pipewire' || {
 } &
 
 # Start the foot-server
-#foot -s > "$log_dir/foot-server" 2>&1 &
+foot -s > "$log_dir/foot-server" 2>&1 &
