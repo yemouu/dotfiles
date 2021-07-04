@@ -1,0 +1,14 @@
+# Make sure execinfo.h isn't being used otherwise we will have issues with
+# other packages.
+src_prepare() {
+	# don't add -O3 to CXXFLAGS, bug 549140
+	sed -i -e '/CONFIG\s*+=/s/optimize_full//' src/corelib/corelib.pro || die
+
+	# fix missing qt_version_tag symbol w/ LTO, bug 674382
+	sed -i -e 's/^gcc:ltcg/gcc/' src/corelib/global/global.pri || die
+
+	# Don't use execinfo.h
+	use elibc_musl && { sed -i 's/define QLOG/define N/g' ./src/corelib/global/qlogging.cpp || die; }
+
+	qt5-build_src_prepare
+}
