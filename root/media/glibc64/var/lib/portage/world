@@ -3,6 +3,7 @@ app-eselect/eselect-repository
 app-misc/abduco
 app-misc/dvtm
 app-shells/loksh
+app-text/tree
 dev-util/ccache
 dev-util/shellcheck-bin
 dev-util/strace

@@ -6,6 +6,7 @@ app-eselect/eselect-repository
 app-eselect/eselect-sh
 app-misc/abduco
 app-misc/dvtm
+app-misc/radeontop
 app-portage/repoman
 app-shells/dash
 app-shells/loksh
@@ -50,6 +51,7 @@ media-libs/noise-suppression-for-voice
 media-sound/audacity
 media-sound/carla
 media-sound/catnip
+media-sound/catnip-gtk
 media-sound/myxer
 media-sound/pavucontrol
 media-sound/playerctl

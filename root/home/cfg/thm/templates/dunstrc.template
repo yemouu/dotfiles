@@ -1,5 +1,6 @@
 [global]
-monitor = 1
+#monitor = 1
+follow = mouse
 geometry = 400x1-32+32
 shrink = true
 layer = top

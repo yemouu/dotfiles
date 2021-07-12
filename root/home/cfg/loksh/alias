@@ -16,3 +16,29 @@ run() {
 		i=$((i+1))
 	done
 }
+
+# This is needed so ctrl + shift + n will use the current working directory
+# when using foot (https://codeberg.org/dnkl/foot/wiki#bash-and-zsh)
+cd() {
+	builtin cd "$@" || return 1
+
+	osc7_cwd() (
+		urlencode() {
+			local string="$1"
+			while [ "$string" ]
+			do
+				local c="${string%${string#?}}"
+				case $c in
+					%) printf '%%%02X' "'$c" ;;
+					*) printf "%s" "$c" ;;
+				esac
+				string=${string#?}
+			done
+		}
+
+		printf '\e]7;file://%s%s\e\\' "$HOSTNAME" "$(urlencode "$PWD")"
+	)
+
+	osc7_cwd
+	unset -f osc7_cwd
+}

@@ -16,8 +16,8 @@ PS2="\[\033[1;36m\]>\[\033[m\] "
 
 [ -d /media/glibc64 ] || PS1="(chroot) $PS1"
 
-# Source aliases
-. "$XDG_CONFIG_HOME/loksh/alias"
-
 # Source completions
 . "$XDG_CONFIG_HOME/loksh/completions"
+
+# Source aliases
+. "$XDG_CONFIG_HOME/loksh/alias"

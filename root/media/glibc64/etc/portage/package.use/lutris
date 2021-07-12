@@ -71,3 +71,5 @@ media-libs/glu abi_x86_32
 sys-fs/eudev abi_x86_32
 virtual/libusb abi_x86_32
 dev-libs/libusb abi_x86_32
+media-libs/harfbuzz abi_x86_32
+media-gfx/graphite2 abi_x86_32

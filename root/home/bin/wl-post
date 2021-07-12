@@ -25,3 +25,6 @@ pgrep -x 'pipewire' || {
 
 # Start the foot-server
 foot -s > "$log_dir/foot-server" 2>&1 &
+
+## Start Carla without gui
+#pgrep -x 'carla' || { carla -n "${HOME}/cfg/carla/desktop.carxp" > "$log_dir/carla" 2>&1 & } &
