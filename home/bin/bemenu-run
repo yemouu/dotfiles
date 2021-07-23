@@ -1,0 +1,24 @@
+#!/bin/sh
+. "${XDG_CACHE_HOME}/thm/colors.sh"
+
+# It looks like transparency set here is stacked ontop of eachother?
+# sb/sf/scb/scf don't seem to change anything
+exec /usr/bin/bemenu-run -i \
+                         -w \
+                         -p run: \
+                         -m all \
+                         -H 32 \
+                         --fn "monospace 10" \
+                         --tb "#${bg_color}d9" \
+                         --tf "#${color5}" \
+                         --fb "#${bg_color}00" \
+                         --ff "#${color5}" \
+                         --nb "#${bg_color}00" \
+                         --nf "#${color8}" \
+                         --hb "#${bg_color}00" \
+                         --hf "#${fg_color}" \
+                         --sb "#${color9}" \
+                         --sf "#${color9}" \
+                         --scb "#${color9}" \
+                         --scf "#${color9}" \
+                         "$@"

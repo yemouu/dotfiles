@@ -1,0 +1,7 @@
+net-dns/dnsmasq script
+net-misc/spice-gtk usbredir
+app-emulation/virt-manager gtk policykit
+
+app-emulation/libvirt policykit
+
+app-emulation/qemu -doc gtk io-uring opengl sdl sdl-image spice usb usbredir QEMU_SOFTMMU_TARGETS: x86_64 QEMU_USER_TARGETS: x86_64

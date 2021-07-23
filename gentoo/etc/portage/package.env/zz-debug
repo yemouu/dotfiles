@@ -1,0 +1,3 @@
+#sys-libs/musl debug-full debug-gdb
+#media-sound/carla debug-full debug-gdb
+#media-video/pipewire debug-full debug-gdb

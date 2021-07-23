@@ -1,0 +1,25 @@
+src_configure() {
+	local emesonargs=(
+		$(meson_feature gtk3 gtk)
+		$(meson_feature introspection)
+		$(meson_use mjpeg builtin-mjpeg)
+		$(meson_feature policykit polkit)
+		$(meson_feature lz4)
+		$(meson_feature sasl)
+		$(meson_feature smartcard)
+		$(meson_feature usbredir)
+		$(meson_feature vala vapi)
+		$(meson_feature webdav)
+		$(meson_feature wayland wayland-protocols)
+		-Dcoroutine=gthread
+	)
+
+	if use usbredir; then
+		emesonargs+=(
+			-Dusb-acl-helper-dir=/usr/libexec
+			-Dusb-ids-path=/usr/share/misc/usb.ids
+		)
+	fi
+
+	meson_src_configure
+}

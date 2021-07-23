@@ -1,0 +1,18 @@
+#!/bin/sh
+# Post startup script for wayland compositors
+
+# Log dir should be created from wl script
+log_dir=$HOME/tmp/logs
+
+# Dbus (atleast with elogind) doesn't get updated environment variables causing
+# some applications (like mako) to not autostart.
+dbus-update-activation-environment --all > "$log_dir/dbus-env-update" 2>&1 &
+
+# Do this if pipewire is not already running
+pw-launch &
+
+# Start the foot-server
+foot -s > "$log_dir/foot-server" 2>&1 &
+
+## Start Carla without gui
+#pgrep -x 'carla' || { carla -n "${HOME}/cfg/carla/desktop.carxp" > "$log_dir/carla" 2>&1 & } &
