@@ -1,5 +1,8 @@
 #!/bin/ksh
 
+# Don't continue if we are not interactive
+[[ $- = *i* ]] || return
+
 # Not having this set to the current terminal can cause issues
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -14,7 +17,7 @@ set -o csh-history
 PS1="\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
 PS2="\[\033[1;36m\]>\[\033[m\] "
 
-[ -d /mnt/glibc64 ] || PS1="(chroot) $PS1"
+[ "$WITHIN_KNOWN_CHROOT" = "true" ] && PS1="($CURRENT_DISTRO) $PS1"
 
 # Source completions
 . "$XDG_CONFIG_HOME/loksh/completions"

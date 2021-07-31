@@ -13,6 +13,7 @@ app-portage/repoman
 app-shells/dash
 app-shells/loksh
 app-text/ansifilter
+app-text/texlive
 dev-go/golicense
 dev-libs/bemenu
 dev-python/flake8
@@ -59,6 +60,7 @@ media-sound/pavucontrol
 media-sound/playerctl
 media-video/mpv
 net-analyzer/nethogs
+net-analyzer/speedtest-cli
 net-im/cchat-gtk
 net-misc/dhcpcd
 net-misc/ntp
@@ -78,7 +80,6 @@ sys-fs/dosfstools
 sys-kernel/gentoo-sources
 sys-kernel/linux-firmware
 sys-libs/timezone-data
-sys-power/auto-cpufreq
 sys-process/htop
 sys-process/lsof
 www-client/firefox

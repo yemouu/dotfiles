@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# Kernel pre-install hook for my efistub setup.
+#
+# Arguments passed to this script: $1 pkgname, $2 version.
+#
+PKGNAME="$1"
+VERSION="$2"
+
+# I want /boot to look like the following:
+# /boot
+# └── EFI
+#     ├── Gentoo
+#     │   ├── bzImage
+#     │   └── bzImage.bak
+#     └── Void
+#         ├── initramfs
+#         ├── initramfs.bak
+#         ├── vmlinuz
+#         └── vmlinuz.bak
+#
+# In the pre-install hook we will update the backup kernel and initramfs.
+
+# If for whatever reason we don't have both initramfs and kernel image, skip this step.
+if [ -f "${ROOTDIR}/boot/EFI/Void/initramfs" ] && [ -f "${ROOTDIR}/boot/EFI/Void/vmlinuz" ]
+then
+	mv "${ROOTDIR}/boot/EFI/Void/initramfs" "${ROOTDIR}/boot/EFI/Void/initramfs.bak"
+	mv "${ROOTDIR}/boot/EFI/Void/vmlinuz" "${ROOTDIR}/boot/EFI/Void/vmlinuz.bak"
+fi

@@ -1,7 +1,20 @@
 #!/bin/sh
 
 # Place this file in /etc/profile.d
-[ "$(id -u)" = "1000" ] && [ "${0##*/}" = "-ksh" ] || return 0
+[ "$(id -u)" = "1000" ] || return 0
+case ${0##*/} in
+	-*ksh ) ;;
+	*     ) return 0 ;;
+esac
+
+# Figure out what Distro we are in
+CURRENT_DISTRO="$(. /etc/os-release; printf '%s' $NAME)"
+
+# Are we in a chroot that we know about?
+[ "$CURRENT_DISTRO" = "Gentoo" ] && { findmnt /mnt/void > /dev/null 2>&1 \
+	&& WITHIN_KNOWN_CHROOT=false || WITHIN_KNOWN_CHROOT=true; }
+[ "$CURRENT_DISTRO" = "void" ] && { findmnt /mnt/gentoo > /dev/null 2>&1 \
+	&& WITHIN_KNOWN_CHROOT=false || WITHIN_KNOWN_CHROOT=true; }
 
 # Set XDG variables
 XDG_CACHE_HOME="$HOME/tmp/cache"
@@ -53,11 +66,12 @@ PATH="$HOME/bin:$HOME/opt/bin:$GOPATH/bin:/usr/lib/ccache/bin:$PATH"
 
 # Export all the variables
 export AR \
-       CARGO_HOME CC CFLAGS CGO_CFLAGS CGO_CXXFLAGS CGO_FFLAGS CXX CXXFLAGS \
+       CARGO_HOME CC CFLAGS CGO_CFLAGS CGO_CXXFLAGS CGO_FFLAGS CURRENT_DISTRO CXX CXXFLAGS \
        EDITOR ENV \
        FCFLAGS FFLAGS \
        GNUPGHOME GOMODCACHE GOPATH GRIPHOME \
        HISTCONTROL HISTFILE HISTSIZE \
+       WITHIN_KNOWN_CHROOT \
        LD LESSHISTFILE \
        NM \
        PAGER PASSWORD_STORE_DIR PATH \

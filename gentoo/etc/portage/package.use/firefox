@@ -5,4 +5,4 @@ media-libs/libvpx postproc
 sys-apps/xdg-desktop-portal screencast geolocation
 www-client/firefox lto pgo screencast
 x11-base/xorg-server xvfb
-net-libs/nodejs -lto
+net-libs/nodejs lto system-icu

@@ -1,0 +1,43 @@
+# Build with the flag `--without-tesseract` so we can compile with clang
+src_configure() {
+	local FONTPATH
+	for path in \
+		"${EPREFIX}"/usr/share/fonts/urw-fonts \
+		"${EPREFIX}"/usr/share/fonts/Type1 \
+		"${EPREFIX}"/usr/share/fonts \
+		"${EPREFIX}"/usr/share/poppler/cMap/Adobe-CNS1 \
+		"${EPREFIX}"/usr/share/poppler/cMap/Adobe-GB1 \
+		"${EPREFIX}"/usr/share/poppler/cMap/Adobe-Japan1 \
+		"${EPREFIX}"/usr/share/poppler/cMap/Adobe-Japan2 \
+		"${EPREFIX}"/usr/share/poppler/cMap/Adobe-Korea1
+	do
+		FONTPATH="$FONTPATH${FONTPATH:+:}${EPREFIX}$path"
+	done
+
+	PKGCONFIG=$(type -P $(tc-getPKG_CONFIG)) \
+	econf \
+		--enable-dynamic \
+		--enable-freetype \
+		--enable-fontconfig \
+		$(use_enable jpeg2k openjpeg) \
+		--disable-compile-inits \
+		--with-drivers=ALL \
+		--with-fontpath="$FONTPATH" \
+		--with-ijs \
+		--with-jbig2dec \
+		--with-libpaper \
+		--with-system-libtiff \
+		$(use_enable cups) \
+		$(use_enable dbus) \
+		$(use_enable gtk) \
+		$(use_with cups pdftoraster) \
+		$(use_with unicode libidn) \
+		$(use_with X x) \
+		DARWIN_LDFLAGS_SO_PREFIX="${EPREFIX}/usr/lib/" \
+		--without-tesseract
+
+	cd "${S}/ijs" || die
+	econf \
+		--enable-shared \
+		$(use_enable static-libs static)
+}

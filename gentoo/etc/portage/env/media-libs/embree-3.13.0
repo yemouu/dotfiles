@@ -1,0 +1,9 @@
+src_prepare() {
+	cmake_src_prepare
+
+	# disable RPM package building
+	sed -e 's|CPACK_RPM_PACKAGE_RELEASE 1|CPACK_RPM_PACKAGE_RELEASE 0|' \
+		-i CMakeLists.txt || die
+
+	sed -i 's/ objdump / llvm-objdump /g' common/cmake/check_globals.cmake || die
+}
