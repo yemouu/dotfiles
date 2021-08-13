@@ -1,1 +1,1 @@
-sys-libs/musl clang-O3
+sys-libs/musl cflags-O3

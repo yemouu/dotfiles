@@ -25,5 +25,7 @@ aud_filename="$(date +%y-%m-%d-%H_%M_%S).wav"
 pic_filename="$(date +%y-%m-%d-%H_%M_%S).png"
 
 ## rec settings ##
-#The name of the video file.
+# The name of the video file.
 rec_filename="$(date +%y-%m-%d-%H_%M_%S).mp4"
+# extra flags for wf-recorder
+rec_extraflags="-t -c h264_vaapi -d /dev/dri/renderD128"

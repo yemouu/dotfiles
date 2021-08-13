@@ -1,1 +1,1 @@
-app-text/texlive-core clang-O3
+app-text/texlive-core cflags-O3

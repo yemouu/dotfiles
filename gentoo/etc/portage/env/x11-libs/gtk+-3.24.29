@@ -1,3 +1,5 @@
+# Set the correct compiler
+# uses CC_FOR_BUILD instead of CC
 src_prepare() {
 	if ! use test ; then
 		# don't waste time building tests

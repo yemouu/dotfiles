@@ -71,13 +71,11 @@ add-highlighter global/ regex \b(TODO|FIXME)\b 0:default+rb
 # Indentation Options
 set-option global indentwidth 0
 set-option global tabstop 8
-hook global WinSetOption filetype=(css|html|xml) %{
-	map global insert <tab> '  '
-	set-option global indentwidth 2
+hook global WinSetOption filetype=(css|html|xml|markdown) %{
+	whitespace spaces 2
 }
 hook global WinSetOption filetype=python %{
-	map global insert <tab> '    '
-	set-option global indentwidth 4
+	whitespace spaces 4
 }
 
 # Status Line

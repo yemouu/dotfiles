@@ -1,1 +1,1 @@
-media-libs/libglvnd clang-O3
+media-libs/libglvnd cflags-O3

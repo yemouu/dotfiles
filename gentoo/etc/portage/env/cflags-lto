@@ -1,7 +1,4 @@
-FEATURES="splitdebug compressdebug installsources"
-USE="debug"
-
-COMMON_FLAGS="-O0 -g -pipe"
+COMMON_FLAGS="-march=native -O3 -flto -pipe -falign-functions=32"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS}"
 FCFLAGS="${COMMON_FLAGS}"

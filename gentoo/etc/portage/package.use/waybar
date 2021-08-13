@@ -1,2 +1,0 @@
-gui-apps/waybar -udev tray popups
-dev-libs/libdbusmenu gtk3

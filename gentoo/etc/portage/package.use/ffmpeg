@@ -1,1 +1,1 @@
-media-video/ffmpeg opus vorbis vpx webp
+media-video/ffmpeg libaom opus vorbis vpx webp

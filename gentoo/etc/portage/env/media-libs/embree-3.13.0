@@ -1,3 +1,4 @@
+# Replace objdump with llvm-objdump
 src_prepare() {
 	cmake_src_prepare
 

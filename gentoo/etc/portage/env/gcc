@@ -1,0 +1,14 @@
+# We could actually set variables here but gentoo defaults to gcc anyway
+# and my setup does NOT symlink tools to cc, c++, etc
+AR=""
+CC=""
+CPP=""
+CXX=""
+LD=""
+STRINGS=""
+STRIP=""
+NM=""
+RANLIB=""
+READELF=""
+OBJCOPY=""
+OBJDUMP=""

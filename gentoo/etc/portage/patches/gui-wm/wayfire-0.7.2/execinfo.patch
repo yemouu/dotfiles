@@ -1,0 +1,44 @@
+diff -ur wayfire-0.7.0a/src/debug-func.hpp wayfire-0.7.0b/src/debug-func.hpp
+--- wayfire-0.7.0a/src/debug-func.hpp	2021-01-29 16:32:09.323723600 +0000
++++ wayfire-0.7.0b/src/debug-func.hpp	2021-02-13 01:22:32.976767690 +0000
+@@ -2,7 +2,11 @@
+ #include <wayfire/debug.hpp>
+ #include <sstream>
+ #include <iomanip>
++
++#if defined (__GLIBC__)
+ #include <execinfo.h>
++#endif
++
+ #include <cxxabi.h>
+ #include <cstdio>
+ #include <dlfcn.h>
+@@ -210,6 +214,7 @@
+     };
+ }
+ 
++#if defined (__GLIBC__)
+ void wf::print_trace(bool fast_mode)
+ {
+     void *addrlist[MAX_FRAMES];
+@@ -253,6 +258,7 @@
+ 
+     free(symbollist);
+ }
++#endif
+ 
+ /* ------------------- Impl of debugging functions ---------------------------*/
+ #include <iomanip>
+diff -ur wayfire-0.7.0a/src/main.cpp wayfire-0.7.0b/src/main.cpp
+--- wayfire-0.7.0a/src/main.cpp	2021-01-29 16:32:09.323723600 +0000
++++ wayfire-0.7.0b/src/main.cpp	2021-02-13 01:22:22.610558403 +0000
+@@ -139,7 +139,9 @@
+     }
+ 
+     LOGE("Fatal error: ", error);
++    #if defined (__GLIBC__)
+     wf::print_trace(false);
++    #endif
+     std::_Exit(-1);
+ }
+ 

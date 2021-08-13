@@ -1,1 +1,1 @@
-dev-lang/python clang-O3
+dev-lang/python cflags-O3

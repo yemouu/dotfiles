@@ -1,1 +1,1 @@
-net-im/cchat-gtk clang-O3
+net-im/cchat-gtk cflags-O3
