@@ -1,0 +1,8 @@
+app-arch/libarchive -e2fsprogs
+app-text/xmlto text
+dev-libs/libpcre2 pcre16
+dev-qt/qtcore icu
+dev-qt/qtgui egl
+sys-libs/zlib minizip
+app-text/poppler qt5
+media-gfx/krita pdf

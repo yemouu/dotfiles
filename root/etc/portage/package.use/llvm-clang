@@ -1,4 +1,0 @@
-*/* clang compiler-rt default-compiler-rt default-libcxx default-lld libcxx libcxxabi llvm-libunwind
-
-# Fails on _Unwind_Word
-sys-libs/compiler-rt-sanitizers:12.0.0 -hwasan

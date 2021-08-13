@@ -5,7 +5,12 @@ and some eye candy
 
 # branches
 There are two branches in this repo, desktop and laptop. Each branch being for
-configuration for a specific computer
+configuration for a specific computer.
+
+# repo layout
+There are three directories in this repo each representing a btrfs subvolume.
+The two distros I have installed, Gentoo and Void, are setup in a way that I can boot
+from either without any issue.
 
 # current hardware (desktop)
 Intel Core i5 6500
@@ -14,19 +19,16 @@ Radeon RX 470
 2 x 1TB SSD
 
 # Gentoo
-I use Gentoo with musl libc and in a chroot, a normal Gentoo install.
-Portage configurations for my main install are located in root/etc/portage.
-Portage configurations for the chroot are located in root/media/glibc64/etc/portage.
+I use Gentoo with musl libc and Clang systemwide. GCC is not installed on this system.
+Configuration specific to Gentoo is located in the `gentoo` directory.
 
-# notable things i use
-wm:       wayfire
-terminal: foot
-editor:   Kakoune
-shell:    loksh
-launcher: bemenu
-bar:      waybar
+Many of the patches in this repo do not belong to me. I will provide a link where I
+find these patches in the future.
 
-Some of the scripts used can be found in my scripts repo[1] and others can be found in root/home/bin.
+# Void
+For applications that require glibc, I have a chroot where Void is installed.
+This chroot is bootable incase I ever need it. Configuration specific to Void
+are located in the `void` directory.
 
 # home directory structure
 My home directory is read-only and contains seven directories:
@@ -38,10 +40,23 @@ media - Contains videos and images.
 opt   - Contains software not installed system wide.
 tmp   - Contains cache (XDG_CACHE_HOME is ~/tmp/cache) and other random files.
 
-These directories can be changed in root/home/cfg/loksh/profile and root/home/cfg/user-dirs.dirs.
+These directories can be changed in home/cfg/loksh/profile and home/cfg/user-dirs.dirs.
+
+# notable things i use
+wm:       wayfire
+terminal: foot
+editor:   Kakoune
+shell:    loksh
+launcher: bemenu
+bar:      waybar
+
+Some of the scripts used can be found in my scripts repo[0] and others can be found in home/bin.
+This repo as well as the scripts repo can also be found on GitLab[1][2].
 
 # note
 These configurations are specific to my system and are not guaranteed to work on yours.
 
 # links
-[1] https://github.com/yemouu/scripts
+[0] https://github.com/yemouu/scripts
+[1] https://gitlab.com/yemou/setup
+[2] https://gitlab.com/yemou/scripts

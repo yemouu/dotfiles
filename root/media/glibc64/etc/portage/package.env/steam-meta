@@ -1,3 +1,0 @@
-media-libs/alsa-lib gcc-O3
-sys-devel/llvm gcc-O3
-dev-libs/libbsd gcc-O3

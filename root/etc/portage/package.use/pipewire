@@ -1,2 +1,0 @@
-media-sound/pulseaudio -alsa-plugin
-media-video/pipewire extra gstreamer jack-sdk pipewire-alsa

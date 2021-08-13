@@ -1,8 +1,0 @@
-dev-lang/python sqlite
-media-libs/libpng apng
-media-libs/libsdl2 gles2
-media-libs/libvpx postproc
-sys-apps/xdg-desktop-portal screencast geolocation
-www-client/firefox lto pgo screencast
-x11-base/xorg-server xvfb
-net-libs/nodejs -lto

@@ -1,0 +1,2 @@
+# Some extra stuff that glibc has builtin that musl may not
+sys-libs/queue-standalone

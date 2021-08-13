@@ -1,0 +1,80 @@
+#!/bin/sh
+
+# Place this file in /etc/profile.d
+[ "$(id -u)" = "1000" ] || return 0
+case ${0##*/} in
+	-*ksh ) ;;
+	*     ) return 0 ;;
+esac
+
+# Figure out what Distro we are in
+CURRENT_DISTRO="$(. /etc/os-release; printf '%s' $NAME)"
+
+# Are we in a chroot that we know about?
+[ "$CURRENT_DISTRO" = "Gentoo" ] && { findmnt /mnt/void > /dev/null 2>&1 \
+	&& WITHIN_KNOWN_CHROOT=false || WITHIN_KNOWN_CHROOT=true; }
+[ "$CURRENT_DISTRO" = "void" ] && { findmnt /mnt/gentoo > /dev/null 2>&1 \
+	&& WITHIN_KNOWN_CHROOT=false || WITHIN_KNOWN_CHROOT=true; }
+
+# Set XDG variables
+XDG_CACHE_HOME="$HOME/tmp/cache"
+XDG_CONFIG_HOME="$HOME/cfg"
+XDG_DATA_HOME="$HOME/data"
+
+# KSH specific variables
+ENV="$XDG_CONFIG_HOME/loksh/rc"
+HISTCONTROL="ignoredups:ignorespace"
+HISTFILE="$XDG_CACHE_HOME/loksh_history"
+
+# Prevent $HOME pollution
+GNUPGHOME="$XDG_DATA_HOME/gnupg"
+GRIPHOME="$XDG_CONFIG_HOME/grip"
+LESSHISTFILE="$XDG_CACHE_HOME/less_history"
+PASSWORD_STORE_DIR="$HOME/doc/.pws"
+XAUTHORITY="$XDG_CACHE_HOME/.Xauthority"
+
+# Set default commands
+EDITOR="kak"
+PAGER="less"
+VISUAL="kak"
+
+# C/C++/Fortran
+CC="clang"
+CXX="clang++"
+LD="ld.lld"
+AR="llvm-ar"
+NM="llvm-nm"
+RANLIB="llvm-ranlib"
+
+CFLAGS="-march=native -O3 -flto=thin -pipe -falign-functions=32"
+CXXFLAGS="$CFLAGS"
+FCFLAGS="$CFLAGS"
+FFLAGS="$CFLAGS"
+
+# Go
+GOMODCACHE="$XDG_CACHE_HOME/go/pkg/mod"
+GOPATH="$XDG_DATA_HOME/go"
+CGO_CFLAGS="$CFLAGS -fno-lto"
+CGO_CXXFLAGS="$CGO_CFLAGS"
+CGO_FFLAGS="$CGO_CFLAGS"
+
+# Rust
+CARGO_HOME="$XDG_DATA_HOME/cargo"
+
+# Add local bin dirs to path
+PATH="$HOME/bin:$HOME/opt/bin:$GOPATH/bin:/usr/lib/ccache/bin:$PATH"
+
+# Export all the variables
+export AR \
+       CARGO_HOME CC CFLAGS CGO_CFLAGS CGO_CXXFLAGS CGO_FFLAGS CURRENT_DISTRO CXX CXXFLAGS \
+       EDITOR ENV \
+       FCFLAGS FFLAGS \
+       GNUPGHOME GOMODCACHE GOPATH GRIPHOME \
+       HISTCONTROL HISTFILE HISTSIZE \
+       WITHIN_KNOWN_CHROOT \
+       LD LESSHISTFILE \
+       NM \
+       PAGER PASSWORD_STORE_DIR PATH \
+       RANLIB \
+       VISUAL \
+       XAUTHORITY XDG_CACHE_HOME XDG_CONFIG_HOME XDG_DATA_HOME

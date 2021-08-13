@@ -1,0 +1,15 @@
+src_prepare() {
+	default
+
+	find include -name \*.html -delete || die
+
+	# Give it a soname on FreeBSD
+	echo 'LIB_LINK_FLAGS += -Wl,-soname=$(BUILDING_LIBRARY)' >>	build/FreeBSD.gcc.inc
+	# Set proper versionning on FreeBSD
+	sed -i -e '/.DLL =/s/$/.1/' build/FreeBSD.inc || die
+	# Musl fix
+	sed -e "s@#define MALLOC_UNIXLIKE_OVERLOAD_ENABLED __linux__@@"  \
+		-i src/tbbmalloc/proxy.h
+
+	use debug || sed -i -e '/_debug/d' Makefile
+}

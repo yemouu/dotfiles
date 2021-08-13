@@ -1,0 +1,2 @@
+dev-go/golicense cflags-O3
+dev-lang/go cflags-O3

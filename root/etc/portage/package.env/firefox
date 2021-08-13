@@ -1,3 +1,0 @@
-media-libs/dav1d clang-O3
-media-libs/x264 clang-O3
-www-client/firefox use-libcxx

@@ -1,3 +1,0 @@
-# I don't use any Java ebuilds so I should be fine
-dev-java/openjdk -gentoo-vm
-dev-java/openjdk-bin -gentoo-vm

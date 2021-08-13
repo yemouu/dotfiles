@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Kernel post-install hook for my efistub setup.
+#
+# Arguments passed to this script: $1 pkgname, $2 version.
+#
+PKGNAME="$1"
+VERSION="$2"
+
+# I want /boot to look like the following:
+# /boot
+# └── EFI
+#     ├── Gentoo
+#     │   ├── bzImage
+#     │   └── bzImage.bak
+#     └── Void
+#         ├── initramfs
+#         ├── initramfs.bak
+#         ├── vmlinuz
+#         └── vmlinuz.bak
+#
+# Gentoo's kernel is already handled with my script `kupdater`
+mkdir -p boot/EFI/Void
+
+# Delete the config file. Void's kernel is configured with IKCONFIG and IKCONFIG_PROC
+if [ -f "boot/config-${VERSION}"  ]
+then
+	rm "boot/config-${VERSION}"
+fi
+
+# I doubt these files will ever not exist but checking wouldn't hurt
+if [ -f "boot/initramfs-${VERSION}.img" ]
+then
+	mv "boot/initramfs-${VERSION}.img" "boot/EFI/Void/initramfs"
+fi
+
+if [ -f "boot/vmlinuz-${VERSION}" ]
+then
+	mv "boot/vmlinuz-${VERSION}" "boot/EFI/Void/vmlinuz"
+fi

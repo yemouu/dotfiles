@@ -1,0 +1,9 @@
+#!/bin/sh
+export HOME="/home/mou/tmp/homes/mozilla"
+[ -d "$HOME" ] || mkdir -p "$HOME"
+
+# If this directory doesn't exist we are inside our glibc chroot
+if [ -d /mnt/glibc64 ]
+then exec /usr/bin/firefox-wayland "$@"
+else exec /usr/bin/firefox-wayland -P drm "$@"
+fi
