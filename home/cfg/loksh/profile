@@ -3,7 +3,7 @@
 # Place this file in /etc/profile.d
 [ "$(id -u)" = "1000" ] || return 0
 case ${0##*/} in
-	-*ksh ) ;;
+	-*ksh ) ;; # Catch loksh and ksh
 	*     ) return 0 ;;
 esac
 
