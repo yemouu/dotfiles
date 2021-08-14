@@ -3,7 +3,7 @@ export HOME="/home/mou/tmp/homes/mozilla"
 [ -d "$HOME" ] || mkdir -p "$HOME"
 
 # If this directory doesn't exist we are inside our glibc chroot
-if [ -d /mnt/glibc64 ]
+if [ "$CURRENT_DISTRO" = void ] && [ "$WITHIN_KNOWN_CHROOT" = false ]
 then exec /usr/bin/firefox-wayland "$@"
 else exec /usr/bin/firefox-wayland -P drm "$@"
 fi
