@@ -1,0 +1,6 @@
+#!/bin/sh
+
+case $1 in
+	-- ) shift; exec /usr/bin/carla "$@" ;;
+	*  ) exec /usr/bin/carla "$@" "${HOME}/cfg/carla/desktop.carxp" ;;
+esac

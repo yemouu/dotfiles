@@ -1,0 +1,4 @@
+#!/bin/sh
+SSH_CONFIG="${XDG_CONFIG_HOME}/ssh/config"
+SSH_ID="${XDG_DATA_HOME}/ssh/id_ed25519"
+exec /usr/bin/ssh -F "$SSH_CONFIG" -i "$SSH_ID" "$@"

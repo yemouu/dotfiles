@@ -1,0 +1,5 @@
+#!/bin/sh
+
+exec /usr/bin/catnip -b parec \
+                     -d "$(pactl info | grep Default\ Sink | awk '{print $3}').monitor" \
+                     "$@"

@@ -1,0 +1,5 @@
+#!/bin/sh
+export HOME="/home/mou/tmp/homes/audacity"
+[ -d "$HOME" ] || mkdir -p "$HOME"
+
+exec /usr/bin/audacity "$@"
