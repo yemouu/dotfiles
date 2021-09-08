@@ -45,17 +45,14 @@ ghroot_mount() {
 	done
 
 	# Mount any drives from /etc/fstab
-	while read -r line
+	while read -r check_comment mount_point _
 	do
-		case $line in
-			\#*  ) continue ;;
-			*$1* ) ;;
+		case $check_comment in \#*  ) continue ;; esac
+		case $mount_point in
+			# Don't do an automatic mount for the chroot itself. We already did this
+			$1* ) [ "$mount_point" != "$1" ] && mount "$mount_point" ;;
 			*    ) continue ;;
 		esac
-		line="${line#* }"
-		line="${line%% *}"
-		# Don't do an automatic mount for the chroot itself. We already did this
-		[ "$line" != "$1" ] && mount "$line"
 	done < /etc/fstab
 
 	printf '%s\n' "$1" >> /tmp/ghroot
@@ -75,17 +72,14 @@ ghroot_umount() {
 		umount -R "$1/$home" || { info "failed to unmount $1/$home"; }
 	done
 
-	while read -r line
+	while read -r check_comment mount_point _
 	do
-		case $line in
-			\#*  ) continue ;;
-			*$1* ) ;;
+		case $check_comment in \#*  ) continue ;; esac
+		case $mount_point in
+			# Don't unmount the chroot itself. We do this later
+			$1*  ) [ "$mount_point" != "$1" ] && umount -R "$mount_point" ;;
 			*    ) continue ;;
 		esac
-		line="${line#* }"
-		line="${line%% *}"
-		# Don't unmount the chroot itself. We do this later
-		[ "$line" != "$1" ] && umount -R "$line"
 	done < /etc/fstab
 
 	umount -R "$1"

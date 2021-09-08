@@ -29,9 +29,9 @@ set-face global LineNumbersWrapped bright-white,default
 set-face global MatchingChar       default,default+ub
 set-face global Whitespace         default,default
 
-#set-face global value              red,default
-#set-face global type               yellow,default
-#set-face global identifier         green,default
-#set-face global string             magenta,default
-#set-face global keyword            blue,default
-set-face global comment            cyan,default+b
+# set-face global value              red,default
+# set-face global type               yellow,default
+# set-face global identifier         green,default
+# set-face global string             magenta,default
+# set-face global keyword            blue,default
+set-face global comment            cyan,default+i

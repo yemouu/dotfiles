@@ -12,18 +12,15 @@ There are three directories in this repo each representing a btrfs subvolume.
 The two distros I have installed, Gentoo and Void, are setup in a way that I can boot
 from either without any issue.
 
-# current hardware (desktop)
-Intel Core i5 6500
-Radeon RX 470
-16GB RAM
-2 x 1TB SSD
+# current hardware
+Lenovo ThinkPad X1 Yoga Gen 6
 
 # Gentoo
 I use Gentoo with musl libc and Clang systemwide. GCC is not installed on this system.
 Configuration specific to Gentoo is located in the `gentoo` directory.
 
 Many of the patches in this repo do not belong to me. I will provide a link where I
-find these patches in the future.
+find these patches in the future to give proper credit.
 
 # Void
 For applications that require glibc, I have a chroot where Void is installed.

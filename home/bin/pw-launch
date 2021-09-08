@@ -8,13 +8,15 @@ log_dir=$HOME/tmp/logs
 pgrep -x 'pipewire' || {
 	# Start pipewire in the background and wait a second
 	pipewire > "$log_dir/pipewire" 2>&1 &
+	# Void Linux does not enable pipewire-pulse by default
+	[ "$CURRENT_DISTRO" = void ] && pipewire-pulse > "$log_dir/pipewire-pulse" 2>&1 &
 	sleep 1
 
 	[ "$1" = normal ] || {
-		# Create a null sink to easily run all audio through an equalizer
-		pactl load-module module-null-sink object.linger=1 media.class=Audio/Sink sink_name=PreEqualizer \
-			> "$log_dir/null-sink" 2>&1
-		pactl set-default-sink PreEqualizer >> "$log_dir/null-sink" 2>&1
+		# # Create a null sink to easily run all audio through an equalizer
+		# pactl load-module module-null-sink object.linger=1 media.class=Audio/Sink sink_name=PreEqualizer \
+		# 	> "$log_dir/null-sink" 2>&1
+		# pactl set-default-sink PreEqualizer >> "$log_dir/null-sink" 2>&1
 
 		# Create a null sink to easily noise suppress microphone output
 		pactl load-module module-null-sink object.linger=1 media.class=Audio/Source/Virtual \

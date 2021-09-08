@@ -11,6 +11,7 @@ options="hibernate\\nhybrid-sleep\\nlock\\npoweroff\\nreboot\\nsuspend\\nsuspend
 confirm() {
     c_prompt="Are you sure? [$action]"
     c_input=$(printf '%b' "yes\\nno" | bemenu -p "$c_prompt")
+    sleep 1
     case $c_input in
 	Y*|y* ) return 0 ;;
 	N*|n* ) exit 0 ;;

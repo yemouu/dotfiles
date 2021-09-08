@@ -1,4 +1,4 @@
-FEATURES="splitdebug compressdebug installsources"
+FEATURES="nostrip"
 USE="debug"
 
 COMMON_FLAGS="-O0 -g -pipe"

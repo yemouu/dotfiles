@@ -29,14 +29,15 @@ export LLVM=1 LLVM_IAS=1
 usage() {
 	printf '%s\n' "usage: ${0##*/} [options]" \
 	              "options:" \
-	              "  -a: do not move kernel to \$KUPDATER_DEST_DIR" \
-	              "  -b: do not make a backup kernel" \
-	              "  -c: do not compile the kernel" \
-	              "  -e: edit kernel config" \
-	              "  -h: display this message" \
-	              "  -l: set LLVM=0" \
-	              "  -o: do not apply old kernel config" \
-	              "  -r: rollback the last update"
+	              "  -a        - do not move kernel to \$KUPDATER_DEST_DIR" \
+	              "  -b        - do not make a backup kernel" \
+	              "  -c        - do not compile the kernel" \
+	              "  -e        - edit kernel config (menuconfig)" \
+	              "  -h        - display this message" \
+	              "  -l        - set LLVM=0 LLVM_IAS=0" \
+	              "  -o        - do not apply old kernel config" \
+	              "  -r        - rollback the last update" \
+	              "  -s script - configure kernel with a script (disables -o)"
 }
 
 # Print status messages to the terminal
@@ -108,31 +109,31 @@ kup_apply() {
 }
 
 # Handle arguments
-for flag in "$@"
+while [ "$*" ]
 do
 	# Make sure argument start with '-' and is atleast 2 characters long
-	case $flag in
-		-  ) continue ;;
-		-- ) break ;;
-		-* ) ;;
-		*  ) continue ;;
+	case $1 in
+		-  ) shift; continue ;;
+		-- ) shift; break ;;
+		-* ) flag=${1#-}; shift ;;
+		*  ) shift; continue ;;
 	esac
 
 	# Split the argument into letters to get options
-	flag=${flag#-}
 	while [ "$flag" ]
 	do
-		a=${flag%${flag#?}}
-		case $a in
-			a ) kup_skip_apply=true ;;
-			b ) kup_skip_backup=true ;;
-			c ) kup_skip_compile=true ;;
-			e ) kup_edit_cfg=true ;;
+		arg=${flag%${flag#?}}
+		case $arg in
+			a ) kup_skip_apply=true; shift ;;
+			b ) kup_skip_backup=true; shift ;;
+			c ) kup_skip_compile=true; shift ;;
+			e ) kup_edit_cfg=true; shift ;;
 			h ) usage; exit 0 ;;
-			l ) export LLVM=0 LLVM_IAS=0 ;;
-			o ) kup_skip_setup=true ;;
-			r ) kup_rollback=true ;;
-			* ) printf '%s\n' "${0##*/}: -$a is an invalid argument" 1>&2
+			s ) kup_cfg_script=$1; shift ;;
+			l ) export LLVM=0 LLVM_IAS=0; shift ;;
+			o ) kup_skip_setup=true; shift ;;
+			r ) kup_rollback=true; shift ;;
+			* ) printf '%s\n' "${0##*/}: -$arg: is an invalid argument" 1>&2
 			    usage 1>&2; exit 1 ;;
 		esac
 		flag=${flag#?}
@@ -150,6 +151,7 @@ cd "$KUPDATER_SRC_DIR" || { info f "failed to enter directory $KUPDATER_SRC_DIR"
 
 [ $kup_skip_setup ] || kup_setup
 [ $kup_edit_cfg ] && kup_configure
+[ "$kup_cfg_script" ] && { [ -x "$kup_cfg_script" ] && "$kup_cfg_script" || exit 1; }
 [ $kup_skip_compile ] || kup_compile
 [ $kup_skip_backup ] || kup_backup
 [ $kup_skip_apply ] || kup_apply

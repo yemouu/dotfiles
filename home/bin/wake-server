@@ -1,0 +1,6 @@
+#!/bin/sh
+
+read -r ip < "$HOME/doc/.server-ip"
+read -r mac < "$HOME/doc/.server-mac"
+
+exec wol "$@" -i "$ip" "$mac"

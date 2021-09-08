@@ -9,7 +9,7 @@ log_dir=$HOME/tmp/logs
 dbus-update-activation-environment --all > "$log_dir/dbus-env-update" 2>&1 &
 
 # Do this if pipewire is not already running
-pw-launch &
+pw-launch normal &
 
 # Start the foot-server
 foot -s > "$log_dir/foot-server" 2>&1 &
