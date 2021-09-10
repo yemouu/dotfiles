@@ -3,16 +3,30 @@
 
 # Log dir should be created from wl script
 log_dir=$HOME/tmp/logs
+[ -d "$log_dir" ] || mkdir -p "$log_dir"
 
 # Dbus (atleast with elogind) doesn't get updated environment variables causing
 # some applications (like mako) to not autostart.
-dbus-update-activation-environment --all > "$log_dir/dbus-env-update" 2>&1 &
+dbus-update-activation-environment --all > "$log_dir/dbus-env-update.log" 2>&1 &
 
-# Do this if pipewire is not already running
-pw-launch normal &
+# Configure displays
+kanshi > "$log_dir/kanshi.log" 2>&1 &
 
-# Start the foot-server
-foot -s > "$log_dir/foot-server" 2>&1 &
+# Pipewire
+pw-launch normal > "$log_dir/pipewire.log" 2>&1 &
 
 ## Start Carla without gui
 #pgrep -x 'carla' || { carla -n "${HOME}/cfg/carla/desktop.carxp" > "$log_dir/carla" 2>&1 & } &
+
+# Start the foot-server
+foot -s > "$log_dir/foot-server.log" 2>&1 &
+
+# Set idle actions
+swayidle timeout 300 swaylock > "$log_dir/swayidle.log" 2>&1 &
+
+# Set a wallpaper
+swaybg -i "$HOME/media/images/wallpapers/evie-s-fF9z39kVOfk-unsplash.jpg" -m fill \
+	> "$log_dir/swaybg.log" 2>&1 &
+
+## Nightlight
+#wlsunset -t 3700 -l 33.9 -L 84.5 > "$log_dir/wlsunset.log" 2>&1 &

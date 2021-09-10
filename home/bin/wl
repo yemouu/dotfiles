@@ -8,17 +8,17 @@ export XDG_SESSION_TYPE SDL_VIDEODRIVER
 # Setup a log dir
 # Output to tty sometimes gets jumbled
 log_dir="$HOME/tmp/logs"
-[ -d "$log_dir" ] || { mkdir -p "$log_dir" || printf '%s\n' "failed to make directory: $log_dir"; }
+[ -d "$log_dir" ] ||  mkdir -p "$log_dir"
 
 # Autostart
 {
-	syncthing -no-browser > "$log_dir/syncthing" 2>&1 &
+	syncthing -no-browser > "$log_dir/syncthing.log" 2>&1 &
 } &
 
 # Pick Wayland Compositor
 case $1 in
 	sway|s    ) export XDG_CURRENT_DESKTOP=sway
-	            exec dbus-run-session sway > "$log_dir/sway" 2>&1 ;;
+	            exec dbus-run-session sway > "$log_dir/sway.log" 2>&1 ;;
 	wayfire|w ) export XDG_CURRENT_DESKTOP=Wayfire
-	            exec dbus-run-session wayfire > "$log_dir/wayfire" 2>&1 ;;
+	            exec dbus-run-session wayfire > "$log_dir/wayfire.log" 2>&1 ;;
 esac

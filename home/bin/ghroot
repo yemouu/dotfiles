@@ -19,7 +19,8 @@ ghroot_check() {
 }
 
 ghroot_mount() {
-	# If an entry in /etc/fstab exist for this location, mount it. Otherwise create an rbind mount
+	# If an entry in /etc/fstab exist for this location, mount it.
+	# Otherwise create a rbind mount
 	mount "$1" || mount -B "$1" "$1"
 
 	# Mount what is necessary for the chroot
@@ -41,7 +42,10 @@ ghroot_mount() {
 	for home in /home/*
 	do
 		mkdir -p "$1/$home"
-		mount -R "$home" "$1/$home" || { info "failed to mount $home to $1/$home"; exit 1; }
+		mount -R "$home" "$1/$home" || {
+			info "failed to mount $home to $1/$home"
+			exit 1
+		}
 	done
 
 	# Mount any drives from /etc/fstab
@@ -85,7 +89,8 @@ ghroot_umount() {
 	umount -R "$1"
 
 	# Deletes the line number the chroot is on
-	sed "$(grep -n "$1" /tmp/ghroot | sed 's/:.*/d;/' | tr -d '\n' | sed 's/;$//')" /tmp/ghroot > /tmp/ghrootn
+	sed "$(grep -n "$1" /tmp/ghroot | sed 's/:.*/d;/' | tr -d '\n' | sed 's/;$//')" \
+		/tmp/ghroot > /tmp/ghrootn
 	mv /tmp/ghrootn /tmp/ghroot
 }
 

@@ -8,4 +8,8 @@
 ghroot m /mnt/glibc64
 
 TERM=xterm-256color
-chroot /mnt/glibc64 su -c "XDG_RUNTIME_DIR=/run/user/1000 WAYLAND_DISPLAY=wayland-1 XDG_SESSION_TYPE=wayland DISPLAY=:0 $*" - mou
+
+GEXEC_ENV="XDG_RUNTIME_DIR=/run/user/1000 WAYLAND_DISPLAY=wayland-1 XDG_SESSION_TYPE=wayland"
+GEXEC_ENV="$GEXEC_ENV DISPLAY=:0"
+
+chroot /mnt/glibc64 su -c "$GEXEC_ENV $*" - mou

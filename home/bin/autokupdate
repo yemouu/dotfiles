@@ -33,14 +33,19 @@ msg() {
 }
 
 # Sanity Checks
-[ -x "$AKU_CONFIG_SCRIPT" ] || { msg e "\`$AKU_CONFIG_SCRIPT\`: does not exist or is not executable"; exit 1; }
+[ -x "$AKU_CONFIG_SCRIPT" ] || {
+	msg e "\`$AKU_CONFIG_SCRIPT\`: doesn't exist or isn't executable"
+	exit 1
+}
 [ -d "$AKU_DIR" ] || { msg e "\`$AKU_DIR\`: does not exist"; exit 1; }
 
 # Check for `portageq`
 command -v portageq > /dev/null 2>&1 && AKU_PORTAGEQ=1
 
 # Set MAKEOPTS if not already set
-[ "$MAKEOPTS" ] || { [ "$AKU_PORTAGEQ" ] && MAKEOPTS="$(portageq envvar MAKEOPTS)" || MAKEOPTS="=j$(nproc)"; }
+[ "$MAKEOPTS" ] || {
+	[ "$AKU_PORTAGEQ" ] && MAKEOPTS="$(portageq envvar MAKEOPTS)" || MAKEOPTS="=j$(nproc)"
+}
 
 # If CC is set to clang in portage, enable LLVM and LLVM_IAS, but
 # if LLVM and LLVM_IAS is already set, don't change it.

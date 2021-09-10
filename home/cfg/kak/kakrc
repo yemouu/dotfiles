@@ -19,6 +19,24 @@ hook global WinSetOption filetype=(python|c|cpp) %{
 	map global insert <a-n> "<a-;>: insert-a-n<ret>"
 }
 
+# Column Indicator
+define-command -params 2..3 -docstring \
+"Add or remove column indicators. Takes three arguments: <add|remove> <column_number> <color>
+Where color is in the format <foreground>[,background][+attribute]." \
+columnindicator %{
+	evaluate-commands %sh{
+		[ "$1" = add ] && {
+			[ "$3" ] && color=$3 || color=default,bright_white
+			printf '%s\n' "eval addhl global/ column $2 $color"
+		}
+
+		[ "$1" = remove ] && {
+			[ "$3" ] && color=$3 || color=default,bright_white
+			printf '%s\n' "eval rmhl global/column_$2_$color"
+		}
+	}
+}
+
 # Template Command
 define-command -params 1 -docstring \
 "Print template into the current file. Templates are located at %val{config}/templates." \
@@ -36,9 +54,9 @@ define-command -params 2 -docstring \
 whitespace %{
 	evaluate-commands %sh{
 		[ "$1" = tabs ] \
-			&& printf '%s\n' "evaluate-commands map global insert <tab> <tab>" \
-			                 "evaluate-commands set-option global indentwidth 0" \
-			                 "evaluate-commands set-option global tabstop $2"
+			&& printf '%s\n' "eval map global insert <tab> <tab>" \
+			                 "eval set global indentwidth 0" \
+			                 "eval set global tabstop $2"
 
 		[ "$1" = spaces ] && {
 			s=0
@@ -48,8 +66,8 @@ whitespace %{
 				s=$((s+1))
 			done
 
-			printf '%s\n' "evaluate-commands map global insert <tab> \"$size\"" \
-			              "evaluate-commands set-option global indentwidth $2"
+			printf '%s\n' "eval map global insert <tab> \"$size\"" \
+			              "eval set global indentwidth $2"
 		}
 	}
 }
@@ -60,13 +78,16 @@ map global user p '!wl-paste<ret>' -docstring 'Paste from System Clipboard (Wayl
 map global user y '<a-|>wl-copy<ret>' -docstring 'Copy to System Clipboard (Wayland)'
 
 # Enable Wrapping
-add-highlighter global/ wrap -indent -marker '$>'
+add-highlighter global/ wrap -indent #-marker '$>'
 
 # Highlight Matching Characters
 add-highlighter global/ show-matching
 
 # Highligh TODO and friends
 add-highlighter global/ regex \b(TODO|FIXME)\b 0:default+rb
+
+# Add column indication at column 100
+columnindicator add 100 default,bright-white
 
 # Indentation Options
 set-option global indentwidth 0
@@ -79,8 +100,8 @@ hook global WinSetOption filetype=python %{
 }
 
 # Status Line
-set-option global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}} {{mode_info}}'
-set-option -add global modelinefmt ' - %sh{printf $USER} %sh{date +"%R %Z"} '
+set global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}}'
+set -add global modelinefmt ' {{mode_info}} - %sh{printf $USER} %sh{date +"%R %Z"} '
 
 # Colorscheme
 evaluate-commands %sh{
