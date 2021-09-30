@@ -28,20 +28,19 @@ read -r uptime _ < /proc/uptime
 up=${uptime%.*}
 
 # Calculate days, hours, minutes and seconds from the given output
-days=$(( up / 86400 ))
-hours=$(( ( up % 86400 ) / 3600 ))
-min=$(( (( up % 86400 ) % 3600 ) / 60 ))
-sec=$(( (( up % 86400 ) % 3600 ) % 60 ))
+days=$((up / 86400))
+hours=$(((up % 86400) / 3600))
+min=$((((up % 86400) % 3600) / 60))
+sec=$((((up % 86400) % 3600) % 60))
 
 # Only display the value if it is not zero
-[ $days = 0 ] || dout="${days}d "
+[ $days = 0 ]  || dout="${days}d "
 [ $hours = 0 ] || hout="${hours}h "
-[ $min = 0 ] || mout="${min}m "
-[ $sec = 0 ] || sout="${sec}s"
+[ $min = 0 ]   || mout="${min}m "
+[ $sec = 0 ]   || sout="${sec}s"
 pretty_uptime="$dout$hout$mout$sout"
 
 # Calculate package count (Gentoo)
-pkg_count=0
 set -- /var/db/pkg/*/*
 pkg_count=$#
 

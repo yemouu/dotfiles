@@ -18,14 +18,14 @@ aud_source="$(pactl info | grep Default\ Source)"
 aud_source="${aud_source#Default\ Source: }"
 
 # The name of the audio file.
-aud_filename="$(date +%y-%m-%d-%H_%M_%S).wav"
+aud_filename="$(date +%F-%H_%M_%S).wav"
 
 ## pic settings ##
 # The name of the image file.
-pic_filename="$(date +%y-%m-%d-%H_%M_%S).png"
+pic_filename="$(date +%F-%H_%M_%S).png"
 
 ## rec settings ##
 # The name of the video file.
-rec_filename="$(date +%y-%m-%d-%H_%M_%S).mp4"
+rec_filename="$(date +%F-%H_%M_%S).mp4"
 # extra flags for wf-recorder
 rec_extraflags="-t -c h264_vaapi -d /dev/dri/renderD128"

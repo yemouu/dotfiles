@@ -1,6 +1,6 @@
 #!/bin/sh
 
 export HOME=/home/mou/tmp/homes/teams
-[ -d $HOME ] || mkdir -p "$HOME"
 
+[ -d $HOME ] || mkdir -p "$HOME"
 exec /usr/bin/teams "$@"

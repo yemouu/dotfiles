@@ -1,2 +1,3 @@
 # networkmanager with lto flag enabled tries to use gcc only options (Tue Aug 24 12:39:28 PM EDT 2021)
-net-misc/networkmanager -ppp -wext -lto
+# iwd requires ell which currently requires gcc
+net-misc/networkmanager -ppp -wext -lto resolvconf #iwd

@@ -26,12 +26,12 @@ Where color is in the format <foreground>[,background][+attribute]." \
 columnindicator %{
 	evaluate-commands %sh{
 		[ "$1" = add ] && {
-			[ "$3" ] && color=$3 || color=default,bright_white
+			[ "$3" ] && color=$3 || color=default,bright-white
 			printf '%s\n' "eval addhl global/ column $2 $color"
 		}
 
 		[ "$1" = remove ] && {
-			[ "$3" ] && color=$3 || color=default,bright_white
+			[ "$3" ] && color=$3 || color=default,bright-white
 			printf '%s\n' "eval rmhl global/column_$2_$color"
 		}
 	}
@@ -86,30 +86,52 @@ add-highlighter global/ show-matching
 # Highligh TODO and friends
 add-highlighter global/ regex \b(TODO|FIXME)\b 0:default+rb
 
-# Add column indication at column 100
-columnindicator add 100 default,bright-white
+# Set theme_type
+evaluate-commands %sh{
+	[ "$TERM" = linux ] && { 
+		printf '%s\n' "decl str theme_type none"
+		return 0
+	}
+	. $(cat $HOME/tmp/cache/thm/current_thm)
+	case $theme_type in
+		light ) printf '%s\n' "decl str theme_type light" ;;
+		dark  ) printf '%s\n' "decl str theme_type dark" ;;
+		*     ) return 0 ;;
+	esac
+}
+
+# Add column indicator at column 100
+columnindicator add 100
 
 # Indentation Options
 set-option global indentwidth 0
-set-option global tabstop 8
+set-option global tabstop 4
+
+# Filetype specific options
 hook global WinSetOption filetype=(css|html|xml|markdown) %{
 	whitespace spaces 2
 }
 hook global WinSetOption filetype=python %{
 	whitespace spaces 4
 }
+hook global WinSetOption filetype=git-commit %{
+	columnindicator remove 100
+	columnindicator add 70
+}
+hook global WinSetOption filetype=markdown %{
+	columnindicator remove 100
+	remove-highlighter global/wrap_-indent
+	add-highlighter global/ wrap -indent -word
+}
 
 # Status Line
 set global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}}'
 set -add global modelinefmt ' {{mode_info}} - %sh{printf $USER} %sh{date +"%R %Z"} '
 
-# Colorscheme
+# Set colorscheme
 evaluate-commands %sh{
-	[ "$TERM" = linux ] && return 0
-	. $(cat $HOME/tmp/cache/thm/current_thm)
-	case $theme_type in
-		light ) printf '%s\n' "colorscheme theme-light" ;;
-		dark  ) printf '%s\n' "colorscheme theme-dark" ;;
-		*     ) return 0 ;;
+	case "$kak_opt_theme_type" in
+		dark ) printf '%s\n' "colorscheme theme-dark" ;;
+		*    ) printf '%s\n' "colorscheme theme" ;;
 	esac
 }

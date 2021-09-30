@@ -2,10 +2,18 @@
 
 # Place this file in /etc/profile.d
 [ "$(id -u)" = "1000" ] || return 0
-case ${0##*/} in
-	-*ksh ) ;; # Catch loksh and ksh
-	*     ) return 0 ;;
-esac
+
+# Catch only `loksh` and `ksh`
+# Gentoo calls the loksh binary `ksh` while void calls it `loksh`
+# This method for detecting the shell doesn't always work such as when using `su`
+#case ${0##*/} in
+#	-ksh   ) ;;
+#	-loksh ) ;;
+#	ksh    ) ;;
+#	loksh  ) ;;
+#	*      ) return 0 ;;
+#esac
+[ "$KSH_VERSION" ] || return 0
 
 # Figure out what Distro we are in
 CURRENT_DISTRO="$(. /etc/os-release; printf '%s' $NAME)"

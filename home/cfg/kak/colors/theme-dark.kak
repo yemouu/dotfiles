@@ -1,37 +1,40 @@
-set-face global Default bright-white,black
-set-face global BufferPadding bright-white,black
+source "%val{config}/colors/theme.kak"
 
-set-face global PrimarySelection black,white
-set-face global SecondarySelection bright-black,white
-set-face global PrimaryCursor black,bright-white
-set-face global SecondaryCursor bright-black,bright-white
-set-face global PrimaryCursorEol black,bright-white
-set-face global SecondaryCursorEol bright-black,bright-white
 
-set-face global MenuForeground white,bright-blue
-set-face global MenuBackground bright-blue,bright-black
-set-face global MenuInfo bright-cyan,bright-black
+#set-face global Default            default,default
+#set-face global BufferPadding      white,default
 
-set-face global Information bright-black,bright-yellow
-set-face global Error bright-white,bright-red
+#set-face global PrimarySelection   default,default+rb
+#set-face global SecondarySelection default,default+r
+#set-face global PrimaryCursor      default,default+rb
+#set-face global SecondaryCursor    default,default+r
+#set-face global PrimaryCursorEol   default,default+r
+#set-face global SecondaryCursorEol default,default+r
 
-set-face global StatusLine bright-cyan,bright-black
-set-face global StatusLineMode bright-yellow,bright-black
-set-face global StatusLineInfo bright-blue,bright-black
-set-face global StatusLineValue bright-green,bright-black
-set-face global StatusCursor white,bright-cyan
-set-face global Prompt bright-yellow,bright-black
+set-face global MenuForeground     bright-blue,bright-black+b
+set-face global MenuBackground     bright-blue,black+b
+set-face global MenuInfo           bright-cyan,default
 
-set-face global LineNumbers bright-black,black
-set-face global LineNumberCursor white,black
-set-face global LineNumbersWrapped bright-black,black
+set-face global Information        yellow,default+r
+#set-face global Error              default,bright-red+f
 
-set-face global MatchingChar bright-white,bright-magenta
-set-face global Whitespace default,default
+set-face global StatusLine         default,black
+#set-face global StatusLineMode     magenta,default+b
+#set-face global StatusLineInfo     blue,default+b
+#set-face global StatusLineValue    green,default+b
+#set-face global StatusCursor       default,default+rbfg
+#set-face global Prompt             default,default
 
-set-face global value red,black
-set-face global type yellow,black
-set-face global identifier green,black
-set-face global string magenta,black
-set-face global keyword blue,black
-set-face global comment cyan,black
+#set-face global LineNumbers        white,default
+#set-face global LineNumberCursor   bright-black,default
+#set-face global LineNumbersWrapped bright-white,default
+
+#set-face global MatchingChar       default,default+ub
+#set-face global Whitespace         default,default
+
+## set-face global value              red,default
+## set-face global type               yellow,default
+## set-face global identifier         green,default
+## set-face global string             magenta,default
+## set-face global keyword            blue,default
+#set-face global comment            cyan,default+i

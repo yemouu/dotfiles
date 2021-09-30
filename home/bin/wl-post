@@ -2,7 +2,7 @@
 # Post startup script for wayland compositors
 
 # Log dir should be created from wl script
-log_dir=$HOME/tmp/logs
+log_dir=$HOME/tmp/logs/$(date +%F)
 [ -d "$log_dir" ] || mkdir -p "$log_dir"
 
 # Dbus (atleast with elogind) doesn't get updated environment variables causing

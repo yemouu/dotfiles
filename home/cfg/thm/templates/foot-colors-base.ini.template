@@ -17,9 +17,3 @@ bright4={color12}
 bright5={color13}
 bright6={color14}
 bright7={color15}
-
-[csd]
-color=ff{color7}
-button-minimize-color=ff{color3}
-button-maximize-color=ff{color2}
-button-close-color=ff{color1}

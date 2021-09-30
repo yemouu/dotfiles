@@ -1,0 +1,7 @@
+include=/home/mou/tmp/cache/thm/foot-colors-base.ini
+
+[csd]
+color=ff{color7}
+button-minimize-color=ff{color3}
+button-maximize-color=ff{color2}
+button-close-color=ff{color1}

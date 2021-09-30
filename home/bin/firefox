@@ -2,8 +2,13 @@
 export HOME="/home/mou/tmp/homes/mozilla"
 [ -d "$HOME" ] || mkdir -p "$HOME"
 
+case $CURRENT_DISTRO in
+	Gentoo ) cmd=/usr/bin/firefox ;;
+	void   ) cmd=/usr/bin/firefox-wayland ;;
+esac
+
 # If this directory doesn't exist we are inside our glibc chroot
-if [ "$CURRENT_DISTRO" = void ] && [ "$WITHIN_KNOWN_CHROOT" = false ]
-then exec /usr/bin/firefox-wayland "$@"
-else exec /usr/bin/firefox-wayland -P drm "$@"
+if [ "$CURRENT_DISTRO" = void ] && [ "$WITHIN_KNOWN_CHROOT" = true ]
+then exec /usr/bin/firefox-wayland -P drm "$@"
+else exec $cmd "$@"
 fi

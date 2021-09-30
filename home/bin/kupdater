@@ -47,6 +47,7 @@ info() {
 		i ) m="**"; c="\033[32;1m" ;;
 		w ) m="??"; c="\033[33;1m" ;;
 	esac; shift
+
 	printf "$c%s\033[m %s\n" "$m" "$*"
 }
 
@@ -123,6 +124,7 @@ do
 	while [ "$flag" ]
 	do
 		arg=${flag%${flag#?}}
+
 		case $arg in
 			a ) kup_skip_apply=true; shift ;;
 			b ) kup_skip_backup=true; shift ;;
@@ -136,6 +138,7 @@ do
 			* ) printf '%s\n' "${0##*/}: -$arg: is an invalid argument" 1>&2
 			    usage 1>&2; exit 1 ;;
 		esac
+
 		flag=${flag#?}
 	done
 done
@@ -149,9 +152,9 @@ done
 info i "cd $KUPDATER_SRC_DIR"
 cd "$KUPDATER_SRC_DIR" || { info f "failed to enter directory $KUPDATER_SRC_DIR" 1>&2; exit 1; }
 
-[ $kup_skip_setup ] || kup_setup
-[ $kup_edit_cfg ] && kup_configure
+[ $kup_skip_setup ]   || kup_setup
+[ $kup_edit_cfg ]     && kup_configure
 [ "$kup_cfg_script" ] && { [ -x "$kup_cfg_script" ] && "$kup_cfg_script" || exit 1; }
 [ $kup_skip_compile ] || kup_compile
-[ $kup_skip_backup ] || kup_backup
-[ $kup_skip_apply ] || kup_apply
+[ $kup_skip_backup ]  || kup_backup
+[ $kup_skip_apply ]   || kup_apply

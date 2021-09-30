@@ -55,7 +55,7 @@ ghroot_mount() {
 		case $mount_point in
 			# Don't do an automatic mount for the chroot itself. We already did this
 			$1* ) [ "$mount_point" != "$1" ] && mount "$mount_point" ;;
-			*    ) continue ;;
+			*   ) continue ;;
 		esac
 	done < /etc/fstab
 
