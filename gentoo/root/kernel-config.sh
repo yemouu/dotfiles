@@ -92,7 +92,7 @@ cmd -e cmdline_bool
 cmd --set-str cmdline "root=PARTUUID=8cfe7af7-77eb-b246-8095-dedbf3e409f3 rootflags=subvolid=256 resume=UUID=aa573578-0f21-47b0-bf3a-8e8328dd20de resume_offset=10849834"
 
 # Load extra firmware
-cmd --set-str extra_firmware "intel-ucode/06-8c-01 regulatory.db regulatory.db.p7s iwlwifi-QuZ-a0-hr-b0-63.ucode intel/ibt-19-0-4.sfi i915/tgl_dmc_ver2_08.bin intel/sof/sof-tgl.ri"
+cmd --set-str extra_firmware "intel-ucode/06-8c-01 regulatory.db regulatory.db.p7s iwlwifi-QuZ-a0-hr-b0-63.ucode intel/ibt-19-0-4.sfi i915/tgl_dmc_ver2_08.bin intel/sof/sof-tgl.ri intel/sof-tplg/sof-hda-generic-4ch.tplg"
 
 # Networking
 cmd -e cfg80211_wext
@@ -126,6 +126,7 @@ cmd -e bt_hidp
 cmd -e bt_hs
 cmd -e bt_hcibtusb
 cmd -e bt_hciuart
+
 
 # Power management
 cmd -e cpu_freq_stat
@@ -260,6 +261,7 @@ cmd -e cgroup_perf
 cmd -e blk_cgroup
 cmd -e user_ns
 cmd -e sched_autogroup
+cmd -e cgroup_pids
 
 # Virtualization
 cmd -e kvm
@@ -314,5 +316,10 @@ cmd -e crypto_user_api_hash
 cmd -e crypto_user_api_skcipher
 cmd -e pkcs8_private_key_parser
 
-## gpm
-#cmd -e input_mousedev
+# bluez
+cmd -e bt_rfcomm_tty
+cmd -e bt_bnep
+cmd -e bt_bnep_mc_filter
+cmd -e bt_bnep_proto_filter
+cmd -e crypto_user
+cmd -e crypto_user_api_aead

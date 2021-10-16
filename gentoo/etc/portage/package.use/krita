@@ -5,4 +5,5 @@ dev-qt/qtcore icu
 dev-qt/qtgui egl
 sys-libs/zlib minizip
 app-text/poppler qt5
+dev-python/PyQt5 declarative network
 media-gfx/krita pdf

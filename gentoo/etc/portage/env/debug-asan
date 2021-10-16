@@ -1,8 +1,12 @@
-COMMON_FLAGS="-march=native -O3 -flto -pipe -falign-functions=32"
+FEATURES="nostrip"
+USE="debug"
+
+COMMON_FLAGS="-O0 -g -pipe -fsanitize=address"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS}"
 FCFLAGS="${COMMON_FLAGS}"
 FFLAGS="${COMMON_FLAGS}"
+LDFLAGS="${LDFLAGS} -fsanitize=address"
 
 CGO_CFLAGS="${COMMON_FLAGS}"
 CGO_CXXFLAGS="${COMMON_FLAGS}"

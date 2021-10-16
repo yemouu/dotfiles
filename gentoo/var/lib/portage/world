@@ -4,7 +4,6 @@ app-admin/pass
 app-admin/sudo
 app-admin/sysklogd
 app-doc/eclass-manpages
-app-editors/emacs
 app-editors/kakoune
 app-eselect/eselect-repository
 app-eselect/eselect-sh
@@ -17,7 +16,11 @@ app-shells/dash
 app-shells/loksh
 app-text/ansifilter
 app-text/editorconfig-core-c
+dev-go/go-tools
 dev-go/golicense
+dev-go/gopls
+dev-java/openjdk-bin
+dev-lang/rust
 dev-libs/bemenu
 dev-python/flake8
 dev-python/pydocstyle
@@ -62,13 +65,18 @@ media-sound/playerctl
 media-video/mpv
 net-analyzer/nethogs
 net-analyzer/speedtest-cli
+net-dns/bind-tools
 net-im/cchat-gtk
+net-im/gotktrix
 net-misc/dhcpcd
 net-misc/ntp
 net-misc/youtube-dl
 net-p2p/syncthing
+sys-apps/bubblewrap
+sys-apps/exa
 sys-apps/lm-sensors
 sys-apps/man-pages
+sys-apps/ripgrep
 sys-apps/smartmontools
 sys-apps/usbutils
 sys-auth/pam_yubico
@@ -87,6 +95,7 @@ sys-process/htop
 sys-process/iotop
 sys-process/lsof
 www-client/firefox
+x11-apps/xlsclients
 x11-libs/libnotify
 x11-misc/pcmanfm
 x11-misc/xdg-user-dirs

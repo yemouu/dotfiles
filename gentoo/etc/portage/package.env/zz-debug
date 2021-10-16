@@ -1,1 +1,6 @@
-
+## gotktrix debug
+#sys-libs/musl debug debug-gdb
+#dev-libs/glib debug debug-gdb
+#gui-libs/gtk:4 debug debug-gdb
+#dev-lang/go debug debug-gdb
+#net-im/gotktrix debug-asan debug-gdb

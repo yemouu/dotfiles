@@ -5,7 +5,7 @@ daemonize
 # Appearance
 disable-caps-lock-text
 indicator-caps-lock
-color={color7}
+color={color8}
 bs-hl-color={color1}
 caps-lock-bs-hl-color={color1}
 caps-lock-key-hl-color={color3}

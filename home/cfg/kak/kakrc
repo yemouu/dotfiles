@@ -5,25 +5,35 @@ source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "whereswaldon/shellcheck.kak"
 
 # kak-lsp
-eval %sh{kak-lsp --kakoune -s $kak_session}
-hook global WinSetOption filetype=(python|c|cpp) %{
+eval %sh{ kak-lsp --kakoune -s $kak_session }
+
+hook -group lsp global WinSetOption filetype=(c|cpp|go|java|python) %{
 	lsp-enable-window
-	def -hidden insert-a-n %{
-		try %{
-			lsp-snippets-select-next-placeholders
-			exec '<a-;>d'
-		} catch %{
-			exec -with-hooks '<c-n>'
+	#def -hidden insert-a-n %{
+	#	try %{
+	#		lsp-snippets-select-next-placeholders
+	#		exec '<a-;>d'
+	#	} catch %{
+	#		exec -with-hooks '<c-n>'
+	#	}
+	#}
+	#map global insert <a-n> "<a-;>: insert-a-n<ret>"
+}
+
+hook -group lsp global WinSetOption filetype=go %{
+	hook -group lsp-format buffer BufWritePost .* %{
+		evaluate-commands %sh{
+			goimports -e -w "$kak_buffile"
 		}
+		edit!
 	}
-	map global insert <a-n> "<a-;>: insert-a-n<ret>"
 }
 
 # Column Indicator
 define-command -params 2..3 -docstring \
 "Add or remove column indicators. Takes three arguments: <add|remove> <column_number> <color>
 Where color is in the format <foreground>[,background][+attribute]." \
-columnindicator %{
+m-columnindicator %{
 	evaluate-commands %sh{
 		[ "$1" = add ] && {
 			[ "$3" ] && color=$3 || color=default,bright-white
@@ -40,7 +50,7 @@ columnindicator %{
 # Template Command
 define-command -params 1 -docstring \
 "Print template into the current file. Templates are located at %val{config}/templates." \
-template %{
+m-template %{
 	evaluate-commands %sh{
 		[ -e "$kak_config/templates/$1" ] \
 			&& printf '%s\n' "exec !cat<space>$kak_config/templates/$1<ret>" \
@@ -51,7 +61,7 @@ template %{
 # Whitespace command
 define-command -params 2 -docstring \
 "Set whitespace options. Takes two arguments: <tabs|spaces> <size>" \
-whitespace %{
+m-whitespace %{
 	evaluate-commands %sh{
 		[ "$1" = tabs ] \
 			&& printf '%s\n' "eval map global insert <tab> <tab>" \
@@ -78,7 +88,7 @@ map global user p '!wl-paste<ret>' -docstring 'Paste from System Clipboard (Wayl
 map global user y '<a-|>wl-copy<ret>' -docstring 'Copy to System Clipboard (Wayland)'
 
 # Enable Wrapping
-add-highlighter global/ wrap -indent #-marker '$>'
+add-highlighter global/ wrap -indent
 
 # Highlight Matching Characters
 add-highlighter global/ show-matching
@@ -101,7 +111,7 @@ evaluate-commands %sh{
 }
 
 # Add column indicator at column 100
-columnindicator add 100
+m-columnindicator add 100
 
 # Indentation Options
 set-option global indentwidth 0
@@ -109,17 +119,20 @@ set-option global tabstop 4
 
 # Filetype specific options
 hook global WinSetOption filetype=(css|html|xml|markdown) %{
-	whitespace spaces 2
+	m-whitespace spaces 2
 }
-hook global WinSetOption filetype=python %{
-	whitespace spaces 4
+
+hook global WinSetOption filetype=(java|python) %{
+	m-whitespace spaces 4
 }
+
 hook global WinSetOption filetype=git-commit %{
-	columnindicator remove 100
-	columnindicator add 70
+	m-columnindicator remove 100
+	m-columnindicator add 70
 }
+
 hook global WinSetOption filetype=markdown %{
-	columnindicator remove 100
+	m-columnindicator remove 100
 	remove-highlighter global/wrap_-indent
 	add-highlighter global/ wrap -indent -word
 }

@@ -10,8 +10,8 @@
 # 		- $HOME in this case should be the root user's home directory (usually /root)
 # 		- If the script does not exist, the script will exit immediately
 # 		- A sample of of a kernel-config.sh can be found in my dotfiles at
-# 		  GitLab (https://gitlab.com/yemou/setup/gentoo/root/kernel-config.sh) or
-# 		  GitHub (https://github.com/yeemou/setup/gentoo/root/kernel-config.sh)
+# 		  GitLab (https://gitlab.com/yemou/setup/-/blob/laptop/gentoo/root/kernel-config.sh) or
+# 		  GitHub (https://github.com/yemouu/setup/blob/laptop/gentoo/root/kernel-config.sh)
 # 	- Compiles the kernel
 # 	- Copies bzImage to it's dest dir /boot/EFI/Gentoo/bzImage (AKU_DEST)
 # 		- If a file is already at this location, a backup will be made

@@ -1,0 +1,26 @@
+#!/bin/sh
+# Create an environment for glibc applications to run (without root permissions)
+
+# Make sure we have a command to execute
+[ "$*" ] || {
+	printf '%s\n' "Missing command to execute" 1>&2
+	exit 1
+}
+
+glibc_rootfs=/mnt/void
+
+# Populate the sandbox with some mounts
+for i in dev home media mnt proc root run sys tmp
+do args="${args}--dev-bind /$i /$i "
+done
+
+# Make mounts from void (glibc) rootfs to gentoo (musl) rootfs
+for i in bin etc lib lib32 lib64 opt sbin usr var
+do args="${args}--dev-bind $glibc_rootfs/$i /$i "
+done
+
+# Set these environment variables so my scripts and such know their environment
+args="${args}--setenv CURRENT_DISTRO void --setenv WITHIN_KNOWN_CHROOT true "
+
+# shellcheck disable=SC2086
+exec bwrap $args "$@"

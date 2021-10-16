@@ -1,0 +1,7 @@
+src_prepare() {
+	epatch "${FILESDIR}"/${P}-fix-segfault.patch
+	epatch "${FILESDIR}"/${P}-c11-using.patch
+	# Apply user patches
+	epatch_user || die
+	use prefix && eautoreconf
+}

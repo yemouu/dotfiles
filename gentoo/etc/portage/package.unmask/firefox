@@ -1,3 +1,5 @@
 www-client/firefox::gentoo
 
 =dev-lang/rust-1.55.0::yemou-overlay
+=dev-lang/spidermonkey-78.15.0::yemou-overlay
+=www-client/firefox-93.0::yemou-overlay
