@@ -1,5 +1,0 @@
-# Testing use flags for musl/clang profile
-
-# The way portage updates llvm and friends will lead to issues
-# If lld is updated before clang, clang may segfault at the linking stage
-# If some libraries, like libcxx, are updated before lld is built, a linking error may occur

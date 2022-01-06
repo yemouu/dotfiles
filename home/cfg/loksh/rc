@@ -28,7 +28,7 @@ set -o csh-history
 
 }
 
-[ "$WITHIN_KNOWN_CHROOT" = "true" ] && PS1="($CURRENT_DISTRO) $PS1"
+[ "$DWRAP_WITHIN_SANDBOX" = "true" ] && PS1="($DWRAP_CURRENT_DISTRO) $PS1"
 
 # Source completions
 . "$XDG_CONFIG_HOME/loksh/completions"

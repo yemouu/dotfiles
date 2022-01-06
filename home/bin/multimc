@@ -4,6 +4,6 @@
 # data directory into the home directory. YUCK!
 if [ "$CURRENT_DISTRO" = void ]
 then exec /usr/libexec/multimc/multimc "$@"
-else exec multimc "$@"
+else exec /usr/bin/multimc "$@"
 fi
 

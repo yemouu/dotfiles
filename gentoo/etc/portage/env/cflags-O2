@@ -1,4 +1,4 @@
-COMMON_FLAGS="-march=native -O2 -pipe -falign-functions=32"
+COMMON_FLAGS="-march=native -O2 -pipe"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS}"
 FCFLAGS="${COMMON_FLAGS}"

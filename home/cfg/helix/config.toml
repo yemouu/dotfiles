@@ -1,0 +1,4 @@
+theme = "theme"
+
+[editor]
+smart-case = false

@@ -6,7 +6,9 @@ case $1 in
 	* ) S_HOME="blanklily" ;;
 esac
 
-HOME="/home/mou/tmp/homes/steam-${S_HOME}"
+export HOMEWRAP_HOME="$HOME/tmp/homes/steam-$S_HOME"
+[ -d "$HOMEWRAP_HOME" ] || mkdir -p "$HOMEWRAP_HOME"
 
-[ -d ${HOME} ] || mkdir -p "${HOME}"
-exec /usr/bin/steam "$@"
+
+export SDL_VIDEODRIVER=x11
+exec homewrap /usr/bin/steam "$@"

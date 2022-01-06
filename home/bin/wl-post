@@ -2,7 +2,7 @@
 # Post startup script for wayland compositors
 
 # Log dir should be created from wl script
-log_dir=$HOME/tmp/logs/$(date +%F)
+log_dir=$HOME/tmp/logs/$(date +%F_%H_%M)
 [ -d "$log_dir" ] || mkdir -p "$log_dir"
 
 # Dbus (atleast with elogind) doesn't get updated environment variables causing
@@ -18,8 +18,8 @@ pw-launch normal > "$log_dir/pipewire.log" 2>&1 &
 ## Start Carla without gui
 #pgrep -x 'carla' || { carla -n "${HOME}/cfg/carla/desktop.carxp" > "$log_dir/carla" 2>&1 & } &
 
-# Start the foot-server
-foot -s > "$log_dir/foot-server.log" 2>&1 &
+## Start the foot-server
+#foot -s > "$log_dir/foot-server.log" 2>&1 &
 
 # Set idle actions
 swayidle timeout 300 swaylock > "$log_dir/swayidle.log" 2>&1 &
@@ -28,5 +28,5 @@ swayidle timeout 300 swaylock > "$log_dir/swayidle.log" 2>&1 &
 swaybg -i "$HOME/media/images/wallpapers/evie-s-fF9z39kVOfk-unsplash.jpg" -m fill \
 	> "$log_dir/swaybg.log" 2>&1 &
 
-## Nightlight
-#wlsunset -t 3700 -l 33.9 -L 84.5 > "$log_dir/wlsunset.log" 2>&1 &
+# Nightlight
+wlsunset -l 33.9 -L -84.5 > "$log_dir/wlsunset.log" 2>&1 &

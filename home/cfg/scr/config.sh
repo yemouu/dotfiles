@@ -28,4 +28,5 @@ pic_filename="$(date +%F-%H_%M_%S).png"
 # The name of the video file.
 rec_filename="$(date +%F-%H_%M_%S).mp4"
 # extra flags for wf-recorder
-rec_extraflags="-t -c h264_vaapi -d /dev/dri/renderD128"
+#rec_extraflags="-t -c h264_vaapi -d /dev/dri/renderD128"
+rec_extraflags="-t -b 0 -c h264_vaapi -d /dev/dri/renderD128"

@@ -7,7 +7,7 @@ export XDG_SESSION_TYPE SDL_VIDEODRIVER
 
 # Setup a log dir
 # Output to tty sometimes gets jumbled
-log_dir="$HOME/tmp/logs/$(date +%F)"
+log_dir="$HOME/tmp/logs/$(date +%F_%H_%M)"
 [ -d "$log_dir" ] ||  mkdir -p "$log_dir"
 
 # Autostart

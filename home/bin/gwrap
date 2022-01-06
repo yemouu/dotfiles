@@ -7,20 +7,18 @@
 	exit 1
 }
 
-glibc_rootfs=/mnt/void
+export DWRAP_DISTRO="gentoo-glibc"
 
-# Populate the sandbox with some mounts
-for i in dev home media mnt proc root run sys tmp
-do args="${args}--dev-bind /$i /$i "
-done
+export DWRAP_FROM_HOST="dev home media mnt proc root run sys"
+export DWRAP_FROM_ROOTFS="bin etc lib lib64 opt sbin tmp usr var"
 
-# Make mounts from void (glibc) rootfs to gentoo (musl) rootfs
-for i in bin etc lib lib32 lib64 opt sbin usr var
-do args="${args}--dev-bind $glibc_rootfs/$i /$i "
-done
+#case $1 in --rootfs-run|-r)
+#	shift
+#
+#	export DWRAP_FROM_HOST="dev home proc sys"
+#	export DWRAP_FROM_ROOTFS="bin etc lib lib64 opt run sbin tmp usr var"
+#
+#	exec dwrap --dev-bind /run/NetworkManager/resolv.conf /resolv.conf "$@"
+#;; esac
 
-# Set these environment variables so my scripts and such know their environment
-args="${args}--setenv CURRENT_DISTRO void --setenv WITHIN_KNOWN_CHROOT true "
-
-# shellcheck disable=SC2086
-exec bwrap $args "$@"
+exec dwrap "$@"

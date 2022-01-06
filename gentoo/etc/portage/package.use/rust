@@ -1,1 +1,2 @@
 dev-lang/rust system-bootstrap system-llvm
+dev-lang/rust libcxx llvm-libunwind

@@ -7,17 +7,17 @@ plug "whereswaldon/shellcheck.kak"
 # kak-lsp
 eval %sh{ kak-lsp --kakoune -s $kak_session }
 
-hook -group lsp global WinSetOption filetype=(c|cpp|go|java|python) %{
+hook -group lsp global WinSetOption filetype=(c|cpp|go|python) %{
 	lsp-enable-window
-	#def -hidden insert-a-n %{
-	#	try %{
-	#		lsp-snippets-select-next-placeholders
-	#		exec '<a-;>d'
-	#	} catch %{
-	#		exec -with-hooks '<c-n>'
-	#	}
-	#}
-	#map global insert <a-n> "<a-;>: insert-a-n<ret>"
+	def -hidden insert-a-n %{
+		try %{
+			lsp-snippets-select-next-placeholders
+			exec '<a-;>d'
+		} catch %{
+			exec -with-hooks '<c-n>'
+		}
+	}
+	map global insert <a-n> "<a-;>: insert-a-n<ret>"
 }
 
 hook -group lsp global WinSetOption filetype=go %{
@@ -83,6 +83,10 @@ m-whitespace %{
 }
 
 # Keybinds
+## User
+map global user c ':comment-line<ret>' -docstring 'comment line'
+map global user C ':comment-block<ret>' -docstring 'comment block'
+map global user f ':format<ret>' -docstring 'Run formatcmd'
 map global user l ':enter-user-mode lsp<ret>' -docstring 'Enter kak-lsp user mode'
 map global user p '!wl-paste<ret>' -docstring 'Paste from System Clipboard (Wayland)'
 map global user y '<a-|>wl-copy<ret>' -docstring 'Copy to System Clipboard (Wayland)'
@@ -92,6 +96,7 @@ add-highlighter global/ wrap -indent
 
 # Highlight Matching Characters
 add-highlighter global/ show-matching
+
 
 # Highligh TODO and friends
 add-highlighter global/ regex \b(TODO|FIXME)\b 0:default+rb
@@ -110,7 +115,7 @@ evaluate-commands %sh{
 	esac
 }
 
-# Add column indicator at column 100
+# Add column indicator at column 101
 m-columnindicator add 100
 
 # Indentation Options
@@ -118,12 +123,20 @@ set-option global indentwidth 0
 set-option global tabstop 4
 
 # Filetype specific options
-hook global WinSetOption filetype=(css|html|xml|markdown) %{
+hook global WinSetOption filetype=(css|html|java|markdown|xml) %{
 	m-whitespace spaces 2
 }
 
-hook global WinSetOption filetype=(java|python) %{
+hook global WinSetOption filetype=java %{
+	set-option buffer formatcmd "google-java-format -"
+}
+
+hook global WinSetOption filetype=(python|zig) %{
 	m-whitespace spaces 4
+}
+
+hook global WinSetOption filetype=zig %{
+	set-option buffer formatcmd "zig fmt --stdin"
 }
 
 hook global WinSetOption filetype=git-commit %{

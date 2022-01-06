@@ -1,0 +1,10 @@
+## Infinite compile
+
+## Infinite compile
+=media-libs/mesa-21.3.1-r1 cflags-Ono
+=media-libs/mesa-21.3.2 cflags-Ono
+=media-libs/mesa-21.3.3 cflags-Ono
+=dev-libs/boost-1.78.0-r2 cflags-Ono
+=dev-python/numpy-1.21.5 cflags-Ono
+=dev-python/numpy-1.22.0 cflags-Ono
+=dev-qt/qtgui-5.15.2-r15 cflags-Ono

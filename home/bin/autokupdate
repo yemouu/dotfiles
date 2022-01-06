@@ -18,77 +18,109 @@
 # 		  within the directory
 # 		- If the AKU_DEST is set to `none` kernel files will not be copied
 
+# TODO:
+# 	Remove stuff specific to Gentoo
+# 	Make it easier for the user to modify install behaviour
+# 	Make script more readable
+
 # Exit on error
 set -e
 
 # Set default values if environment variables aren't set
-[ "$AKU_CONFIG_SCRIPT" ] || AKU_CONFIG_SCRIPT=${HOME}/kernel-config.sh
-[ "$AKU_DIR" ] || AKU_DIR=/usr/src/linux
-[ "$AKU_DEST" ] || AKU_DEST=/boot/EFI/Gentoo
+: "${AKU_CONFIG_SCRIPT:=$HOME/kernel-config.sh}"
+: "${AKU_DIR:=/usr/src/linux}"
+: "${AKU_DEST:=/boot/EFI/Gentoo}"
 
-msg() {
-	case $1 in
-		e ) shift; printf '%s\n' "${0##*/}: $*" 1>&2 ;;
-		* ) printf '%s\n' "${0##*/}: $*" ;;
-	esac
-}
+info() { printf '%s\n' "${0##*/}: $*"; }
+warn() { printf '%s\n' "${0##*/}: $*" 1>&2; }
+erro() { printf '%s\n' "${0##*/}: $*" 1>&2; exit 1; }
 
 # Sanity Checks
-[ -x "$AKU_CONFIG_SCRIPT" ] \
-	|| { msg e "\`$AKU_CONFIG_SCRIPT\`: doesn't exist or isn't executable"; exit 1; }
-[ -d "$AKU_DIR" ] || { msg e "\`$AKU_DIR\`: does not exist"; exit 1; }
+[ -x "$AKU_CONFIG_SCRIPT" ] || { erro "$AKU_CONFIG_SCRIPT: doesn't exist or isn't an executable"; }
+[ -d "$AKU_DIR" ] || { erro "$AKU_DIR: does not exist"; }
 
 # Check for `portageq`
 command -v portageq > /dev/null 2>&1 && AKU_PORTAGEQ=1
 
 # Set MAKEOPTS if not already set
-[ "$MAKEOPTS" ] \
-	|| { [ "$AKU_PORTAGEQ" ] && MAKEOPTS="$(portageq envvar MAKEOPTS)" || MAKEOPTS="=j$(nproc)"; }
+[ "$MAKEOPTS" ] ||
+	{ [ "$AKU_PORTAGEQ" ] && MAKEOPTS="$(portageq envvar MAKEOPTS)" || MAKEOPTS="=j$(nproc)"; }
 
 # If CC is set to clang in portage, enable LLVM and LLVM_IAS, but
 # if LLVM and LLVM_IAS is already set, don't change it.
-command -v portageq > /dev/null 2>&1 &&
+[ "$AKU_PORTAGEQ" = 1 ] &&
 	case $(portageq envvar CC) in
 		*clang* )
-			[ "$LLVM" ] || export LLVM=1
-			[ "$LLVM_IAS" ] || export LLVM_IAS=1 ;;
+			: "${LLVM=1}"
+			: "${LLVM_IAS=1}"
+			export LLVM LLVM_IAS
 	esac
 
-msg "Changing directory ($AKU_DIR)..."
+info "Changing directory ($AKU_DIR)..."
 cd "$AKU_DIR"
 
-msg Cleaning build directory...
+info Cleaning build directory...
 # Clean any residue. Not doing this can sometimes cause errors when rebuilding
 # shellcheck disable=SC2086
-make ${MAKEOPTS} clean mrproper
+make ${MAKEOPTS} clean
 
-msg Applying default kernel configuration...
+info Applying default kernel configuration...
 # Generate default config
 # shellcheck disable=SC2086
 make ${MAKEOPTS} defconfig
 
-msg "Applying user's kernel configuration ($AKU_CONFIG_SCRIPT)..."
+info "Applying user's kernel configuration ($AKU_CONFIG_SCRIPT)..."
 # Run user's kernel configuration script
 "$AKU_CONFIG_SCRIPT"
 
-msg Validating kernel configuration...
+info Validating kernel configuration...
 # Validate and fix the .config
 # shellcheck disable=SC2086
 make ${MAKEOPTS} olddefconfig
 
-msg Compiling kernel...
+info Compiling kernel...
 # Compile the kenrel
 # shellcheck disable=SC2086
 make ${MAKEOPTS}
 
+info Installing kernel modules...
+# Install kernel modules
+# shellcheck disable=SC2086
+make ${MAKEOPTS} modules_install
+
+command -v emerge > /dev/null 2>&1 && {
+	info Rebuilding kernel module packages...
+	# Rebuilding kernel module packages
+	emerge @module-rebuild
+}
+
 [ "$AKU_DEST" = "none" ] || {
-	msg "Moving kernel to destination ($AKU_DEST)..."
+	# Edit this to work for how you want your kernels managed
+	# I may just run another external script or just the config script with an argument
+
+	info "Moving kernel to destination ($AKU_DEST)..."
 	# Ensure the destination directory exist
 	mkdir -p "$AKU_DEST"
 
-	# Create a backup if necessary
-	[ -e "$AKU_DEST/bzImage" ] && cp "$AKU_DEST/bzImage" "$AKU_DEST/bzImage.bak"
+	
+	kernel_version=$(make kernelversion)
+
+	update_boot_entries=1
+	[ -e "$AKU_DEST/bzImage-$kernel_version" ] && update_boot_entries=0
 
 	# Copy new kernel to destination
-	cp "$AKU_DIR/arch/x86/boot/bzImage" "$AKU_DEST"
+	cp "$AKU_DIR/arch/x86/boot/bzImage" "$AKU_DEST/bzImage-$kernel_version"
+
+	[ "$update_boot_entries" = 0 ] && exit
+
+	command -v efibootmgr > /dev/null 2>&1 && {
+		efibootmgr -c -d /dev/nvme0n1 -p 1 \
+			-L "Gentoo GLIBC $kernel_version" -l "/EFI/Gentoo/bzImage-$kernel_version" \
+			-u 'rootflags=subvolid=552' > /dev/null
+
+		efibootmgr -c -d /dev/nvme0n1 -p 1 \
+			-L "Gentoo MUSL $kernel_version" -l "/EFI/Gentoo/bzImage-$kernel_version" \
+			-u 'rootflags=subvolid=256' > /dev/null
+
+	}
 }

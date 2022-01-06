@@ -1,1 +1,2 @@
 sys-kernel/gentoo-sources experimental symlink
+sys-apps/kmod zstd

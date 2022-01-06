@@ -43,3 +43,11 @@ cd() {
 	osc7_cwd
 	unset -f osc7_cwd
 }
+
+source-env() {
+	[ "$1" ] || { print "missing argument" 1>&2; return 1; }
+	local env_d="$XDG_CONFIG_HOME/loksh/env.d"
+
+	[ -f "$env_d/${1}.env" ] || { print "env file ${1}.env: not found" 1>&2; return 1; }
+	. "$env_d/${1}".env
+}

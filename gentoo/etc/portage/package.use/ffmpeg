@@ -1,1 +1,1 @@
-media-video/ffmpeg libaom opus vorbis vpx webp
+media-video/ffmpeg libaom mp3 opus vorbis vpx webp fontconfig truetype

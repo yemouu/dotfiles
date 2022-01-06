@@ -1,0 +1,13 @@
+diff --git a/boost/interprocess/permissions.hpp b/boost/interprocess/permissions.hpp
+index ab55411..5988df4 100644
+--- a/boost/interprocess/permissions.hpp
++++ b/boost/interprocess/permissions.hpp
+@@ -11,6 +11,8 @@
+ #ifndef BOOST_INTERPROCESS_PERMISSIONS_HPP
+ #define BOOST_INTERPROCESS_PERMISSIONS_HPP
+ 
++#include <sys/stat.h>
++
+ #if !defined(BOOST_INTERPROCESS_DOXYGEN_INVOKED)
+ 
+ #ifndef BOOST_CONFIG_HPP

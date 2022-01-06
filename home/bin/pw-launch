@@ -1,24 +1,27 @@
 #!/bin/sh
 # Script to start pipewire with extra sinks and sources
 
-# Do this if pipewire is not already running
-pgrep -x 'pipewire' || {
-	# Start pipewire in the background and wait a second
-	pipewire &
+# Gentoo has their own pipewire launch script
+gentoo-pipewire-launcher &
 
-	# Void Linux does not enable pipewire-pulse by default
-	[ "$CURRENT_DISTRO" = void ] && pipewire-pulse &
-	sleep 1
-
-	[ "$1" = normal ] || {
-		## Create a null sink to easily run all audio through an equalizer
-		#pactl load-module module-null-sink object.linger=1 media.class=Audio/Sink \
-		#	sink_name=PreEqualizer
-		#pactl set-default-sink PreEqualizer
-
-		# Create a null sink to easily noise suppress microphone output
-		pactl load-module module-null-sink object.linger=1 \
-			media.class=Audio/Source/Virtual sink_name=PostNoiseSuppression channels=1
-		pactl set-default-source PostNoiseSuppression
-	}
-}
+## Do this if pipewire is not already running
+#pgrep -x 'pipewire' || {
+#	# Start pipewire in the background and wait a second
+#	pipewire &
+#
+#	# Void Linux does not enable pipewire-pulse by default
+#	[ "$CURRENT_DISTRO" = void ] && pipewire-pulse &
+#	sleep 1
+#
+#	[ "$1" = normal ] || {
+#		## Create a null sink to easily run all audio through an equalizer
+#		#pactl load-module module-null-sink object.linger=1 media.class=Audio/Sink \
+#		#	sink_name=PreEqualizer
+#		#pactl set-default-sink PreEqualizer
+#
+#		# Create a null sink to easily noise suppress microphone output
+#		pactl load-module module-null-sink object.linger=1 \
+#			media.class=Audio/Source/Virtual sink_name=PostNoiseSuppression channels=1
+#		pactl set-default-source PostNoiseSuppression
+#	}
+#}

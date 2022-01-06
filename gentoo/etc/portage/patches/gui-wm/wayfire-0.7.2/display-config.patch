@@ -1,0 +1,172 @@
+From 82f227292e5d1403b417f35897e1f0d424bebf1b Mon Sep 17 00:00:00 2001
+From: Ilia Bozhinov <ammen99@gmail.com>
+Date: Tue, 1 Jun 2021 09:24:04 +0200
+Subject: [PATCH] output-layout: add workarounds/use_external_output_config
+
+Currently, if an external application like kanshi sets the output
+configuration, Wayfire will reset it to the values in the config file
+whenever the config file is reloaded.
+
+To fix this, the new `use_external_output_config` option modifies
+Wayfire's handling of output configuration: when this option is true,
+    Wayfire will ignore any values in the config file (except mirroring)
+    and use the values given by kanshi (or any similar program).
+---
+ metadata/workarounds.xml   |  7 ++++
+ src/core/output-layout.cpp | 78 ++++++++++++++++++++++++++++----------
+ 2 files changed, 66 insertions(+), 19 deletions(-)
+
+diff --git a/metadata/workarounds.xml b/metadata/workarounds.xml
+index 3f3474eca..c12af9800 100644
+--- a/metadata/workarounds.xml
++++ b/metadata/workarounds.xml
+@@ -30,6 +30,13 @@
+       <_short>Allow dynamic repaint delay</_short>
+       <_long>If true, allows Wayfire to dynamically recalculate its max_render_time, i.e allow render time higher than max_render_time.</_long>
+       <default>false</default>
++    </option>
++    <option name="use_external_output_configuration" type="bool">
++      <_short>Use external output configuration instead of Wayfire's own.</_short>
++      <_long>If true, Wayfire will not handle any configuration options for outputs in the config file once an
++      external daemon like https://github.com/emersion/kanshi sets the output configuration via the wlr-output-management protocol.
++      Exceptions are made for options not available via wlr-output-management, like output mirroring and custom modelines.</_long>
++      <default>false</default>
+     </option>
+ 	</plugin>
+ </wayfire>
+diff --git a/src/core/output-layout.cpp b/src/core/output-layout.cpp
+index 3fef83921..24be2e9d6 100644
+--- a/src/core/output-layout.cpp
++++ b/src/core/output-layout.cpp
+@@ -251,6 +251,7 @@ struct output_layout_output_t
+ {
+     wlr_output *handle;
+     output_state_t current_state;
++    bool is_externally_managed = false;
+ 
+     std::unique_ptr<wf::output_impl_t> output;
+     wl_listener_wrapper on_destroy, on_mode;
+@@ -261,6 +262,9 @@ struct output_layout_output_t
+     wf::option_wrapper_t<double> scale_opt;
+     wf::option_wrapper_t<std::string> transform_opt;
+ 
++    wf::option_wrapper_t<bool> use_ext_config{
++        "workarounds/use_external_output_configuration"};
++
+     void initialize_config_options()
+     {
+         config_section = wf::get_core().config_backend->get_output_section(handle);
+@@ -373,15 +377,50 @@ struct output_layout_output_t
+         return true;
+     }
+ 
+-    output_state_t load_state_from_config()
++    /**
++     * Determine whether the state in the config file should be ignored.
++     */
++    bool should_ignore_config_state()
+     {
+-        output_state_t state;
+-        state.position = position_opt;
++        if (is_externally_managed && use_ext_config)
++        {
++            wf::output_config::mode_t mode = mode_opt;
++            if (mode.get_type() == output_config::MODE_MIRROR)
++            {
++                // Special case: output mirroring
++                // It is not supported directly supported by wlr-output-management
++                // Thus, if the config file says to mirror an output, we do use that
++                // information.
++                return false;
++            }
+ 
+-        /* Make sure we can use custom modes that are
+-         * specified in the config */
++            return true;
++        }
++
++        return false;
++    }
++
++    /**
++     * Load the state the output is configured with.
++     * This is typically the config file, but in case of daemons like kanshi this
++     * might be the external configuration.
++     */
++    output_state_t load_configured_state()
++    {
++        // Ensure custom modes from the config are enabled
++        // Also make sure to refresh them even if the output is externally
++        // managed.
+         refresh_custom_modes();
+ 
++        if (should_ignore_config_state())
++        {
++            // Current state is what was requested by the client.
++            return this->current_state;
++        }
++
++        output_state_t state;
++        state.position = position_opt;
++
+         wf::output_config::mode_t mode = mode_opt;
+         wlr_output_mode tmp;
+ 
+@@ -968,6 +1007,12 @@ class output_layout_t::impl
+ 
+         if (apply_configuration(configuration, test_only))
+         {
++            // Notify outputs that they have external configuration
++            for (auto& [wo, _] : configuration)
++            {
++                this->outputs[wo]->is_externally_managed = true;
++            }
++
+             wlr_output_configuration_v1_send_succeeded(wlr_configuration);
+         } else
+         {
+@@ -989,7 +1034,7 @@ class output_layout_t::impl
+          * next reconfiguration. This is needed because if we are removing
+          * an output, we might get into a situation where the last physical
+          * output has already been removed but we are yet to add the noop one */
+-        noop_output->apply_state(noop_output->load_state_from_config());
++        noop_output->apply_state(noop_output->load_configured_state());
+         wlr_output_layout_add_auto(output_layout, noop_output->handle);
+         timer_remove_noop.disconnect();
+     }
+@@ -1056,27 +1101,22 @@ class output_layout_t::impl
+         return configuration;
+     }
+ 
+-    output_configuration_t last_config_configuration;
+-
+     /** Load config from file, test and apply */
+     void reconfigure_from_config()
+     {
+-        /* Load from config file */
++        // Load desired configuration from config file
+         output_configuration_t configuration;
+-        for (auto& entry : this->outputs)
++        for (auto& [output, layout_output] : this->outputs)
+         {
+-            configuration[entry.first] = entry.second->load_state_from_config();
++            configuration[output] = layout_output->load_configured_state();
+         }
+ 
+-        if ((configuration == get_current_configuration()) ||
+-            (configuration == last_config_configuration))
++        if (configuration != get_current_configuration())
+         {
+-            return;
+-        }
+-
+-        if (test_configuration(configuration))
+-        {
+-            apply_configuration(configuration);
++            if (test_configuration(configuration))
++            {
++                apply_configuration(configuration);
++            }
+         }
+     }
+ 

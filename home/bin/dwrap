@@ -1,0 +1,39 @@
+#!/bin/sh
+# Run an application inside another distro
+
+# Make sure we have a command to execute
+[ "$*" ] || {
+	printf '%s\n' "Missing command to execute" 1>&2
+	exit 1
+}
+
+# There is no sane default for this
+[ "$DWRAP_DISTRO" ] ||
+	{ printf '%s\n' "Missing distro. Set DWRAP_DISTRO" 1>&2; exit 1; }
+
+# Directory where rootfs are stored
+: "${DWRAP_ROOTFS_DIR:=/mnt}"
+
+# Directories to use from the host machine
+: "${DWRAP_FROM_HOST:=dev home media mnt proc root run sys tmp}"
+
+# Directories to use from the ROOTFS
+: "${DWRAP_FROM_ROOTFS:=bin etc lib lib64 opt sbin usr var}"
+
+rootfs="$DWRAP_ROOTFS_DIR/$DWRAP_DISTRO"
+
+# Populate the sandbox with host dirs
+for i in $DWRAP_FROM_HOST
+do args="${args}--dev-bind /$i /$i "
+done
+
+# Populate the sandbox with rootfs dirs
+for i in $DWRAP_FROM_ROOTFS
+do args="${args}--dev-bind $rootfs/$i /$i "
+done
+
+# Set these environment variables so my scripts and such know their environment
+args="${args}--setenv DWRAP_CURRENT_DISTRO $DWRAP_DISTRO --setenv DWRAP_WITHIN_SANDBOX true "
+
+# shellcheck disable=SC2086
+exec bwrap $args "$@"

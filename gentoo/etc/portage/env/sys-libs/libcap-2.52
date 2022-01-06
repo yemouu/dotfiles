@@ -1,6 +1,0 @@
-# Use the correct OBJCOPY
-src_configure() {
-	tc-export AR CC LD OBJCOPY RANLIB
-	tc-export_build_env BUILD_CC
-	multilib-minimal_src_configure
-}

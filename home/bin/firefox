@@ -1,14 +1,14 @@
 #!/bin/sh
-export HOME="/home/mou/tmp/homes/mozilla"
-[ -d "$HOME" ] || mkdir -p "$HOME"
+export HOMEWRAP_HOME="$HOME/tmp/homes/mozilla"
+[ -d "$HOMEWRAP_HOME" ] || mkdir -p "$HOMEWRAP_HOME"
 
-case $CURRENT_DISTRO in
-	Gentoo ) cmd=/usr/bin/firefox ;;
-	void   ) cmd=/usr/bin/firefox-wayland ;;
+case $DWRAP_DISTRO in
+	gentoo-glibc ) cmd=/usr/bin/firefox-bin ;;
+	* ) cmd=/usr/bin/firefox ;;
 esac
 
 # If this directory doesn't exist we are inside our glibc chroot
-if [ "$CURRENT_DISTRO" = void ] && [ "$WITHIN_KNOWN_CHROOT" = true ]
-then exec /usr/bin/firefox-wayland -P drm "$@"
-else exec $cmd "$@"
+if [ "$DWRAP_WITHIN_SANDBOX" = true ]
+then exec homewrap $cmd -P drm "$@"
+else exec homewrap $cmd "$@"
 fi
