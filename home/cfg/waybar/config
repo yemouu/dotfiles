@@ -1,12 +1,62 @@
+// Things I want (Maybe I'll create my own panel at some point)
+// App Menu Icon
+//  - [ ] On left click opens App menu with all desktop applications
+//  - [ ] Needs image module
+// Music Control & Info
+//  - [ ] Three Buttons (Needs image module) 
+//    - [ ] Previous
+//    - [ ] Play / Pause
+//    - [ ] Next
+//  - [ ] Shows artist name and Song name
+//    - [ ] On left click, focus music player (If possible)
+//
+// Tray
+//  - [ ] Generic system tray for whatever ends up using it
+// Volume Level & Control
+//  - [ ] Requires image module
+//  - [ ] Sink
+//    - [ ] Muted / Unmuted
+//  - [ ] Source
+//    - [ ] Mute / Unmuted
+//  - [ ] On left click open pavucontrol or some other volume control application
+//  - [ ] On hover show volume percentage
+// WiFi & Wired Network
+//  - [ ] Requires image module
+//    - [ ] Show if on WiFi or Ethernet
+//  - [ ] If on WiFi show signal strength
+//  - [ ] On hover show Network Name
+// Battery Status & Level
+//  - [ ] Requires image module
+//  - [ ] Four States
+//    - [X] High   >40
+//    - [X] Medium <40, >25
+//    - [X] Low    <25
+//    - [X] Dead   =0
+//  - [ ] On left click open battery management gui (Maybe something ill make myself)
+// Time & Date
+//  - [X] Show time 
+//  - [X] On scroll switch between UTC and ET
+//  - [X] On hover show date
+//  - [ ] On left click open calendar app
+// Notification Center
+//   - [ ] Would just be an icon
+//   - [ ] Two states
+//     - [ ] No notifications
+//     - [ ] Notifications
+//   - [ ] Opens a notification center on left click
+//   - [ ] Clears all notifications on right click
+// Powermenu? (May merge into App Menu)
+//  - [ ] On left click opens power menu
+
 [
 	{
-		"layer":	   "top",
-		"position":	   "top",
-		"height":	   32,
-		"modules-left":	   ["custom/loadaverage", "memory"],
-		"modules-center":  ["custom/randomtext"],
-		"modules-right":   ["custom/ds4-battery", "pulseaudio", "clock", "tray"],
-		"name":		   "topbar",
+		"layer": "top",
+		"position": "top",
+		"height": 32,
+		//"modules-left": [ "custom/media" ],
+		"modules-center": [ "custom/randomtext" ],
+		"modules-right": [ "tray", "pulseaudio", "battery", "clock" ],
+		"name": "topbar",
 	
 		"custom/randomtext": {
 			"exec": "$HOME/cfg/waybar/randomtext.sh",
@@ -14,33 +64,22 @@
 			"format": "{}",
 			"tooltip": false
 		},
+
+		"battery": {
+			"states": {
+				"med": 40,
+				"low": 25,
+				"dead": 0
+			},
+			"tooltip": false
+		},
 	
 		"clock": {
 			"interval": 1,
-			"format": "{:%R %e %a %b %Y %Z}",
-			"timezones": [ "UTC", "America/New_York"],
-			"tooltip": false,
+			"format": "{:%R}",
+			"timezones": [ "America/New_York", "UTC" ],
+			"tooltip": true,
 			"tooltip-format": "{:%e %a %b %Y %Z}"
-		},
-	
-		"custom/loadaverage": {
-			"exec": "$HOME/cfg/waybar/loadaverage.sh",
-			"interval": 1,
-			"format": "{}",
-			"tooltip": false
-		},
-	
-		"memory": {
-			"interval": 1,
-			"format": "{used:0.2f}G / {total:0.2f}G ({avail:0.2f}G)",
-			"tooltip": false
-		},
-	
-		"custom/ds4-battery": {
-			"exec": "$HOME/cfg/waybar/ds4-battery.sh",
-			"interval": 60,
-			"format": "{}",
-			"tooltip": false
 		},
 	
 		"pulseaudio": {
@@ -52,31 +91,9 @@
 			"tooltip": false
 		},
 	
-		"sway/workspaces": {
-			"format": "{name}",
-			"disable-scroll": true,
-			"disable-click": true,
-			"numeric-first": true
-		},
-	
 		"tray": {
 			"icon-size": 24,
 			"spacing": 10
-		}
-	},
-	{
-		"layer":	   "top",
-		"position":	   "bottom",
-		"height":	   32,
-		"modules-center":  ["wlr/taskbar"],
-		"name":		   "botbar",
-	
-		"wlr/taskbar": {
-			"format": "{app_id}",
-			"icon-size": 24,
-			"on-click": "minimize-raise",
-			"on-click-middle": "close",
-			"on-click-right": "activate"
 		}
 	}
 ]

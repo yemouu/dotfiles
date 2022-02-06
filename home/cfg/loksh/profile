@@ -24,9 +24,9 @@ PASSWORD_STORE_DIR="$HOME/doc/.pws"
 XAUTHORITY="$XDG_CACHE_HOME/.Xauthority"
 
 # Set default commands
-EDITOR="hx"
+EDITOR="kak"
 PAGER="less"
-VISUAL="hx"
+VISUAL="kak"
 
 # Add local bin dirs to path
 PATH="$HOME/bin:$HOME/opt/bin:$PATH"

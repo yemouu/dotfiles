@@ -56,7 +56,7 @@ m-template %{
 			&& printf '%s\n' "exec !cat<space>$kak_config/templates/$1<ret>" \
 			|| printf '%s\n' "echo Template $1 doesn't exist."
 	}
-}
+} -shell-script-candidates %{ cd "$kak_config/templates"; printf '%s\n' * }
 
 # Whitespace command
 define-command -params 2 -docstring \
@@ -90,6 +90,11 @@ map global user f ':format<ret>' -docstring 'Run formatcmd'
 map global user l ':enter-user-mode lsp<ret>' -docstring 'Enter kak-lsp user mode'
 map global user p '!wl-paste<ret>' -docstring 'Paste from System Clipboard (Wayland)'
 map global user y '<a-|>wl-copy<ret>' -docstring 'Copy to System Clipboard (Wayland)'
+
+# Set termcmd
+hook global ModuleLoaded wayland %{
+	set-option global termcmd "foot sh -c"
+}
 
 # Enable Wrapping
 add-highlighter global/ wrap -indent
@@ -151,8 +156,9 @@ hook global WinSetOption filetype=markdown %{
 }
 
 # Status Line
-set global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}}'
-set -add global modelinefmt ' {{mode_info}} - %sh{printf $USER} %sh{date +"%R %Z"} '
+set global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}} '
+set -add global modelinefmt '{{mode_info}} - %sh{printf $USER} %sh{date +"%R %Z"} '
+set -add global modelinefmt '%sh{cat /sys/class/power_supply/BAT0/capacity} '
 
 # Set colorscheme
 evaluate-commands %sh{

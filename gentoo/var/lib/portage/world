@@ -4,10 +4,10 @@ app-admin/sysklogd
 app-arch/lzip
 app-arch/plzip
 app-crypt/seahorse
+app-crypt/yubikey-manager-qt
 app-doc/eclass-manpages
 app-editors/helix
 app-editors/kakoune
-app-emulation/virt-manager
 app-eselect/eselect-repository
 app-eselect/eselect-sh
 app-laptop/tlp
@@ -40,6 +40,7 @@ dev-util/strace
 dev-util/uncrustify
 dev-util/vulkan-tools
 dev-vcs/git
+dev-vcs/git-lfs
 games-action/supertuxkart
 games-fps/xonotic
 games-util/game-device-udev-rules
@@ -68,7 +69,6 @@ media-fonts/ibm-plex
 media-fonts/noto
 media-fonts/noto-emoji
 media-gfx/imagemagick
-media-gfx/inkscape
 media-gfx/krita
 media-libs/noise-suppression-for-voice
 media-sound/catnip
@@ -82,14 +82,16 @@ net-analyzer/speedtest-cli
 net-dns/bind-tools
 net-im/cchat-gtk
 net-im/gotktrix
-net-misc/networkmanager
 net-misc/ntp
 net-misc/wol
 net-misc/yt-dlp
 net-p2p/syncthing
+net-wireless/iwd
+net-wireless/iwgtk
 sys-apps/bubblewrap
 sys-apps/drm_info
 sys-apps/exa
+sys-apps/flatpak
 sys-apps/lm-sensors
 sys-apps/man-pages
 sys-apps/ripgrep
@@ -98,9 +100,9 @@ sys-apps/thunderbolt-software-user-space
 sys-apps/usbutils
 sys-auth/pam_yubico
 sys-auth/rtkit
+sys-auth/yubikey-personalization-gui
 sys-boot/efibootmgr
 sys-devel/cc-config
-sys-devel/distcc
 sys-firmware/intel-microcode
 sys-firmware/sof-firmware
 sys-fs/btrfs-progs
@@ -114,7 +116,6 @@ sys-power/powertop
 sys-process/htop
 sys-process/iotop
 sys-process/lsof
-www-client/epiphany
 www-client/firefox
 x11-apps/igt-gpu-tools
 x11-apps/mesa-progs

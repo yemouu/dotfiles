@@ -1,7 +1,9 @@
+/* Import my colorscheme */
 @import url("/home/mou/tmp/cache/thm/gtk.css");
 
+/* General bar settings */
 * {
-  border: none;
+  border: 6px;
   font-family: monospace;
   font-size: 14px;
   font-weight: 600;
@@ -17,46 +19,34 @@ window#waybar {
   margin: 0 8px;
 }
 
+/* Random Text */
 #custom-randomtext {
   color: @color1;
 }
 
-#custom-loadaverage {
-  color: @color2;
-}
-
-#memory {
-  color: @color3;
-}
-
-#workspaces {
-  color: @color4;
-}
-
-#workspaces button {
-  color: @color8;
-}
-
-#workspaces button.visible {
-  color: @color4;
-}
-
-#workspaces button.urgent {
-  color: @color1;
-}
-
-#workspaces button {
-  padding: 0 4px;
-}
-
-#custom-ds4-battery {
-  color: @color4;
-}
-
+/* Volume Status */
 #pulseaudio {
   color: @color5;
 }
 
+/* Battery */
+#battery {
+  color: @color2;
+}
+
+#battery.med {
+  color: @color3;
+}
+
+#battery.low {
+  color: @color1;
+}
+
+#battery.dead {
+  color: @color8;
+}
+
+/* Date & Time */
 #clock {
   color: @color6;
 }

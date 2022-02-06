@@ -1,0 +1,2 @@
+app-accessibility/speech-dispatcher -espeak flite
+app-accessibility/flite voices

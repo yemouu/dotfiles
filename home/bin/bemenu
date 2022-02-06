@@ -8,13 +8,13 @@ exec /usr/bin/bemenu -i \
                      -m all \
                      -H 32 \
                      --fn "monospace 10" \
-                     --tb "#${bg_color}d9" \
+                     --tb "#${bg_color}" \
                      --tf "#${color5}" \
-                     --fb "#${bg_color}00" \
+                     --fb "#${bg_color}" \
                      --ff "#${color5}" \
-                     --nb "#${bg_color}00" \
+                     --nb "#${bg_color}" \
                      --nf "#${color8}" \
-                     --hb "#${bg_color}00" \
+                     --hb "#${bg_color}" \
                      --hf "#${fg_color}" \
                      --sb "#${color9}" \
                      --sf "#${color9}" \

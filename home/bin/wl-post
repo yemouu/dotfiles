@@ -30,3 +30,6 @@ swaybg -i "$HOME/media/images/wallpapers/evie-s-fF9z39kVOfk-unsplash.jpg" -m fil
 
 # Nightlight
 wlsunset -l 33.9 -L -84.5 > "$log_dir/wlsunset.log" 2>&1 &
+
+# Panel
+waybar > "$log_dir/waybar.log" 2>&1 &

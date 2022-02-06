@@ -4,48 +4,33 @@ include /etc/sway/config.d/*
 # Appearance #
 include ${XDG_CACHE_HOME}/thm/sway-appearance
 
-## Outputs #
-#output DP-1 {
-#	bg ${HOME}/media/images/wallpapers/evie-s-_IpKsTK9gcE-unsplash.jpg fill
-#	max_render_time 3
-#	pos 1920 0
-#	res 3840x2160@60.000000Hz
-#	scale 2
-#	subpixel rgb
-#}
-
-#output DP-2 {
-#	bg ${HOME}/media/images/wallpapers/evie-s-XjX3Ju1jFfU-unsplash.jpg fill
-#	max_render_time 3
-#	pos 0 0
-#	res 1920x1080@144.001007Hz
-#	subpixel rgb
-#}
-
 # Input #
-input 7805:11616:ROCCAT_ROCCAT_Kain_200_Aimo_Dongle_Mouse {
+input 1133:50503:Logitech_USB_Receiver {
 	accel_profile flat
-	pointer_accel -0.7
+	pointer_accel -0.92
 }
 
 input 12136:130:Hoksi_Technology_DURGOD_Taurus_K320 {
 	xkb_options compose:caps
+	repeat_delay 300
+	repeat_rate 50
 }
 
 input 1386:782:Wacom_Intuos_S_Pen {
-	map_to_output DP-1
+	map_to_output "BenQ Corporation BenQ PD2700U ET87K04288SL0"
 }
 
-# Seats #
-seat seat0 {
-	hide_cursor 8000
-	#xcursor_theme clicc
-}
+## Seats #
+#seat seat0 {
+#	hide_cursor 8000
+#	#xcursor_theme clicc
+#}
 
 ## Bar
 #bar swaybar_command waybar
 
 exec wl-post
+exec_always pkill kanshi; exec kanshi
 
 # Options #
 floating_maximum_size -1 x -1
@@ -108,18 +93,22 @@ bindsym {
 	$W+$A+f exec $file_manager
 	$W+$C+f exec ffp
 
-	XF86AudioPlay exec playerctl play-pause
+	#XF86AudioPlay exec playerctl play-pause
+	XF86AudioPlay exec playerctl play
+	XF86AudioPause exec playerctl pause
 	XF86AudioStop exec playerctl stop
 	XF86AudioPrev exec playerctl previous
 	XF86AudioNext exec playerctl next
 
+	$W+e exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+	XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 	XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +2%
 	XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -2%
-	XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-	 
-	$W+e exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+	# Brightness control
 
 	Print exec scr pic -c
+	$W+Print exec scr pic -cd
 
 	$W+c exec colorgrab -co
 	$W+$A+c exec colorgrab -cn
@@ -180,6 +169,10 @@ bindsym {
 	$W+b border pixel 2
 	$W+n border none
 }
+
+# Bindswitches
+bindswitch --locked lid:on output eDP-1 disable
+bindswitch --locked lid:off output eDP-1 enable
 
 floating_modifier $W normal
 

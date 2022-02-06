@@ -28,7 +28,7 @@ cd() {
 			local string="$1"
 			while [ "$string" ]
 			do
-				local c="${string%${string#?}}"
+				local c="${string%"${string#?}"}"
 				case $c in
 					%) printf '%%%02X' "'$c" ;;
 					*) printf "%s" "$c" ;;
