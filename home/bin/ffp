@@ -10,4 +10,4 @@ profile="$(grep Name= $profile_location/firefox/profiles.ini | sed 's/Name=//' |
 
 [ -z "$profile" ] && exit
 
-exec firefox -P "$profile"
+exec moulog firefox -P "$profile"

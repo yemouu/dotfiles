@@ -1,0 +1,120 @@
+#!/bin/sh
+# This script is meant to run as root
+# Changes intel turbo boost state and thinkpad fan speed
+# Why? My ThinkPad will sometimes overheat and thermal throttle when compiling or
+# playing games. Turning off turbo boost is usually enough to fix it but turbo boost
+# may be useful for some situations
+
+# Default is to turn on turbo and set fans to auto (this is how your computer should boot)
+# -t <on|off> to turn on turbo boost (alternatively, 1 or 0 can be used instead of on or off)
+# -f <full|auto> to change fan speed
+# Anything after `--` will be executed as a command. When that command finishes execution,
+# settings will be reverted to their previous or default state. The script will return the exit
+# code of the command.
+
+usage() {
+	while read -r line
+	do
+		[ "$1" = 0 ] &&
+			printf '%b\n' "$line" ||
+			printf '%b\n' "$line" 1>&2
+	done <<-USAGE
+		usage: ${0##*/} [OPTIONS]
+
+		options:
+		\t-f [0-7|auto|disengaged|full] - determine the fan speed
+		\t-t [on|off]                   - determine the state of turbo boost
+		\t-r                            - revert to state before change
+	USAGE
+
+	exit "$1"
+}
+
+while [ "$*" ]
+do
+	case $1 in
+		-  ) shift; continue ;;
+		-- ) shift; break ;;
+		-* ) flag=${1#-}; shift ;;
+		*  ) shift; continue ;;
+	esac
+
+	while [ "$flag" ]
+	do
+		arg=${flag%"${flag#?}"}
+
+		case $arg in
+			f ) fans=$1 ;;
+			t ) turbo=$1 ;;
+			r ) revert=yes ;;
+			h ) usage 0 ;;
+			* ) printf '%s\n' "${0##*/}: -$arg: invalid argument"; usage 1 ;;
+		esac
+
+		flag=${flag#?}
+	done
+done
+
+[ "$revert" = yes ] && {
+	read -r current_turbo < /sys/devices/system/cpu/intel_pstate/no_turbo
+	[ "$current_turbo" ] || current_turbo=1
+
+	while read -r line
+	do
+		case $line in
+			"level: 0"          ) current_fan="0"; break ;;
+			"level: 1"          ) current_fan="1"; break ;;
+			"level: 2"          ) current_fan="2"; break ;;
+			"level: 3"          ) current_fan="3"; break ;;
+			"level: 4"          ) current_fan="4"; break ;;
+			"level: 5"          ) current_fan="5"; break ;;
+			"level: 6"          ) current_fan="6"; break ;;
+			"level: 7"          ) current_fan="7"; break ;;
+			"level: auto"       ) current_fan="auto"; break ;;
+			"level: full-speed" ) current_fan="full-speed"; break ;;
+			"level: disengaged" ) current_fan="full-speed"; break ;; # This is the reported level
+			                                                         # when I set fan speed to
+			                                                         # full-speed
+		esac
+	done < /proc/acpi/ibm/fan
+	[ "$current_fan" ] || current_fan="auto"
+}
+
+case $turbo in
+	off|1 ) printf '%s' "1" > /sys/devices/system/cpu/intel_pstate/no_turbo ;;
+	on|0  ) printf '%s' "0" > /sys/devices/system/cpu/intel_pstate/no_turbo ;;
+	""    ) printf '%s' "0" > /sys/devices/system/cpu/intel_pstate/no_turbo ;;
+	*     ) printf '%s\n' "${0##*/}: $turbo: invalid option for turbo boost. Skipping..." 1>&2 ;;
+esac
+
+case $fans in
+	0          ) printf '%s' "level 0" > /proc/acpi/ibm/fan ;;
+	1          ) printf '%s' "level 1" > /proc/acpi/ibm/fan ;;
+	2          ) printf '%s' "level 2" > /proc/acpi/ibm/fan ;;
+	3          ) printf '%s' "level 3" > /proc/acpi/ibm/fan ;;
+	4          ) printf '%s' "level 4" > /proc/acpi/ibm/fan ;;
+	5          ) printf '%s' "level 5" > /proc/acpi/ibm/fan ;;
+	6          ) printf '%s' "level 6" > /proc/acpi/ibm/fan ;;
+	7          ) printf '%s' "level 7" > /proc/acpi/ibm/fan ;;
+	auto       ) printf '%s' "level auto" > /proc/acpi/ibm/fan ;;
+	disengaged ) printf '%s' "level disengaged" > /proc/acpi/ibm/fan ;;
+	full       ) printf '%s' "level full-speed" > /proc/acpi/ibm/fan ;;
+	""         ) printf '%s' "level auto" > /proc/acpi/ibm/fan ;;
+	*          ) printf '%s\n' "${0##*/}: $fans: invalid option for fan speed. Skipping..." 1>&2 ;;
+esac
+
+[ "$*" ] && {
+	"$@"
+	exitcode=$?
+
+	if [ "$revert" = yes ]
+	then
+		printf '%s' "$current_turbo" > /sys/devices/system/cpu/intel_pstate/no_turbo
+		printf '%s' "level $current_fan" > /proc/acpi/ibm/fan
+	else
+		printf '%s' "0" > /sys/devices/system/cpu/intel_pstate/no_turbo
+		printf '%s' "level auto" > /proc/acpi/ibm/fan
+	fi
+
+	exit $exitcode
+}

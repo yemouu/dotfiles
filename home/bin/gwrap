@@ -21,4 +21,4 @@ export DWRAP_FROM_ROOTFS="bin etc lib lib64 opt sbin tmp usr var"
 #	exec dwrap --dev-bind /run/NetworkManager/resolv.conf /resolv.conf "$@"
 #;; esac
 
-exec dwrap "$@"
+exec dwrap --ro-bind /etc/resolv.conf /etc/resolv.conf "$@"

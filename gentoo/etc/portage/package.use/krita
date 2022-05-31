@@ -6,4 +6,6 @@ dev-qt/qtgui egl
 sys-libs/zlib minizip
 app-text/poppler qt5
 dev-python/PyQt5 declarative network
-media-gfx/krita pdf
+media-gfx/krita fftw gif heif openexr pdf qtmedia vc webp 
+sci-libs/fftw threads
+media-gfx/gmic curl ffmpeg fftw jpeg openexr openmp png tiff qt5

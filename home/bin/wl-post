@@ -1,35 +1,30 @@
 #!/bin/sh
 # Post startup script for wayland compositors
 
-# Log dir should be created from wl script
-log_dir=$HOME/tmp/logs/$(date +%F_%H_%M)
-[ -d "$log_dir" ] || mkdir -p "$log_dir"
-
 # Dbus (atleast with elogind) doesn't get updated environment variables causing
 # some applications (like mako) to not autostart.
-dbus-update-activation-environment --all > "$log_dir/dbus-env-update.log" 2>&1 &
+moulog dbus-update-activation-environment --all &
 
 # Configure displays
-kanshi > "$log_dir/kanshi.log" 2>&1 &
+moulog kanshi &
 
 # Pipewire
-pw-launch normal > "$log_dir/pipewire.log" 2>&1 &
+moulog pw-launch normal &
 
 ## Start Carla without gui
-#pgrep -x 'carla' || { carla -n "${HOME}/cfg/carla/desktop.carxp" > "$log_dir/carla" 2>&1 & } &
+# pgrep -x 'carla' || { moulog carla -n "${HOME}/cfg/carla/desktop.carxp" & } &
 
 ## Start the foot-server
-#foot -s > "$log_dir/foot-server.log" 2>&1 &
+# moulog foot -s &
 
 # Set idle actions
-swayidle timeout 300 swaylock > "$log_dir/swayidle.log" 2>&1 &
+moulog swayidle timeout 900 swaylock &
 
 # Set a wallpaper
-swaybg -i "$HOME/media/images/wallpapers/evie-s-fF9z39kVOfk-unsplash.jpg" -m fill \
-	> "$log_dir/swaybg.log" 2>&1 &
+moulog swaybg -i "$HOME/media/images/wallpapers/evie-s-fF9z39kVOfk-unsplash.jpg" -m fill &
 
 # Nightlight
-wlsunset -l 33.9 -L -84.5 > "$log_dir/wlsunset.log" 2>&1 &
+moulog wlsunset -l 33.9 -L -84.5 &
 
 # Panel
-waybar > "$log_dir/waybar.log" 2>&1 &
+moulog waybar &

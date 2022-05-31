@@ -1,0 +1,97 @@
+brute force using the llvm toolchain because im lazy
+diff --git a/mono/mini/helpers.c b/mono/mini/helpers.c
+index 3ceffe6..6e560ab 100644
+--- a/mono/mini/helpers.c
++++ b/mono/mini/helpers.c
+@@ -195,52 +195,52 @@ mono_disassemble_code (MonoCompile *cfg, guint8 *code, int size, char *id)
+ #if defined(sparc) && !defined(__GNUC__)
+ #define DIS_CMD "dis"
+ #elif defined(TARGET_X86)
+-#define DIS_CMD "objdump -l -d"
++#define DIS_CMD "llvm-objdump -l -d"
+ #elif defined(TARGET_AMD64)
+   #if defined(HOST_WIN32)
+-  #define DIS_CMD "x86_64-w64-mingw32-objdump.exe -M x86-64 -d"
++  #define DIS_CMD "x86_64-w64-mingw32-llvm-objdump.exe -M x86-64 -d"
+   #else
+-  #define DIS_CMD "objdump -l -d"
++  #define DIS_CMD "llvm-objdump -l -d"
+   #endif
+ #else
+-#define DIS_CMD "objdump -d"
++#define DIS_CMD "llvm-objdump -d"
+ #endif
+ #endif
+ 
+ #if defined(sparc)
+-#define AS_CMD "as -xarch=v9"
++#define AS_CMD "clang -c -xarch=v9"
+ #elif defined (TARGET_X86)
+ #  if defined(__APPLE__)
+-#    define AS_CMD "as -arch i386"
++#    define AS_CMD "clang -c -arch i386"
+ #  else
+-#    define AS_CMD "as -gstabs"
++#    define AS_CMD "clang -c -gstabs"
+ #  endif
+ #elif defined (TARGET_AMD64)
+ #  if defined (__APPLE__)
+-#    define AS_CMD "as -arch x86_64"
++#    define AS_CMD "clang -c -arch x86_64"
+ #  else
+-#    define AS_CMD "as -gstabs"
++#    define AS_CMD "clang -c -gstabs"
+ #  endif
+ #elif defined (TARGET_ARM)
+ #  if defined (__APPLE__)
+-#    define AS_CMD "as -arch arm"
++#    define AS_CMD "clang -c -arch arm"
+ #  else
+-#    define AS_CMD "as -gstabs"
++#    define AS_CMD "clang -c -gstabs"
+ #  endif
+ #elif defined (TARGET_ARM64)
+ #  if defined (__APPLE__)
+ #    define AS_CMD "clang -c -arch arm64 -g -x assembler"
+ #  else
+-#    define AS_CMD "as -gstabs"
++#    define AS_CMD "clang -c -gstabs"
+ #  endif
+-#elif defined(__mips__) && (_MIPS_SIM == _ABIO32)
+-#define AS_CMD "as -mips32"
++#elif defined(__mclang -cps__) && (_MIPS_SIM == _ABIO32)
++#define AS_CMD "clang -c -mips32"
+ #elif defined(__ppc64__)
+ #define AS_CMD "as -arch ppc64"
+ #elif defined(__powerpc64__)
+-#define AS_CMD "as -mppc64"
++#define AS_CMD "clang -c -mppc64"
+ #elif defined (TARGET_RISCV64)
+-#define AS_CMD "as -march=rv64ima"
++#define AS_CMD "clang -c -march=rv64ima"
+ #elif defined (TARGET_RISCV32)
+ #define AS_CMD "as -march=rv32ima"
+ #else
+
+diff --git a/mono/mini/aot-compiler.c b/mono/mini/aot-compiler.c
+index e0dcfbc..202378a 100644
+--- a/mono/mini/aot-compiler.c
++++ b/mono/mini/aot-compiler.c
+@@ -12154,7 +12154,7 @@ compile_asm (MonoAotCompile *acfg)
+ #ifdef TARGET_WIN32_MSVC
+ #define AS_OPTIONS "--target=x86_64-pc-windows-msvc -c -x assembler"
+ #elif defined(TARGET_AMD64) && !defined(TARGET_MACH)
+-#define AS_OPTIONS "--64"
++#define AS_OPTIONS ""
+ #elif defined(TARGET_POWERPC64)
+ #define AS_OPTIONS "-a64 -mppc64"
+ #elif defined(sparc) && TARGET_SIZEOF_VOID_P == 8
+@@ -12172,7 +12172,7 @@ compile_asm (MonoAotCompile *acfg)
+ #elif defined(TARGET_WIN32_MSVC)
+ #define AS_NAME "clang.exe"
+ #else
+-#define AS_NAME "as"
++#define AS_NAME "clang"
+ #endif
+ 
+ #ifdef TARGET_WIN32_MSVC

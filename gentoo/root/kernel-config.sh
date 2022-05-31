@@ -19,12 +19,10 @@ cmd() {
 # General Setup #
 # ------------- #
 
-# Append a string to the kernel version for identification
+cmd -e werror
 cmd --set-str localversion "-$(hostname)"
-
 cmd -d kernel_gzip
 cmd -e kernel_zstd
-cmd -e werror
 cmd -e watch_queue
 cmd -d uselib
 cmd -d no_hz_idle
@@ -37,12 +35,12 @@ cmd -d preempt_voluntary
 cmd -e preempt
 cmd -e sched_core
 cmd -e bsd_process_acct_v3
-
-# Steam
 cmd -e psi
-
 cmd -e ikconfig
 cmd -e ikconfig_proc
+
+# ---
+
 cmd -m ikheaders
 cmd -e printk_index
 
@@ -95,7 +93,7 @@ cmd -d crash_dump
 cmd -d legacy_vsyscall_xonly
 cmd -e legacy_vsyscall_none
 cmd -e cmdline_bool
-cmd --set-str cmdline "root=PARTUUID=8cfe7af7-77eb-b246-8095-dedbf3e409f3"
+cmd --set-str cmdline "root=PARTUUID=8cfe7af7-77eb-b246-8095-dedbf3e409f3 intel_iommu=on"
 
 # --------------------------------- #
 # Power management and ACPI options #
@@ -285,7 +283,6 @@ cmd -d wlan_vendor_realtek
 cmd -d wlan_vendor_rsi
 cmd -d wlan_vendor_st
 cmd -d wlan_vendor_ti
-cmd -d wlan_vendor_zydas
 cmd -d wlan_vendor_quantenna
 cmd -e crypto_aes_ni_intel
 cmd -e vlan_8021q
@@ -439,6 +436,21 @@ cmd -e acpi_wmi
 ## Misc New (Organize this later)
 cmd -e bt_leds
 cmd -e hid_logitech_dj
+
+## Misc New New
+cmd -m usb_catc
+cmd -m phonet
+cmd -m usb_cdc_phonet
+cmd -m usb_hso
+cmd -m usb_ipheth
+cmd -m usb_kaweth
+cmd -m usb_pegasus
+cmd -m usb_rtl8150
+cmd -e wlan_vendor_zydas
+cmd -m usb_zd1201
+cmd -m usb_rtl8152
+cmd -e of
+cmd -m usb_gadget
 
 # iwd
 cmd -e key_dh_operations

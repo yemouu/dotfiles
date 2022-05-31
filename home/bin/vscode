@@ -1,0 +1,11 @@
+#!/bin/sh
+
+HOMEWRAP_HOME="${HOME}/tmp/homes/vscode"
+mkdir -p "${HOMEWRAP_HOME}"
+
+DOTNET_ROOT=${HOME}/doc/ksu/spring-2022/swe3313/dotnet-6
+PATH=$HOME/doc/ksu/spring-2022/swe3313/dotnet-6:$PATH
+
+
+export HOMEWRAP_HOME DOTNET_ROOT PATH
+exec homewrap /usr/bin/vscode "$@"

@@ -46,14 +46,13 @@ command -v portageq > /dev/null 2>&1 && AKU_PORTAGEQ=1
 [ "$MAKEOPTS" ] ||
 	{ [ "$AKU_PORTAGEQ" ] && MAKEOPTS="$(portageq envvar MAKEOPTS)" || MAKEOPTS="=j$(nproc)"; }
 
-# If CC is set to clang in portage, enable LLVM and LLVM_IAS, but
-# if LLVM and LLVM_IAS is already set, don't change it.
+# If CC is set to clang in portage, enable LLVM, but
+# if LLVM is already set, don't change it. (LLVM_IAS is default to on if LLVM is on)
 [ "$AKU_PORTAGEQ" = 1 ] &&
 	case $(portageq envvar CC) in
 		*clang* )
 			: "${LLVM=1}"
-			: "${LLVM_IAS=1}"
-			export LLVM LLVM_IAS
+			export LLVM
 	esac
 
 info "Changing directory ($AKU_DIR)..."

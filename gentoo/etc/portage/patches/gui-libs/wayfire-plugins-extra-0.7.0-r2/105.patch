@@ -1,0 +1,31 @@
+https://patch-diff.githubusercontent.com/raw/WayfireWM/wayfire-plugins-extra/pull/105.patch
+From d028dec4934cda9ba5183b28107172060d99e605 Mon Sep 17 00:00:00 2001
+From: Scott Moreau <oreaus@gmail.com>
+Date: Mon, 15 Nov 2021 12:42:48 -0700
+Subject: [PATCH] mag: Track wlroots changes
+
+---
+ src/mag.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/mag.cpp b/src/mag.cpp
+index 9093f43..bbe5347 100644
+--- a/src/mag.cpp
++++ b/src/mag.cpp
+@@ -173,9 +173,15 @@ class wayfire_magnifier : public wf::plugin_interface_t
+     {
+         wlr_dmabuf_attributes dmabuf_attribs;
+ 
++        if (output->handle->back_buffer == NULL)
++        {
++            LOGE("Got empty buffer on ", output->handle->name);
++            return;
++        }
++
+         /* This plugin only works if this function succeeds. It will not
+          * work with the x11 backend but works with drm, for example. */
+-        if (!wlr_output_export_dmabuf(output->handle, &dmabuf_attribs))
++        if (!wlr_buffer_get_dmabuf(output->handle->back_buffer, &dmabuf_attribs))
+         {
+             LOGE("Failed reading output contents");
+             deactivate();

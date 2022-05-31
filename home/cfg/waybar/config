@@ -1,30 +1,33 @@
 // Things I want (Maybe I'll create my own panel at some point)
 // App Menu Icon
-//  - [ ] On left click opens App menu with all desktop applications
+//  - [X] On left click opens App menu with all desktop applications
 //  - [ ] Needs image module
-// Music Control & Info
-//  - [ ] Three Buttons (Needs image module) 
-//    - [ ] Previous
-//    - [ ] Play / Pause
-//    - [ ] Next
-//  - [ ] Shows artist name and Song name
-//    - [ ] On left click, focus music player (If possible)
+// App Quick Launch
+//  - [ ] On left click open/focus app
+//  - [ ] On right click show option menu for app
+//  - [ ] firefox
+//  - [ ] foot
+//
+// Random Icon
+//  - [ ] Randomly displays a custom icon
 //
 // Tray
-//  - [ ] Generic system tray for whatever ends up using it
+//  - [X] Generic system tray for whatever ends up using it
 // Volume Level & Control
 //  - [ ] Requires image module
-//  - [ ] Sink
-//    - [ ] Muted / Unmuted
-//  - [ ] Source
-//    - [ ] Mute / Unmuted
-//  - [ ] On left click open pavucontrol or some other volume control application
+//  - [X] Sink
+//    - [X] Muted / Unmuted
+//  - [X] Source
+//    - [X] Mute / Unmuted
+//  - [X] On left click open pavucontrol or some other volume control application
+//  - [X] On right click mute
 //  - [ ] On hover show volume percentage
 // WiFi & Wired Network
 //  - [ ] Requires image module
 //    - [ ] Show if on WiFi or Ethernet
 //  - [ ] If on WiFi show signal strength
 //  - [ ] On hover show Network Name
+//  - [ ] On left- click open network manager
 // Battery Status & Level
 //  - [ ] Requires image module
 //  - [ ] Four States
@@ -45,23 +48,61 @@
 //     - [ ] Notifications
 //   - [ ] Opens a notification center on left click
 //   - [ ] Clears all notifications on right click
-// Powermenu? (May merge into App Menu)
+// Powermenu
 //  - [ ] On left click opens power menu
 
 [
 	{
 		"layer": "top",
-		"position": "top",
-		"height": 32,
-		//"modules-left": [ "custom/media" ],
+		"position": "left",
+		"width": 64,
+		"modules-left": [ "custom/appmenu" ],
 		"modules-center": [ "custom/randomtext" ],
-		"modules-right": [ "tray", "pulseaudio", "battery", "clock" ],
+		"modules-right": [ "tray", "pulseaudio#sink", "pulseaudio#source", "custom/wifi",
+		                   "battery", "clock", "custom/notifications", "custom/powermenu" ],
 		"name": "topbar",
 	
+		"custom/appmenu": {
+			"format": "APPS", // replace with image
+			"on-click": "bemenu-run", // replace with an actual app menu
+			"tooltip": false
+		},
+
 		"custom/randomtext": {
 			"exec": "$HOME/cfg/waybar/randomtext.sh",
 			"interval": 3600,
 			"format": "{}",
+			"tooltip": false,
+			"rotate": 90
+		},
+
+		"tray": {
+			"icon-size": 32,
+			"spacing": 6
+		},
+
+		"pulseaudio#sink": {
+			"format": "{volume}%",
+			"format-muted": "MUTE",
+			"scroll-step": 0,
+			"on-click": "pavucontrol",
+			"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+			"tooltip": false
+		},
+
+		"pulseaudio#source": {
+			"format": "{format_source}",
+			"format-source": "{volume}%",
+			"format-source-muted": "MUTE",
+			"scroll-step": 0,
+			"on-click": "pavucontrol",
+			"on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+			"tooltip": false
+		},
+
+		"custom/wifi": {
+			"format": "WIFI",
+			"on-click": "iwgtk",
 			"tooltip": false
 		},
 
@@ -69,7 +110,7 @@
 			"states": {
 				"med": 40,
 				"low": 25,
-				"dead": 0
+				"dead": 0 // how.
 			},
 			"tooltip": false
 		},
@@ -81,19 +122,16 @@
 			"tooltip": true,
 			"tooltip-format": "{:%e %a %b %Y %Z}"
 		},
-	
-		"pulseaudio": {
-			"format": "{volume}% / {format_source}",
-			"format-muted": "MUTE / {format_source}",
-			"format-source": "{volume}%",
-			"format-source-muted": "MUTE",
-			"scroll-step": 0.0,
+
+		"custom/notifications": {
+			"format": "NOTI",
 			"tooltip": false
 		},
-	
-		"tray": {
-			"icon-size": 24,
-			"spacing": 10
+
+		"custom/powermenu": {
+			"format": "POWER",
+			"on-click": "powermenu",
+			"tooltip": false
 		}
 	}
 ]

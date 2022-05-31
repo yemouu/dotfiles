@@ -1,24 +1,23 @@
 #!/bin/sh
 
 # Set Environment variables
-XDG_SESSION_TYPE=wayland
+QT_QPA_PLATFORMTHEME=gnome
 SDL_VIDEODRIVER=wayland
-export XDG_SESSION_TYPE SDL_VIDEODRIVER
+XDG_SESSION_TYPE=wayland
+export QT_QPA_PLATFORMTHEME SDL_VIDEODRIVER XDG_SESSION_TYPE
 
-# Setup a log dir
-# Output to tty sometimes gets jumbled
-log_dir="$HOME/tmp/logs/$(date +%F_%H_%M)"
-[ -d "$log_dir" ] ||  mkdir -p "$log_dir"
+# Start new logging directory
+moulog -n
 
 # Autostart
 {
-	syncthing -no-browser > "$log_dir/syncthing.log" 2>&1 &
+	moulog syncthing -no-browser &
 } &
 
 # Pick Wayland Compositor
 case $1 in
 	sway|s    ) export XDG_CURRENT_DESKTOP=sway
-	            exec dbus-run-session sway > "$log_dir/sway.log" 2>&1 ;;
+	            exec moulog dbus-run-session sway ;;
 	wayfire|w ) export XDG_CURRENT_DESKTOP=Wayfire
-	            exec dbus-run-session wayfire > "$log_dir/wayfire.log" 2>&1 ;;
+	            exec moulog dbus-run-session wayfire ;;
 esac

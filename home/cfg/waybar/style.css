@@ -1,7 +1,42 @@
 /* Import my colorscheme */
 @import url("/home/mou/tmp/cache/thm/gtk.css");
 
-/* General bar settings */
+* {
+  font-family: monospace;
+  font-size: 14px;
+  margin: 0px 3px 0px 2px;
+}
+
+window#waybar {
+  border-style: solid;
+  border-width: 0px 4px 0px 0px;
+}
+
+.modules-left {
+  margin-top: 6px;
+}
+
+.modules-right {
+  margin-bottom: 6px;
+}
+
+.modules-left > * > *, .modules-right > * > * {
+  padding: 6px 0px;
+}
+
+.modules-left > widget:first-child > *{
+  padding-top: 0px;
+}
+
+.modules-right > widget:last-child > * {
+  padding-bottom: 0px;
+}
+
+#custom-randomtext {
+  font-weight: 600;
+}
+
+/*
 * {
   border: 6px;
   font-family: monospace;
@@ -15,21 +50,18 @@ window#waybar {
 }
 
 #custom-randomtext, #custom-loadaverage, #memory, #custom-ds4-battery, #pulseaudio, #clock, #tray {
-  padding: 0 8px;
-  margin: 0 8px;
+  padding: 2px 2px;
+  margin: 2px 2px;
 }
 
-/* Random Text */
 #custom-randomtext {
   color: @color1;
 }
 
-/* Volume Status */
 #pulseaudio {
   color: @color5;
 }
 
-/* Battery */
 #battery {
   color: @color2;
 }
@@ -46,7 +78,7 @@ window#waybar {
   color: @color8;
 }
 
-/* Date & Time */
 #clock {
   color: @color6;
 }
+*/

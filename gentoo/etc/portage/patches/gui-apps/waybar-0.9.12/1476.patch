@@ -1,0 +1,37 @@
+https://patch-diff.githubusercontent.com/raw/Alexays/Waybar/pull/1476.patch
+From 8b6bc215ccdd6f2a1d2c514e146305968a567fa4 Mon Sep 17 00:00:00 2001
+From: Louis des Landes <louis.deslandes@fleet.space>
+Date: Thu, 10 Mar 2022 14:48:01 +0100
+Subject: [PATCH] Fix freebsd action
+
+---
+ include/modules/clock.hpp | 2 +-
+ src/modules/clock.cpp     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/modules/clock.hpp b/include/modules/clock.hpp
+index 5a9c01e45..7c3eb8fc5 100644
+--- a/include/modules/clock.hpp
++++ b/include/modules/clock.hpp
+@@ -36,7 +36,7 @@ class Clock : public ALabel {
+   auto first_day_of_week() -> date::weekday;
+   const date::time_zone* current_timezone();
+   bool is_timezone_fixed();
+-  auto timezones_text(std::chrono::_V2::system_clock::time_point *now) -> std::string;
++  auto timezones_text(std::chrono::system_clock::time_point *now) -> std::string;
+ };
+ 
+ }  // namespace modules
+diff --git a/src/modules/clock.cpp b/src/modules/clock.cpp
+index 87cd58aa3..c80057c55 100644
+--- a/src/modules/clock.cpp
++++ b/src/modules/clock.cpp
+@@ -219,7 +219,7 @@ auto waybar::modules::Clock::weekdays_header(const date::weekday& first_dow, std
+   os << "\n";
+ }
+ 
+-auto waybar::modules::Clock::timezones_text(std::chrono::_V2::system_clock::time_point *now) -> std::string {
++auto waybar::modules::Clock::timezones_text(std::chrono::system_clock::time_point *now) -> std::string {
+   if (time_zones_.size() == 1) {
+     return "";
+   }

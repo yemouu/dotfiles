@@ -1,5 +1,2 @@
-sys-devel/llvm -binutils-plugin LLVM_TARGETS: *
-sys-devel/clang LLVM_TARGETS: *
-
+sys-devel/llvm -binutils-plugin
 sys-devel/clang-runtime sanitize
-#=sys-libs/compiler-rt-sanitizers-13.0.0-r1 -msan

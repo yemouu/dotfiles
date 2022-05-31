@@ -7,7 +7,7 @@ plug "whereswaldon/shellcheck.kak"
 # kak-lsp
 eval %sh{ kak-lsp --kakoune -s $kak_session }
 
-hook -group lsp global WinSetOption filetype=(c|cpp|go|python) %{
+hook -group lsp global WinSetOption filetype=(c|cpp|go|python|zig) %{
 	lsp-enable-window
 	def -hidden insert-a-n %{
 		try %{
@@ -132,6 +132,11 @@ hook global WinSetOption filetype=(css|html|java|markdown|xml) %{
 	m-whitespace spaces 2
 }
 
+hook global WinSetOption filetype=html %{
+  m-columnindicator remove 100
+  m-columnindicator add 120
+}
+
 hook global WinSetOption filetype=java %{
 	set-option buffer formatcmd "google-java-format -"
 }
@@ -163,7 +168,8 @@ set -add global modelinefmt '%sh{cat /sys/class/power_supply/BAT0/capacity} '
 # Set colorscheme
 evaluate-commands %sh{
 	case "$kak_opt_theme_type" in
-		dark ) printf '%s\n' "colorscheme theme-dark" ;;
-		*    ) printf '%s\n' "colorscheme theme" ;;
+		dark  ) printf '%s\n' "colorscheme theme-dark" ;;
+		light ) printf '%s\n' "colorscheme theme" ;;
+		*     ) printf '%s\n' "colorscheme default" ;;
 	esac
 }
