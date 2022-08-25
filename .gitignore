@@ -1,6 +1,6 @@
 20opengl.conf
-*log
-*keep
+*.log
+*.keep
 eselect-repo.conf~
 patterns.list
 plugins

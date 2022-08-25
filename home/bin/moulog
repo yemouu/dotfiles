@@ -1,0 +1,56 @@
+#!/bin/sh
+# A much better way to handle my logging
+
+#- Settings -#
+# Place to store log files
+: "${MOULOG_DIR:=${XDG_CACHE_HOME:-$HOME/.cache}/moulog}"
+# Max number of old dirs to keep
+: "${MOULOG_MAX:=5}"
+
+usage() {
+	while read -r line
+	do printf '%b\n' "$line"
+	done <<-EOF
+		${0##*/} [options] [command]
+		example: moulog -n
+		example: moulog wlsunset -l 0 -L 0
+
+		options:
+		-h | --help - display this message
+		-n | --new  - create a new logging directory
+		            - useful if being run multiple times in the background
+
+		environment vars:
+		MOULOG_DIR - place to store logs (default: $XDG_CACHE_HOME/moulog)
+		MOULOG_MAX - max number of old dirs to keep (default: 5)
+	EOF
+
+	exit "${1:-1}"
+}
+
+new_dir() {
+	touch /tmp/moulog
+	[ -d "$MOULOG_DIR.$MOULOG_MAX" ] && rm -r "$MOULOG_DIR.$MOULOG_MAX"
+
+	i=$((MOULOG_MAX))
+	until [ $i = 1 ]
+	do
+		[ -d "$MOULOG_DIR.$((i-1))" ] && mv "$MOULOG_DIR.$((i-1))" "$MOULOG_DIR.$i"
+		i=$((i-1))
+	done
+
+	[ -d "$MOULOG_DIR" ] && mv "$MOULOG_DIR" "$MOULOG_DIR.1"
+	mkdir -p "$MOULOG_DIR"
+}
+
+case $1 in
+	-h|--help ) usage 0 ;;
+	-n|--new  ) new_dir; exit 0 ;;
+esac
+
+# I'm using this file to decide if i should make a new directory
+[ -f /tmp/moulog ] || new_dir
+
+
+printf '%s\n' "#### moulog start time: $(date +%s) ####" >> "$MOULOG_DIR/$1.log"
+exec "$@" >> "$MOULOG_DIR/$1.log" 2>&1
