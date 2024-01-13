@@ -1,6 +1,0 @@
-multilib_src_configure() {
-	# Don't force ld.bfd
-	#tc-ld-force-bfd
-
-	ECONF_SOURCE="${S}" econf $(use_enable static-libs static)
-}

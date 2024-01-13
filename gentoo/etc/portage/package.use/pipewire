@@ -1,2 +1,0 @@
-media-sound/pulseaudio -alsa -alsa-plugin -daemon -jack -orc -ssl -udev -webrtc-aec
-media-video/pipewire extra gstreamer jack-sdk pipewire-alsa

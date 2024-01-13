@@ -1,3 +1,0 @@
-# Use libc++ (LLVM) instead of libstdc++ (GNU)
-# Needed for the `cc` rust crate
-CXXSTDLIB=c++

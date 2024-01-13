@@ -1,8 +1,0 @@
-# ccache settings
-CCACHE_BASEDIR="${PORTAGE_TMPDIR}/portage"
-CCACHE_DIR="/var/cache/ccache"
-CCACHE_SIZE="4Gi"
-# get more hits with ccache
-CCACHE_SLOPPINESS="file_stat_matches,include_file_ctime,include_file_mtime,locale,pch_defines,time_macros"
-# enable ccache
-FEATURES="ccache"

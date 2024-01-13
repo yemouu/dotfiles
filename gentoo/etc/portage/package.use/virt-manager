@@ -1,8 +1,0 @@
-app-emulation/virt-manager gtk
-app-emulation/libvirt firewalld fuse libssh lxc pcap wireshark-plugins
-# fuse 
-app-emulation/qemu capstone gtk io-uring opengl sdl sdl-image spice ssh usb usbredir vhost-user-fs virgl virtfs zstd QEMU_SOFTMMU_TARGETS: x86_64 QEMU_USER_TARGETS: x86_64
-
-net-misc/spice-gtk usbredir
-net-dns/dnsmasq script
-net-firewall/nftables xtables python json

@@ -1,2 +1,0 @@
-sys-apps/fwupd amt archive fastboot flashrom gnutls gusb logitech lzma modemmanager nvme spi synaptics thunderbolt tpm uefi test
-net-libs/gnutls tools

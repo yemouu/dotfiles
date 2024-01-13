@@ -1,2 +1,0 @@
-sys-devel/llvm -binutils-plugin
-sys-devel/clang-runtime sanitize

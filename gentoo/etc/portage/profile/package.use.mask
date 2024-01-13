@@ -1,1 +1,0 @@
-dev-java/openjdk-bin:17 -gentoo-vm
