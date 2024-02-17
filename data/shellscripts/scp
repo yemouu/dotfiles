@@ -1,6 +1,0 @@
-#!/bin/sh
-SSH_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/ssh/config"
-SSH_ID="${XDG_DATA_HOME:-$HOME/.local/share}/ssh/id_ed25519"
-
-export TERM=xterm-256color
-exec /usr/bin/scp -F "$SSH_CONFIG" -i "$SSH_ID" "$@"

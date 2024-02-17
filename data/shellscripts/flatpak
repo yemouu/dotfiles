@@ -1,5 +1,0 @@
-#!/bin/sh
-export HOMEWRAP_HOME="${XDG_STATE_HOME:-$HOME/.local/state}/homewrap/flatpak"
-[ -d "$HOMEWRAP_HOME" ] || mkdir -p "$HOMEWRAP_HOME"
-
-exec homewrap /usr/bin/flatpak "$@"

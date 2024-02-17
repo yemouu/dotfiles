@@ -1,2 +1,0 @@
-#!/bin/sh
-exec /usr/bin/slurp -b 00000040 -w 0 "$@"
