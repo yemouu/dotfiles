@@ -1,0 +1,250 @@
+include /etc/sway/config.d/*
+include ${XDG_CACHE_HOME}/thm/sway-appearance
+
+output "LG Electronics LG HDR WFHD 0x0000B11B" {
+	mode 2560x1080@74.991Hz
+	position 640 1080
+	subpixel rgb
+	# max_render_time 1
+	# Monitor was advertised as supporting freesync but it doesn't seem to be enabled
+	# This is likely due to the system detecting the monitor as plugged in via DP when it is
+	# connected via HDMI. Change the cable?
+	adaptive_sync on 
+}
+
+output "AOC 2460G4 0x0000075E" {
+	mode 1920x1080@144.001Hz
+	position 0 0
+	subpixel rgb
+	# max_render_time 1
+	# Monitor is capable of freesync but there is weird flickering
+	adaptive_sync off
+}
+
+output "BNQ BenQ PD2700U ET87K04288SL0" {
+	mode 3840x2160@60.000Hz
+	position 1920 0
+	scale 2
+	subpixel rgb
+	# max_render_time 1
+	adaptive_sync on
+}
+
+output * bg ${HOME}/misc/syncthing/media/images/wallpapers/dark/evie-s-Pb1KFv4tauY-unsplash.jpg fill
+
+# Put on ultrawide monitor limited to the center 1920x1080 area
+input 1386:782:Wacom_Intuos_S_Pen map_to_region 960 1080 1920 1080
+
+input 1133:50503:Logitech_USB_Receiver accel_profile flat
+
+input 1356:3570:Sony_Interactive_Entertainment_DualSense_Edge_Wireless_Controller_Touchpad {
+	events disabled
+}
+
+seat seat0 xcursor_theme Adwaita
+
+workspace_layout tabbed
+floating_maximum_size -1 x -1
+focus_follows_mouse yes
+focus_on_window_activation urgent
+focus_wrapping workspace
+hide_edge_borders --i3 smart
+show_marks yes
+tiling_drag enable
+
+exec swayidle timeout 900 swaylock
+exec wlsunset -l 33.9 -L -84.5
+exec syncthing --no-browser
+
+set {
+	$ws0 0
+	$ws1 1
+	$ws2 2
+	$ws3 3
+	$ws4 4
+	$ws5 5
+	$ws6 6
+	$ws7 7
+	$ws8 8
+	$ws9 9
+	# These are tossaway workspaces
+	# Sway doesn't allow displays to not have a workspace which means if I brought all workspaces
+	# to one display, some workspaces would be forced to stay where they are
+	$ws10 10
+	$ws11 11
+	$ws12 12
+}
+
+workspace {
+		$ws10 output "LG Electronics LG HDR WFHD 0x0000B11B"
+		$ws11 output "BNQ BenQ PD2700U ET87K04288SL0"
+		$ws12 output "AOC 2460G4 0x0000075E"
+}
+
+set {
+	$W Mod4
+	$A Mod1
+	$C Control
+	$S Shift
+	$term foot
+	$menu bemenu-run
+	$file_manager nautilus
+}
+
+
+# TODO: Learn about marks
+# TODO: Learn about scratchpad
+
+mode "focus-output" {
+	bindsym {
+		1 focus output "LG Electronics LG HDR WFHD 0x0000B11B"; mode "default"
+		2 focus output "BNQ BenQ PD2700U ET87K04288SL0"; mode "default"
+		3 focus output "AOC 2460G4 0x0000075E"; mode "default"
+		Escape mode "default"
+	}
+}
+
+# mode "layouts" {
+# 	bindsym {
+# 	}
+# }
+
+# mode "marks" {
+# 	bindsym {
+# 	}
+# }
+ 
+floating_modifier $W normal
+# TODO: rethink keybinds
+bindsym {
+	$W+Return exec $term
+	$W+r exec $menu
+
+	$W+e exec wpctl set-mute @DEFAULT_SOURCE@ toggle
+
+	Print exec scr pic -c
+	$W+Print exec scr pic -cd
+
+	$W+c exec colorgrab -co
+	$W+$A+c exec colorgrab -cn
+	$W+$C+c exec colorgrab -cor
+	$W+$C+$A+c exec colorgrab -cnr
+
+	$W+space exec makoctl dismiss -a
+
+	$W+h focus left
+	$W+j focus down
+	$W+k focus up
+	$W+l focus right
+
+	$W+$S+h move left
+	$W+$S+j move down
+	$W+$S+k move up
+	$W+$S+l move right
+
+	$W+Tab focus next sibling
+	$W+$S+Tab focus prev sibling
+	$W+z focus mode_toggle
+
+	$W+x mode "focus-output"
+
+	$W+1 [workspace=$ws0] move workspace output current; workspace $ws0
+	$W+2 [workspace=$ws1] move workspace output current; workspace $ws1
+	$W+3 [workspace=$ws2] move workspace output current; workspace $ws2
+	$W+4 [workspace=$ws3] move workspace output current; workspace $ws3
+	$W+5 [workspace=$ws4] move workspace output current; workspace $ws4
+	$W+6 [workspace=$ws5] move workspace output current; workspace $ws5
+	$W+7 [workspace=$ws6] move workspace output current; workspace $ws6
+	$W+8 [workspace=$ws7] move workspace output current; workspace $ws7
+	$W+9 [workspace=$ws8] move workspace output current; workspace $ws8
+	$W+0 [workspace=$ws9] move workspace output current; workspace $ws9
+	$W+$C+$A+$S+0 workspace $ws10
+	$W+$C+$A+$S+9 workspace $ws11
+	$W+$C+$A+$S+8 workspace $ws11
+
+	$W+$S+1 move container to workspace $ws0
+	$W+$S+2 move container to workspace $ws1
+	$W+$S+3 move container to workspace $ws2
+	$W+$S+4 move container to workspace $ws3
+	$W+$S+5 move container to workspace $ws4
+	$W+$S+6 move container to workspace $ws5
+	$W+$S+7 move container to workspace $ws6
+	$W+$S+8 move container to workspace $ws7
+	$W+$S+9 move container to workspace $ws8
+	$W+$S+0 move container to workspace $ws9
+
+	$W+$C+Escape exit
+	$W+$A+Escape reload
+	$W+q kill
+
+	# TODO: add sticky keybind
+	# TODO: add swap keybinds
+
+	$W+f floating toggle
+	$W+$C+f fullscreen toggle
+
+	$W+o layout toggle split tabbed
+	$W+$C+o layout toggle split
+	$W+p split toggle
+	$W+$C+p split none
+
+	# Make this a mode?
+	$W+v border normal 2
+	$W+b border pixel 2
+	$W+n border none
+	$W+d border csd
+}
+
+
+
+for_window {
+	# Make all windows float by default
+	# According to `swaymsg -m "['window']" -t subscribe`, windows get their title after
+	# they get created. However, app_id, class and instace are all set when the window is
+	# created.
+	[app_id="."] floating enable, border csd
+	[class="."] floating enable, border csd
+	[instance="."] floating enable, border csd
+
+	# Make the title of each window bold
+	[title="."] title_format "<b>%title</b>"
+
+	[app_id="foot"] border normal
+	[app_id="mpv"] border none
+
+	## These apps should take up the entire screen and not have a border
+	#[app_id="firefox-wayland" title=".*- Mozilla Firefox$"] floating disable, border none
+	#[app_id="firefox-wayland" title="^Mozilla Firefox$"] floating disable, border none
+	#[class="Element"] floating disable, border none
+	#[class="discord"] floating disable, border none
+
+	#[class="csgo_linux64"] fullscreen enable
+}
+
+#for_window {
+#	# Web Browsers should be on the first workspace
+#	[app_id="firefox-wayland"] move container to workspace 0
+
+#	# Chat Applications should be on the second workspace
+#	[class="Element"] move container to workspace 1
+#	[class="discord"] move container to workspace 1
+
+#	# Graphic Applications should be on the third workspace
+#	[app_id="org.inkscape.Inkscape"] move container to workspace 2
+#	[class="Gimp"] move container to workspace 2
+#	[class="krita"] move container to workspace 2
+
+#	# Games and Game Launchers should be on the eighth workspace
+#	[app_id="org.multimc.multimc"] move container to workspace 7
+#	[class="Steam"] move container to workspace 7
+#
+#	[class="csgo_linux64"] move container to workspace 7
+#	[class="Minecraft.*"] move container to workspace 7
+
+#	# Rocket League
+#	[class="steam_app_252950"] move container to workspace 7
+#	# Deceit
+#	[class="steam_app_466240"] move container to workspace 7
+#	# TitanFall 2
+#	[class="steam_app_1237970"] move container to workspace 7
+#}

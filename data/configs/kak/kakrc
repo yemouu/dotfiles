@@ -1,0 +1,183 @@
+# Load Plugin Manager
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+
+# Plugins
+plug "whereswaldon/shellcheck.kak"
+
+# kak-lsp
+eval %sh{ kak-lsp --kakoune -s $kak_session }
+
+hook -group lsp global WinSetOption filetype=(c|cpp|go|nix|python|typst|zig) %{
+	lsp-enable-window
+	lsp-inlay-code-lenses-enable window
+	lsp-inlay-diagnostics-enable window
+	lsp-inlay-hints-enable window
+	def -hidden insert-a-n %{
+		try %{
+			lsp-snippets-select-next-placeholders
+			exec '<a-;>d'
+		} catch %{
+			exec -with-hooks '<c-n>'
+		}
+	}
+	map global insert <a-n> "<a-;>: insert-a-n<ret>"
+}
+
+hook -group lsp global WinSetOption filetype=go %{
+	hook -group lsp-format buffer BufWritePost .* %{
+		evaluate-commands %sh{
+			goimports -e -w "$kak_buffile"
+		}
+		edit!
+	}
+}
+
+# Column Indicator
+define-command -params 2..3 -docstring \
+"Add or remove column indicators. Takes three arguments: <add|remove> <column_number> <color>
+Where color is in the format <foreground>[,background][+attribute]." \
+m-columnindicator %{
+	evaluate-commands %sh{
+		[ "$1" = add ] && {
+			[ "$3" ] && color=$3 || color=default,bright-white
+			printf '%s\n' "eval addhl window/ column $2 $color"
+		}
+
+		[ "$1" = remove ] && {
+			[ "$3" ] && color=$3 || color=default,bright-white
+			printf '%s\n' "eval rmhl window/column_$2_$color"
+		}
+	}
+}
+
+# Template Command
+define-command -params 1 -docstring \
+"Print template into the current file. Templates are located at %val{config}/templates." \
+m-template %{
+	evaluate-commands %sh{
+		[ -e "$kak_config/templates/$1" ] \
+			&& printf '%s\n' "exec !cat<space>$kak_config/templates/$1<ret>" \
+			|| printf '%s\n' "echo Template $1 doesn't exist."
+	}
+} -shell-script-candidates %{ cd "$kak_config/templates"; printf '%s\n' * }
+
+# Whitespace command
+define-command -params 2 -docstring \
+"Set whitespace options. Takes two arguments: <tabs|spaces> <size>" \
+m-whitespace %{
+	evaluate-commands %sh{
+		[ "$1" = tabs ] \
+			&& printf '%s\n' "eval map window insert <tab> <tab>" \
+			                 "eval set window indentwidth 0" \
+			                 "eval set window tabstop $2"
+
+		[ "$1" = spaces ] && {
+			s=0
+			while [ "$s" -lt "$2" ]
+			do
+				size="$size\ "
+				s=$((s+1))
+			done
+
+			printf '%s\n' "eval map window insert <tab> \"$size\"" \
+			              "eval set window indentwidth $2"
+		}
+	}
+}
+
+# Keybinds
+## User
+map global user c ':comment-line<ret>' -docstring 'comment line'
+map global user C ':comment-block<ret>' -docstring 'comment block'
+map global user f ':format<ret>' -docstring 'Run formatcmd'
+map global user l ':enter-user-mode lsp<ret>' -docstring 'Enter kak-lsp user mode'
+map global user p '!wl-paste<ret>' -docstring 'Paste from System Clipboard (Wayland)'
+map global user y '<a-|>wl-copy<ret>' -docstring 'Copy to System Clipboard (Wayland)'
+
+# Set termcmd
+hook global ModuleLoaded wayland %{
+	set-option global termcmd "foot sh -c"
+}
+
+# Enable Wrapping
+add-highlighter global/ wrap -indent
+
+# Highlight Matching Characters
+add-highlighter global/ show-matching
+
+# Highligh TODO and friends
+add-highlighter global/ regex \b(TODO|FIXME)\b 0:default+rb
+
+# Set theme_type
+evaluate-commands %sh{
+	[ "$TERM" = linux ] && { 
+		printf '%s\n' "decl str theme_type none"
+		return 0
+	}
+	. $(cat "${XDG_CACHE_HOME:-$HOME/.cache}/thm/current_thm")
+	case $theme_type in
+		light ) printf '%s\n' "decl str theme_type light" ;;
+		dark  ) printf '%s\n' "decl str theme_type dark" ;;
+		*     ) return 0 ;;
+	esac
+}
+
+hook global WinCreate .* %{
+	# Add column indicator at column 101
+	m-columnindicator add 100
+
+	# Indentation Options
+	set-option window indentwidth 0
+	set-option window tabstop 4
+}
+
+# Filetype specific options
+hook global WinSetOption filetype=(css|html|java|markdown|xml|nix) %{
+	m-whitespace spaces 2
+}
+
+hook global WinSetOption filetype=html %{
+	m-columnindicator remove 100
+	m-columnindicator add 120
+}
+
+hook global WinSetOption filetype=nix %{
+	set-option buffer formatcmd "nixpkgs-fmt"
+}
+
+hook global WinSetOption filetype=java %{
+	set-option buffer formatcmd "google-java-format -"
+}
+
+hook global WinSetOption filetype=(python|zig) %{
+	m-whitespace spaces 4
+}
+
+hook global WinSetOption filetype=zig %{
+	set-option buffer formatcmd "zig fmt --stdin"
+}
+
+hook global WinSetOption filetype=git-commit %{
+	m-columnindicator remove 100
+	m-columnindicator add 70
+}
+
+hook global WinSetOption filetype=markdown %{
+	m-columnindicator remove 100
+	remove-highlighter global/wrap_-indent
+	add-highlighter global/ wrap -indent -word
+}
+
+# Status Line
+set global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}} '
+set -add global modelinefmt '{{mode_info}} - %sh{printf $USER} %sh{date +"%R %Z"} '
+#set -add global modelinefmt '%sh{cat /sys/class/power_supply/BAT0/capacity} '
+
+# Set colorscheme
+evaluate-commands %sh{
+	case "$kak_opt_theme_type" in
+		dark  ) printf '%s\n' "colorscheme theme-dark" ;;
+		light ) printf '%s\n' "colorscheme theme" ;;
+		*     ) printf '%s\n' "colorscheme default" ;;
+	esac
+}

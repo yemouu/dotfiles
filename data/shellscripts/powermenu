@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Required Commands
+# bemenu - allow the user to pick options
+# loginctl - perform actions
+# pkill - send sway into idle state
+
+# Needs to be edited to work with either systemctl or loginctl
+
+prompt="powermenu"
+options="hibernate\\nhybrid-sleep\\nlock\\npoweroff\\nreboot\\nsuspend\\nsuspend-then-hibernate"
+
+confirm() {
+	c_prompt="Are you sure? [$action]"
+	c_input=$(printf '%b' "yes\\nno" | bemenu -p "$c_prompt")
+
+	# Prevents selecting yes instantly waking up from suspend
+	sleep 1
+
+	case $c_input in
+		Y*|y* ) return 0 ;;
+		N*|n* ) exit 0 ;;
+		*     ) exit 1 ;;
+	esac
+}
+
+sleep_task() {
+	pkill -USR1 swayidle
+}
+
+action=$(printf '%b' "$options" | bemenu -p "$prompt")
+case $action in
+	hibernate              ) confirm; loginctl hibernate ;;
+	hybrid-sleep           ) confirm; loginctl hybrid-sleep ;;
+	lock                   ) confirm; loginctl lock-session ;;
+	poweroff               ) confirm; loginctl poweroff ;;
+	reboot                 ) confirm; loginctl reboot ;;
+	suspend                ) confirm; loginctl suspend ;;
+	suspend-then-hibernate ) confirm; loginctl suspend-then-hibernate ;;
+	*                      ) exit 1 ;;
+esac

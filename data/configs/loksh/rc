@@ -1,0 +1,38 @@
+#!/bin/ksh
+
+# Don't continue if we are not interactive
+[[ $- = *i* ]] || return
+
+# Not having this set to the current terminal can cause issues
+GPG_TTY=$(tty)
+export GPG_TTY
+
+# Setup some shell functionality
+set -o trackall
+set -o bgnice
+set -o braceexpand
+set -o csh-history
+
+# Setup prompt based on terminal theme type
+[ "$TERM" = linux ] && {
+	PS1="\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
+	PS2="\[\033[1;36m\]>\[\033[m\] "
+} || {
+	# Try and get OSC-133;A working
+	case $(. "$(<"${XDG_CACHE_HOME:-$HOME/.cache}/thm/current_thm")"; printf '%s' "$theme_type") in
+	 	dark ) PS1="\[\033[1;91m\]\u\[\033[92m\]@\[\033[93m\]\h \[\033[94m\]\W\[\033[m\] "
+		       PS2="\[\033[1;96m\]>\[\033[m\] " ;;
+		*    ) PS1="\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
+		       PS2="\[\033[1;36m\]>\[\033[m\] " ;;
+	esac
+
+
+}
+
+[ "$DWRAP_WITHIN_SANDBOX" = "true" ] && PS1="($DWRAP_CURRENT_DISTRO) $PS1"
+
+# Source completions
+. "${XDG_CONFIG_HOME:-$HOME/.config}/loksh/completions"
+
+# Source aliases
+. "${XDG_CONFIG_HOME:-$HOME/.config}/loksh/alias"

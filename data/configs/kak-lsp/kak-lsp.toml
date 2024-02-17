@@ -1,0 +1,32 @@
+snippet_support = true
+verbosity = 2
+
+[server]
+timeout = 1800
+
+[language_server.clangd]
+filetypes = ["c", "cpp"]
+roots = ["compile_commands.json", ".clangd", ".git", ".hg"]
+command = "clangd"
+
+[language_server.nil]
+filetypes = ["nix"]
+roots = ["flake.nix", ".git"]
+command = "nil"
+
+[language_server.ruff]
+filetypes = ["python"]
+roots = ["requirements.txt", "setup.py", ".git"]
+command = "ruff-lsp"
+
+# Kakoune can't detect typst files right now meaning that there is no highlighting
+# I will just continue to use the browser version of typst
+# [language_server.typst-lsp]
+# filetypes = ["typst"]
+# roots = [".git", "main.typ"]
+# command = "typst-lsp"
+
+[language_server.zls]
+filetypes = ["zig"]
+roots = ["build.zig"]
+command = "zls"

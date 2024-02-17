@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Syncthing
+# Change this to a full path?
+Exec=syncthing --no-browser
+Hidden=false

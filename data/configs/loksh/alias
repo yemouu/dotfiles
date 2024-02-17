@@ -1,0 +1,51 @@
+#!/bin/ksh
+
+alias ls="ls -Fh --color=auto"
+alias grep="grep --color=auto"
+
+# Run something N amount of times
+run() {
+	[[ $# -lt 2 ]] && { print "usage: run <repeat num> <command>" 1>&2; return 1; }
+	local i=0
+	local n=$1; shift
+	until [[ $i -eq $n ]]
+	do
+		eval "$@"
+		i=$((i+1))
+	done
+}
+
+# This is needed so ctrl + shift + n will use the current working directory
+# when using foot (https://codeberg.org/dnkl/foot/wiki#bash-and-zsh)
+cd() {
+	builtin cd "$@" || return 1
+
+	osc7_cwd() (
+		urlencode() {
+			local string="$1"
+			while [ "$string" ]
+			do
+				local c="${string%"${string#?}"}"
+				case $c in
+					%) printf '%%%02X' "'$c" ;;
+					*) printf "%s" "$c" ;;
+				esac
+				string=${string#?}
+			done
+		}
+
+		printf '\e]7;file://%s%s\e\\' "$HOSTNAME" "$(urlencode "$PWD")"
+	)
+
+	osc7_cwd
+	unset -f osc7_cwd
+}
+
+# Because i'm using nix, I no longer need this, I can instead use `nix develop`
+# source-env() {
+# 	[ "$1" ] || { print "missing argument" 1>&2; return 1; }
+# 	local env_d="$XDG_CONFIG_HOME/loksh/env.d"
+#
+# 	[ -f "$env_d/${1}.env" ] || { print "env file ${1}.env: not found" 1>&2; return 1; }
+# 	. "$env_d/${1}".env
+# }

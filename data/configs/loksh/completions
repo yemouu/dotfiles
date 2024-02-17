@@ -1,0 +1,25 @@
+#!/bin/ksh
+# Search for `complete_command` in the ksh/rksh manual for more information
+
+# pass
+[[ -d $PASSWORD_STORE_DIR ]] && {
+	cd "$PASSWORD_STORE_DIR" || return
+	set -A password_list -- */*.gpg
+	cd "$OLDPWD" || return
+
+	num=0
+	while (( num < ${#password_list[@]} ))
+	do
+		password_list[$num]=${password_list[$num]%.gpg}
+		num=$((num+1))
+	done
+
+	# Doing `set -A' sets the variable
+	# shellcheck disable=SC2154
+	set -A complete_pass -- "${password_list[@]}"
+	set -A complete_pass_1 -- add cp edit find generate git grep help init insert list ls mv rm \
+	                          search show version
+	unset password_list num
+}
+
+# Make something for manpages and other utilities i use?

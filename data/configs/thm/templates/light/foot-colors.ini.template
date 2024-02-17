@@ -1,0 +1,8 @@
+include=~/.app/cache/thm/foot-colors-base.ini
+
+[csd]
+color=ff{bg_color}
+button-color=ff{fg_color}
+button-minimize-color=ff{color3}
+button-maximize-color=ff{color2}
+button-close-color=ff{color1}

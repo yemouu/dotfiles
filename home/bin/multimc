@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# Void Linux is stupid and creates a wrapper script for multimc which puts the
-# data directory into the home directory. YUCK!
-if [ "$CURRENT_DISTRO" = void ]
-then exec /usr/libexec/multimc/multimc "$@"
-else exec /usr/bin/multimc "$@"
-fi
-

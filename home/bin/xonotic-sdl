@@ -1,6 +1,0 @@
-#!/bin/sh
-
-HOME="/home/mou/tmp/homes/xonotic"
-[ -d "$HOME" ] || mkdir -p "$HOME"
-
-exec /usr/bin/xonotic-sdl
