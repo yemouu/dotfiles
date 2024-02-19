@@ -1,0 +1,17 @@
+keys:
+  - &lutea age1p55em5e3uk3fprj2mpum7ulrslcqgly63pjsyw2yv6hx99trdsnsvvv9ex
+  - &lily age1amaa55e7nusv904a9ucfvtnjlw4srtet42suehey6u3yc4t2xc5sdldepj
+creation_rules:
+  - path_regex: secrets/common.yaml$
+    key_groups:
+    - age:
+      - *lutea
+      - *lily
+  - path_regex: secrets/lutea.yaml$
+    key_groups:
+    - age:
+      - *lutea
+  - path_regex: secrets/lily.yaml$
+    key_groups:
+    - age:
+      - *lily
