@@ -34,8 +34,8 @@ output * bg ${HOME}/misc/syncthing/media/images/wallpapers/dark/evie-s-Pb1KFv4ta
 
 # Put on ultrawide monitor limited to the center 1920x1080 area
 input 1386:782:Wacom_Intuos_S_Pen map_to_region 960 1080 1920 1080
-
 input 1133:50503:Logitech_USB_Receiver accel_profile flat
+# input 1452:613:Apple_Inc._Magic_Trackpad tap enabled
 
 input 1356:3570:Sony_Interactive_Entertainment_DualSense_Edge_Wireless_Controller_Touchpad {
 	events disabled
@@ -52,8 +52,8 @@ hide_edge_borders --i3 smart
 show_marks yes
 tiling_drag enable
 
-exec swayidle timeout 900 swaylock
-exec wlsunset -l 33.9 -L -84.5
+# exec swayidle timeout 900 swaylock
+# exec wlsunset -l 33.9 -L -84.5
 exec syncthing --no-browser
 
 set {

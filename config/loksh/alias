@@ -1,6 +1,6 @@
 #!/bin/ksh
 
-alias ls="ls -Fh --color=auto"
+alias ls="ls -FAh --color=auto"
 alias grep="grep --color=auto"
 
 # Run something N amount of times
@@ -10,7 +10,7 @@ run() {
 	local n=$1; shift
 	until [[ $i -eq $n ]]
 	do
-		eval "$@"
+		eval "$*"
 		i=$((i+1))
 	done
 }

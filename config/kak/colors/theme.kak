@@ -38,8 +38,10 @@ face global MenuBackground default,bright-white
 face global MenuInfo cyan,default+a
 face global Information default,bright-yellow
 face global Error default,bright-red+f
-face global DiagnosticError magenta # I don't know what these control yet
-face global DiagnosticWarning cyan  # I don't know what these control yet
+face global DiagnosticError red+b
+# face global DiagnosticHint magenta # Unsure what this is being used for
+# face global DiagnosticInfo magenta # Unsure what this is being used for
+face global DiagnosticWarning yellow+b
 face global StatusLine default,white
 face global StatusLineMode magenta,default+b
 face global StatusLineInfo blue,default+b
@@ -49,3 +51,9 @@ face global Prompt default,default
 face global MatchingChar default,default+bu
 face global Whitespace white,default+b
 face global BufferPadding white,default+b
+# face global InlayCodeLens magenta+b
+face global LineFlagError red+b
+# face global LineFlagHint magenta+b
+# face global LineFlagInfo magenta+b
+face global LineFlagWarning yellow+b
+face global InlayHint bright-black+i
