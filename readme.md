@@ -8,8 +8,10 @@ either [Codeberg](https://codeberg.org/yemou/scripts),
 
 These configurations are intended to be distro agnostic.
 Distro specific configurations can be found in other repos.
-- Gentoo (Desktop)
-  - Coming Soon
+- NixOS (Desktops)
+  - [Codeberg](https://codeberg.org/yemou/desktop-configs)
+  - [GitLab](https://gitlab.com/yemou/desktop-configs)
+  - [GitHub](https://github.com/yemouu/desktop-configs)
 - NixOS (Servers)
   - [Codeberg](https://codeberg.org/yemou/server-configs)
   - [GitLab](https://gitlab.com/yemou/server-configs)
