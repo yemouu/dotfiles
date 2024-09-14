@@ -1,5 +1,5 @@
 include /etc/sway/config.d/*
-include ${XDG_CACHE_HOME}/thm/sway-appearance
+include ${XDG_STATE_HOME}/thm/sway-appearance
 
 output "LG Electronics LG HDR WFHD 0x0000B11B" {
 	mode 2560x1080@74.991Hz

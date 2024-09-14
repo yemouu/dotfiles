@@ -1,6 +1,6 @@
 #!/bin/sh
 # shellcheck source=/dev/null
-. "${XDG_CACHE_HOME:-$HOME/.cache}/thm/colors.sh"
+. "${XDG_STATE_HOME:-$HOME/.local/state}/thm/colors.sh"
 
 # shellcheck disable=SC2154
 exec /usr/bin/bemenu -i \

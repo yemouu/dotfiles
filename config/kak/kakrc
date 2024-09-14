@@ -114,7 +114,7 @@ evaluate-commands %sh{
 		printf '%s\n' "decl str theme_type none"
 		return 0
 	}
-	. $(cat "${XDG_CACHE_HOME:-$HOME/.cache}/thm/current_thm")
+	. $(cat "${XDG_STATE_HOME:-$HOME/.local/state}/thm/current_thm")
 	case $theme_type in
 		light ) printf '%s\n' "decl str theme_type light" ;;
 		dark  ) printf '%s\n' "decl str theme_type dark" ;;

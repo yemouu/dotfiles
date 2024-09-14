@@ -1,4 +1,4 @@
-include=~/.cache/thm/foot-colors-base.ini
+include=~/.local/state/thm/foot-colors-base.ini
 
 [csd]
 color=ff{fg_color}
