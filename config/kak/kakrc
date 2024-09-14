@@ -124,7 +124,7 @@ evaluate-commands %sh{
 
 hook global WinCreate .* %{
 	# Add column indicator at column 101
-	m-columnindicator add 100
+	m-columnindicator add 120
 
 	# Indentation Options
 	set-option window indentwidth 0
@@ -136,10 +136,10 @@ hook global WinSetOption filetype=(css|html|java|markdown|xml|nix) %{
 	m-whitespace spaces 2
 }
 
-hook global WinSetOption filetype=html %{
-	m-columnindicator remove 100
-	m-columnindicator add 120
-}
+# hook global WinSetOption filetype=html %{
+# 	m-columnindicator remove 100
+# 	m-columnindicator add 120
+# }
 
 hook global WinSetOption filetype=nix %{
 	set-option buffer formatcmd "nixpkgs-fmt"
@@ -158,12 +158,12 @@ hook global WinSetOption filetype=zig %{
 }
 
 hook global WinSetOption filetype=git-commit %{
-	m-columnindicator remove 100
+	m-columnindicator remove 120
 	m-columnindicator add 70
 }
 
 hook global WinSetOption filetype=markdown %{
-	m-columnindicator remove 100
+	m-columnindicator remove 120
 	remove-highlighter global/wrap_-indent
 	add-highlighter global/ wrap -indent -word
 }
