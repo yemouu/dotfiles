@@ -1,12 +1,8 @@
 Host lily
-	HostName lily.lan
+	HostName 100.77.30.206
 	Port 22
 	SetEnv TERM=xterm-256color
 Host dandelion
-	HostName 2a01:4ff:f0:41c7::1
-	Port 22
-	SetEnv TERM=xterm-256color
-Host fly-agaric
-	HostName 2a01:4ff:f0:348a::1
+	HostName 100.77.19.103
 	Port 22
 	SetEnv TERM=xterm-256color
