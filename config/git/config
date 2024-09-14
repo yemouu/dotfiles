@@ -11,3 +11,6 @@
 	email = "dev@lilac.pink"
 	name = "yemou"
 	signingkey = "~/.ssh/id_ed25519.pub"
+
+[init]
+	defaultBranch = main
