@@ -7,7 +7,7 @@ plug "whereswaldon/shellcheck.kak"
 # kak-lsp
 eval %sh{ kak-lsp --kakoune -s $kak_session }
 
-hook -group lsp global WinSetOption filetype=(c|cpp|go|nix|python|typst|zig) %{
+hook -group lsp global WinSetOption filetype=(c|cpp|go|nix|python|typst|zig|java) %{
 	lsp-enable-window
 	lsp-inlay-code-lenses-enable window
 	lsp-inlay-diagnostics-enable window

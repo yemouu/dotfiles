@@ -9,6 +9,14 @@ filetypes = ["c", "cpp"]
 roots = ["compile_commands.json", ".clangd", ".git", ".hg"]
 command = "clangd"
 
+[language_server.jdtls]
+filetypes = ["java"]
+roots = ["mvnw", "gradlew", ".git", ".hg"]
+command = "jdtls"
+[language_server.jdtls.settings]
+# See https://github.dev/eclipse/eclipse.jdt.ls
+# "java.format.insertSpaces" = true
+
 [language_server.nil]
 filetypes = ["nix"]
 roots = ["flake.nix", ".git"]
