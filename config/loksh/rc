@@ -13,20 +13,22 @@ set -o bgnice
 set -o braceexpand
 set -o csh-history
 
+# foot shell integration for prompt jumping (OSC 133)
+prompt_marker() { printf '\[\033]133;A\033\\\]'; }
+PS1="$(prompt_marker)"
+
 # Setup prompt based on terminal theme type
 [ "$TERM" = linux ] && {
-	PS1="\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
+	PS1="${PS1}\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
 	PS2="\[\033[1;36m\]>\[\033[m\] "
 } || {
 	# Try and get OSC-133;A working
 	case $(. "$(<"${XDG_STATE_HOME:-$HOME/.local/state}/thm/current_thm")"; printf '%s' "$theme_type") in
-	 	dark ) PS1="\[\033[1;91m\]\u\[\033[92m\]@\[\033[93m\]\h \[\033[94m\]\W\[\033[m\] "
+		dark ) PS1="${PS1}\[\033[1;91m\]\u\[\033[92m\]@\[\033[93m\]\h \[\033[94m\]\W\[\033[m\] "
 		       PS2="\[\033[1;96m\]>\[\033[m\] " ;;
-		*    ) PS1="\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
+		*    ) PS1="${PS1}\[\033[1;31m\]\u\[\033[32m\]@\[\033[33m\]\h \[\033[34m\]\W\[\033[m\] "
 		       PS2="\[\033[1;36m\]>\[\033[m\] " ;;
 	esac
-
-
 }
 
 [ "$DWRAP_WITHIN_SANDBOX" = "true" ] && PS1="($DWRAP_CURRENT_DISTRO) $PS1"
