@@ -89,7 +89,7 @@ m-whitespace %{
 ## User
 map global user c ':comment-line<ret>' -docstring 'comment line'
 map global user C ':comment-block<ret>' -docstring 'comment block'
-map global user f ':format<ret>' -docstring 'Run formatcmd'
+map global user f ':try format catch lsp-formatting<ret>' -docstring 'Run formatcmd or lsp formatter'
 map global user l ':enter-user-mode lsp<ret>' -docstring 'Enter kak-lsp user mode'
 map global user p '!wl-paste<ret>' -docstring 'Paste from System Clipboard (Wayland)'
 map global user y '<a-|>wl-copy<ret>' -docstring 'Copy to System Clipboard (Wayland)'
