@@ -3,7 +3,7 @@
 . "${XDG_STATE_HOME:-$HOME/.local/state}/thm/colors.sh"
 
 # shellcheck disable=SC2154
-exec /usr/bin/bemenu -i \
+exec bemenu -i \
                      -w \
                      -m all \
                      -H 32 \
