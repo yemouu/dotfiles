@@ -4,8 +4,8 @@
 ## general ##
 # defines were screenshots and recordings will be stored 
 # scr_basedir="${HOME}/tmp/scr"
-scr_pic_dir="${HOME}/pics/scr"
-scr_rec_dir="${HOME}/vids/scr"
+scr_pic_dir="${HOME}/pic/scr"
+scr_rec_dir="${HOME}/vid/scr"
 scr_aud_dir="${HOME}/aud/scr"
 
 ## aud settings ##
