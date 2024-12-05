@@ -49,7 +49,7 @@ face global StatusLineValue green,default+b
 face global StatusCursor default,bright-magenta+f
 face global Prompt default,default
 face global MatchingChar default,default+bu
-face global Whitespace white,default+b
+face global Whitespace red,default+b
 face global BufferPadding white,default+b
 face global LineFlagError red+b
 face global LineFlagWarning yellow+b

@@ -108,6 +108,9 @@ add-highlighter global/ show-matching
 # Highligh TODO and friends
 add-highlighter global/ regex \b(TODO|FIXME)\b 0:default+rb
 
+# Show Trailing Whitespace
+add-highlighter global/ show-whitespaces -lf ' ' -spc '█' -only-trailing
+
 # Set theme_type
 evaluate-commands %sh{
 	[ "$TERM" = linux ] && { 
