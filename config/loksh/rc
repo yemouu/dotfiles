@@ -31,6 +31,8 @@ PS1="$(prompt_marker)"
 	esac
 }
 
+[ "$IN_NIX_SHELL" ] && PS1="(nix shell) $PS1"
+
 [ "$DWRAP_WITHIN_SANDBOX" = "true" ] && PS1="($DWRAP_CURRENT_DISTRO) $PS1"
 
 # Source completions
