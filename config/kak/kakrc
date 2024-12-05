@@ -141,7 +141,7 @@ add-highlighter global/ show-matching
 add-highlighter global/ regex \b(TODO|FIXME)\b 0:default+rb
 
 # Show Trailing Whitespace
-add-highlighter global/ show-whitespaces -lf ' ' -spc '█' -only-trailing
+add-highlighter global/ show-whitespaces -lf ' ' -indent '' -spc '█' -only-trailing
 
 # Set theme_type
 evaluate-commands %sh{
