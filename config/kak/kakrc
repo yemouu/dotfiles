@@ -5,22 +5,55 @@ source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "whereswaldon/shellcheck.kak"
 
 # kak-lsp
-eval %sh{ kak-lsp --kakoune -s $kak_session }
+eval %sh{ kak-lsp }
 
-hook -group lsp global WinSetOption filetype=(c|cpp|go|nix|python|typst|zig|java) %{
+hook global WinSetOption filetype=(c|cpp|go|nix|python|typst|zig|java) %{
 	lsp-enable-window
-	lsp-inlay-code-lenses-enable window
-	lsp-inlay-diagnostics-enable window
+
+	map global user l %{:enter-user-mode lsp<ret>} -docstring 'Enter kak-lsp mode'
+	map global insert -docstring %{
+		Select next snippet placeholder
+	} <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{execute-keys -with-hooks <lt>tab> }<ret>'
+
+	map global object a '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+	map global object <a-a> '<a-semicolon>lsp-object<ret>' -docstring 'LSP any symbol'
+	map global object f '<a-semicolon>lsp-object Function Method<ret>' -docstring 'LSP function or method'
+	map global object t '<a-semicolon>lsp-object Class Interface Struct<ret>' -docstring 'LSP class interface/struct'
+	map global object d '<a-semicolon>lsp-diagnostic-object --include-warnings<ret>' -docstring 'LSP errors & warnings'
+	map global object D '<a-semicolon>lsp-diagnostic-object<ret>' -docstring 'LSP errors'
+
 	lsp-inlay-hints-enable window
-	def -hidden insert-a-n %{
-		try %{
-			lsp-snippets-select-next-placeholders
-			exec '<a-;>d'
-		} catch %{
-			exec -with-hooks '<c-n>'
-		}
+	lsp-inlay-diagnostics-enable window
+}
+
+hook -group lsp-filetype-nix global BufSetOption filetype=nix %{
+	set-option buffer lsp_servers %{
+		[nixd]
+		root_globs = [ "flake.nix", "shell.nix", ".git", ".hg" ]
 	}
-	map global insert <a-n> "<a-;>: insert-a-n<ret>"
+}
+
+hook -group lsp-filetype-python global BufSetOption filetype=python %{
+	set-option buffer lsp_servers %{
+		[ruff]
+		args = [ "server", "--quiet" ]
+		root_globs = [ "requirements.txt", "setup.py", "pyproject.toml", ".git" ]
+		settings_section = "_"
+		# [ruff.settings._.globalSettings]
+	}
+}
+
+hook -group lsp-filetype-typst global BufSetOption filetype=typst %{
+	set-option buffer lsp_servers %{
+		[tinymist]
+		root_globs = [ ".git" ]
+		settings_section = "tinymist"
+		[tinymist.settings.tinymist]
+		outputPath = "/tmp/tinymist/$root/$dir/$name"
+		fontPaths = [ "./assets/fonts" ]
+		formatterMode = "typstyle"
+		exportPdf = "onType"
+	}
 }
 
 hook -group lsp global WinSetOption filetype=go %{
@@ -90,7 +123,6 @@ m-whitespace %{
 map global user c ':comment-line<ret>' -docstring 'comment line'
 map global user C ':comment-block<ret>' -docstring 'comment block'
 map global user f ':try format catch lsp-formatting<ret>' -docstring 'Run formatcmd or lsp formatter'
-map global user l ':enter-user-mode lsp<ret>' -docstring 'Enter kak-lsp user mode'
 map global user p '!wl-paste<ret>' -docstring 'Paste from System Clipboard (Wayland)'
 map global user y '<a-|>wl-copy<ret>' -docstring 'Copy to System Clipboard (Wayland)'
 
@@ -135,7 +167,7 @@ hook global WinCreate .* %{
 }
 
 # Filetype specific options
-hook global WinSetOption filetype=(css|html|java|markdown|xml|nix) %{
+hook global WinSetOption filetype=(css|html|java|markdown|typst|xml|nix) %{
 	m-whitespace spaces 2
 }
 
@@ -172,8 +204,8 @@ hook global WinSetOption filetype=markdown %{
 }
 
 # Status Line
-set global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}} '
-set -add global modelinefmt '{{mode_info}} - %sh{printf $USER} %sh{date +"%R %Z"} '
+# set global modelinefmt '%val{bufname} %val{cursor_char_column},%val{cursor_line} {{context_info}} '
+# set -add global modelinefmt '{{mode_info}} - %sh{printf $USER} %sh{date +"%R %Z"} '
 #set -add global modelinefmt '%sh{cat /sys/class/power_supply/BAT0/capacity} '
 
 # Set colorscheme
