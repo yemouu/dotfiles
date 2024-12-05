@@ -167,7 +167,7 @@ hook global WinCreate .* %{
 }
 
 # Filetype specific options
-hook global WinSetOption filetype=(css|html|java|markdown|typst|xml|nix) %{
+hook global WinSetOption filetype=(css|html|java|markdown|nix|typst|xml|yaml) %{
 	m-whitespace spaces 2
 }
 
