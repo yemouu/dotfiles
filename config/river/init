@@ -1,0 +1,112 @@
+#!/bin/sh
+# Autostart
+riverctl spawn update-session-vars
+riverctl spawn "swaybg -i ${HOME}/misc/syncthing/media/images/wallpapers/dark/evie-s-Pb1KFv4tauY-unsplash.jpg -m fill"
+riverctl spawn kanshi
+riverctl spawn 'rivertile -outer-padding 0 -view-padding 0 -main-ratio 0.5'
+
+riverctl xcursor-theme Adwaita 24
+
+riverctl input pointer-1356-3570-Sony_Interactive_Entertainment_DualSense_Edge_Wireless_Controller_Touchpad events disabled
+
+riverctl focus-follows-cursor normal
+
+riverctl map normal Super Return spawn foot
+riverctl map normal Super R spawn bemenu-run.sh
+riverctl map normal Super E spawn 'wpctl set-mute @DEFAULT_SOURCE@ toggle'
+
+riverctl map normal None Print spawn 'scr pic -c'
+riverctl map normal Super Print spawn 'scr pic -cd'
+
+# riverctl map normal Super Space 'makoctl dismiss -a'
+
+# riverctl map normal Super H focus-view left
+# riverctl map normal Super J focus-view down
+# riverctl map normal Super K focus-view up
+# riverctl map normal Super L focus-view right
+riverctl map normal Super Z focus-view next
+riverctl map normal Super+Control Z focus-view previous
+
+riverctl map-pointer normal Super BTN_LEFT move-view
+riverctl map-pointer normal Super BTN_RIGHT resize-view
+
+riverctl map normal Super+Shift Return zoom
+
+
+riverctl map normal Super X focus-output next
+riverctl map normal Super+Alt X focus-output previous
+riverctl map normal Super+Control X send-to-output next
+riverctl map normal Super+Control+Alt X send-to-output previous
+riverctl map normal Super+Shift+Control X send-to-output -current-tags next
+riverctl map normal Super+Shift+Control+Alt X send-to-output -current-tags previous
+
+# This doesn't seem to work with these output names
+# riverctl declare-mode output-ops
+# riverctl map normal Super X enter-mode output-ops
+# riverctl map output-ops None 1 focus-output "LG Electronics LG HDR WFHD 0x0000B11B"
+# riverctl map output-ops None 2 focus-output "BNQ BenQ PD2700U ET87K04288SL0"
+# riverctl map output-ops None 3 focus-output "AOC 2460G4 0x0000075E"
+# riverctl map output-ops Shift 1 send-to-output "LG Electronics LG HDR WFHD 0x0000B11B"
+# riverctl map output-ops Shift 2 send-to-output "BNQ BenQ PD2700U ET87K04288SL0"
+# riverctl map output-ops Shift 3 send-to-output "AOC 2460G4 0x0000075E"
+# riverctl map output-ops None Escape enter-mode normal
+
+for i in $(seq 1 9)
+do
+    tags=$((1 << ($i - 1)))
+
+    # Super+Control+[1-9] to toggle focus of tag [0-8]
+    riverctl map normal Super $i toggle-focused-tags $tags
+
+    # Super+Shift+Control+[1-9] to toggle tag [0-8] of focused view
+    riverctl map normal Super+Shift $i toggle-view-tags $tags
+
+    # Super+[1-9] to focus tag [0-8]
+    riverctl map normal Super+Control $i set-focused-tags $tags
+
+    # Super+Shift+[1-9] to tag focused view with tag [0-8]
+    riverctl map normal Super+Shift+Control $i set-view-tags $tags
+done
+
+# Super+0 to focus all tags
+# Super+Shift+0 to tag focused view with all tags
+all_tags=$(((1 << 32) - 1))
+riverctl map normal Super 0 set-focused-tags $all_tags
+riverctl map normal Super+Shift 0 set-view-tags $all_tags
+
+riverctl map normal Super+Control Escape exit
+riverctl map normal Super Q close
+
+riverctl map normal Super F toggle-float
+riverctl map normal Super+Control F toggle-fullscreen
+
+riverctl declare-mode passthrough
+riverctl map normal Super F12 enter-mode passthrough
+riverctl map passthrough Super F12 enter-mode normal
+
+# Set background and border color
+# riverctl background-color 0x002b36
+riverctl border-color-focused 0x93a1a1
+riverctl border-color-unfocused 0x586e75
+
+# # Set keyboard repeat rate
+# riverctl set-repeat 50 300
+
+riverctl map normal Super T output-layout rivertile
+riverctl map normal Super+Control T output-layout none
+
+riverctl map normal Super Up send-layout-cmd rivertile "main-location top"
+riverctl map normal Super Left send-layout-cmd rivertile "main-location left"
+riverctl map normal Super Down send-layout-cmd rivertile "main-location bottom"
+riverctl map normal Super Right send-layout-cmd rivertile "main-location right"
+
+riverctl map normal Super Bracketleft send-layout-cmd rivertile "main-count -1"
+riverctl map normal Super Bracketright send-layout-cmd rivertile "main-count +1"
+riverctl map normal Super+Control Bracketleft send-layout-cmd rivertile "main-ratio -0.05"
+riverctl map normal Super+Control Bracketright send-layout-cmd rivertile "main-ratio  +0.05"
+
+riverctl map normal Super Space zoom
+riverctl map normal Super Comma focus-view previous
+riverctl map normal Super Period focus-view next
+riverctl map normal Super+Control Comma swap previous
+riverctl map normal Super+Control Period swap next

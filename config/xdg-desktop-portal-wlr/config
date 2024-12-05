@@ -1,0 +1,5 @@
+[screencast]
+output_name = DP-1
+max_fps = 75
+chooser_cmd = simple
+chooser_type = slurp -f %o -or
