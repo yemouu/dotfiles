@@ -73,12 +73,12 @@ m-columnindicator %{
 	evaluate-commands %sh{
 		[ "$1" = add ] && {
 			[ "$3" ] && color=$3 || color=default,bright-white
-			printf '%s\n' "eval addhl window/ column $2 $color"
+			printf '%s\n' "eval addhl window/ column $(($2 + 1)) $color"
 		}
 
 		[ "$1" = remove ] && {
 			[ "$3" ] && color=$3 || color=default,bright-white
-			printf '%s\n' "eval rmhl window/column_$2_$color"
+			printf '%s\n' "eval rmhl window/column_$(($2 + 1))_$color"
 		}
 	}
 }
