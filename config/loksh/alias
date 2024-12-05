@@ -1,6 +1,6 @@
 #!/bin/ksh
 
-alias ls="ls -FAh --color=auto"
+alias ls="ls -Fh --color=auto"
 alias grep="grep --color=auto"
 
 # Run something N amount of times
